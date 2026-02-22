@@ -4,12 +4,14 @@ import React, { useState, useEffect } from "react";
 import { checkConnection, getPublicKey } from "@stellar/freighter-api";
 import { Wallet, PlusCircle, ShieldCheck, Landmark } from "lucide-react";
 import LoanTable from "../components/LoanTable";
+import InvoiceMintForm from "../components/InvoiceMintForm";
 import useTransactionToast from "../lib/useTransactionToast";
 
 export default function Page() {
   const [address, setAddress] = useState("");
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showMintForm, setShowMintForm] = useState(false);
 
   // 1. Connect Stellar Wallet (Freighter)
   const connectWallet = async () => {
@@ -39,6 +41,12 @@ export default function Page() {
     useTransactionToast().loading();
     useTransactionToast().success();
     useTransactionToast().error();
+  };
+
+  const handleInvoiceMint = (data: any) => {
+    console.log("Invoice data received:", data);
+    setShowMintForm(false);
+    // TODO: Chain integration will be handled separately
   };
 
   return (
@@ -71,7 +79,10 @@ export default function Page() {
           <h3 className="text-slate-400 text-sm">Protocol Liquidity</h3>
           <p className="text-2xl font-semibold">$1,250,000 USDC</p>
         </div>
-        <button className="bg-blue-600/10 border-2 border-dashed border-blue-500/50 p-6 rounded-2xl flex flex-col items-center justify-center hover:bg-blue-600/20 transition">
+        <button
+          onClick={() => setShowMintForm(true)}
+          className="bg-blue-600/10 border-2 border-dashed border-blue-500/50 p-6 rounded-2xl flex flex-col items-center justify-center hover:bg-blue-600/20 transition"
+        >
           <PlusCircle className="text-blue-400 mb-2" size={32} />
           <span className="font-medium text-blue-400">
             Mint New Invoice NFT
@@ -140,6 +151,14 @@ export default function Page() {
       >
         Test toast
       </button>
+
+      {/* Invoice Mint Form Modal */}
+      {showMintForm && (
+        <InvoiceMintForm
+          onClose={() => setShowMintForm(false)}
+          onSubmit={handleInvoiceMint}
+        />
+      )}
     </div>
   );
 }
