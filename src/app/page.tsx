@@ -6,6 +6,7 @@ import { Wallet, PlusCircle, ShieldCheck, Landmark } from "lucide-react";
 import LoanTable from "../components/LoanTable";
 import SkeletonRow from "../components/SkeletonRow";
 import useTransactionToast from "../lib/useTransactionToast";
+import { formatCurrency, formatDate } from "../lib/format";
 
 export default function Page() {
   const [address, setAddress] = useState("");

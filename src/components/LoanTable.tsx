@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatCurrency, formatDate } from '../lib/format';
 
 // --- Types & Interfaces ---
 type LoanStatus = 'Active' | 'Overdue' | 'Repaid';
@@ -24,10 +25,10 @@ const MOCK_LOANS: Loan[] = [
 // Calculates interest based on time elapsed: (Amount * Rate) * (DaysElapsed / 365)
 const calculateInterest = (amount: number, rate: number, startDateStr: string) => {
   const start = new Date(startDateStr);
-  const now = new Date(); 
+  const now = new Date();
   const diffTime = Math.abs(now.getTime() - start.getTime());
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-  
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
   const interest = (amount * (rate / 100)) * (diffDays / 365);
   return interest.toFixed(2);
 };
@@ -71,10 +72,10 @@ export default function LoanTable() {
                 {loan.invoiceId}
               </td>
               <td className="px-6 py-4">
-                ${loan.amountBorrowed.toLocaleString()}
+                {formatCurrency(loan.amountBorrowed)}
               </td>
               <td className="px-6 py-4">
-                ${calculateInterest(loan.amountBorrowed, loan.interestRate, loan.startDate)}
+                {formatCurrency(calculateInterest(loan.amountBorrowed, loan.interestRate, loan.startDate))}
               </td>
               <td className="px-6 py-4">
                 <StatusBadge status={loan.status} />
@@ -83,11 +84,10 @@ export default function LoanTable() {
                 <button
                   onClick={() => handleRepay(loan.id)}
                   disabled={loan.status === 'Repaid'}
-                  className={`px-4 py-2 text-sm font-medium text-white rounded-md transition-colors ${
-                    loan.status === 'Repaid' 
-                      ? 'bg-gray-300 cursor-not-allowed' 
-                      : 'bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
-                  }`}
+                  className={`px-4 py-2 text-sm font-medium text-white rounded-md transition-colors ${loan.status === 'Repaid'
+                    ? 'bg-gray-300 cursor-not-allowed'
+                    : 'bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+                    }`}
                 >
                   Repay
                 </button>
