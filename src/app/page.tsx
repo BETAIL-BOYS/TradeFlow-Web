@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { checkConnection, getPublicKey } from "@stellar/freighter-api";
 import { Wallet, PlusCircle, ShieldCheck, Landmark } from "lucide-react";
 import LoanTable from "../components/LoanTable";
-import EmptyState from "../components/EmptyState";
+import SkeletonRow from "../components/SkeletonRow";
 import useTransactionToast from "../lib/useTransactionToast";
 
 export default function Page() {
@@ -24,12 +24,15 @@ export default function Page() {
 
   // 2. Fetch Invoices from your Repo 2 API
   const fetchInvoices = async () => {
+    setLoading(true);
     try {
       const res = await fetch("http://localhost:3000/invoices");
       const data = await res.json();
       setInvoices(data);
     } catch (e) {
       console.error("API not running");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -85,50 +88,57 @@ export default function Page() {
             </button>
           </div>
 
-          {/* Invoice Table */}
-          <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden mb-12">
-            <div className="p-6 border-b border-slate-700">
-              <h2 className="text-xl font-semibold">Verified Asset Pipeline</h2>
-            </div>
-            <table className="w-full text-left">
-              <thead className="bg-slate-900/50 text-slate-400 text-sm uppercase">
-                <tr>
-                  <th className="p-4">Invoice ID</th>
-                  <th className="p-4">Risk Score</th>
-                  <th className="p-4">Status</th>
-                  <th className="p-4">Amount</th>
+      {/* Invoice Table */}
+      <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden mb-12">
+        <div className="p-6 border-b border-slate-700">
+          <h2 className="text-xl font-semibold">Verified Asset Pipeline</h2>
+        </div>
+        <table className="w-full text-left">
+          <thead className="bg-slate-900/50 text-slate-400 text-sm uppercase">
+            <tr>
+              <th className="p-4">Invoice ID</th>
+              <th className="p-4">Risk Score</th>
+              <th className="p-4">Status</th>
+              <th className="p-4">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              // Show 5 skeleton rows while loading
+              Array.from({ length: 5 }).map((_, index) => (
+                <SkeletonRow key={`skeleton-${index}`} />
+              ))
+            ) : (
+              invoices.map((inv: any) => (
+                <tr
+                  key={inv.id}
+                  className="border-b border-slate-700/50 hover:bg-slate-700/30 transition"
+                >
+                  <td className="p-4 font-mono text-sm text-blue-300">
+                    #{inv.id.slice(-6)}
+                  </td>
+                  <td className="p-4">
+                    <div className="w-full bg-slate-700 h-2 rounded-full max-w-[100px]">
+                      <div
+                        className="bg-blue-500 h-2 rounded-full"
+                        style={{ width: `${inv.riskScore}%` }}
+                      ></div>
+                    </div>
+                  </td>
+                  <td className="p-4 text-sm font-medium">
+                    <span
+                      className={`px-3 py-1 rounded-full ${inv.status === "Approved" ? "bg-green-500/20 text-green-400" : "bg-yellow-500/20 text-yellow-400"}`}
+                    >
+                      {inv.status}
+                    </span>
+                  </td>
+                  <td className="p-4 font-bold text-lg">${inv.amount}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {invoices.map((inv: any) => (
-                  <tr
-                    key={inv.id}
-                    className="border-b border-slate-700/50 hover:bg-slate-700/30 transition"
-                  >
-                    <td className="p-4 font-mono text-sm text-blue-300">
-                      #{inv.id.slice(-6)}
-                    </td>
-                    <td className="p-4">
-                      <div className="w-full bg-slate-700 h-2 rounded-full max-w-[100px]">
-                        <div
-                          className="bg-blue-500 h-2 rounded-full"
-                          style={{ width: `${inv.riskScore}%` }}
-                        ></div>
-                      </div>
-                    </td>
-                    <td className="p-4 text-sm font-medium">
-                      <span
-                        className={`px-3 py-1 rounded-full ${inv.status === "Approved" ? "bg-green-500/20 text-green-400" : "bg-yellow-500/20 text-yellow-400"}`}
-                      >
-                        {inv.status}
-                      </span>
-                    </td>
-                    <td className="p-4 font-bold text-lg">${inv.amount}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
 
           {/* Active Loans Table (Issue #6) */}
           <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
