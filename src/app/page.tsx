@@ -146,15 +146,15 @@ export default function Page() {
         </table>
       </div>
 
-      {/* Active Loans Table (Issue #6) */}
-      <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
-        <div className="p-6 border-b border-slate-700">
-          <h2 className="text-xl font-semibold">Active Loans Dashboard</h2>
-        </div>
-        <div className="p-6 bg-slate-900/50">
-          <LoanTable />
-        </div>
-      </div>
+          {/* Active Loans Table (Issue #6) */}
+          <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
+            <div className="p-6 border-b border-slate-700">
+              <h2 className="text-xl font-semibold">Active Loans Dashboard</h2>
+            </div>
+            <div className="p-6 bg-slate-900/50">
+              <LoanTable />
+            </div>
+          </div>
 
       <button
         onClick={handleTestToast}
