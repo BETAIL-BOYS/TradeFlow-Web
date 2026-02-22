@@ -11,12 +11,14 @@
   "dependencies": {
     "@stellar/freighter-api": "^1.5.0",
     "@tailwindcss/postcss": "^4.0.0",
+    "clsx": "^2.1.1",
     "lucide-react": "^0.300.0",
     "next": "^14.2.35",
     "react": "^18",
     "react-dom": "^18",
     "react-hot-toast": "^2.6.0",
     "soroban-client": "^1.0.0",
+    "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.0.0"
   },
   "devDependencies": {
