@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "@stellar/freighter-api": "^1.5.0",
     "@tailwindcss/postcss": "^4.0.0",
     "clsx": "^2.1.1",
@@ -16,6 +17,7 @@
     "next": "^14.2.35",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.71.2",
     "react-hot-toast": "^2.6.0",
     "soroban-client": "^1.0.0",
     "tailwind-merge": "^3.5.0",
