@@ -9,6 +9,9 @@ import SkeletonRow from "../components/SkeletonRow";
 =======
 import Footer from "../components/layout/Footer";
 import WalletModal from "../components/WalletModal";
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 import useTransactionToast from "../lib/useTransactionToast";
 import { formatCurrency, formatDate } from "../lib/format";
@@ -161,6 +164,8 @@ export default function Page() {
               <LoanTable />
             </div>
           </div>
+
+      <WalletModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
       <WalletModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
