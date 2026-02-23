@@ -5,6 +5,11 @@ import { checkConnection, getPublicKey } from "@stellar/freighter-api";
 import { Wallet, PlusCircle, ShieldCheck, Landmark } from "lucide-react";
 import LoanTable from "../components/LoanTable";
 import SkeletonRow from "../components/SkeletonRow";
+<<<<<<< Updated upstream
+=======
+import Footer from "../components/layout/Footer";
+import WalletModal from "../components/WalletModal";
+>>>>>>> Stashed changes
 import useTransactionToast from "../lib/useTransactionToast";
 import { formatCurrency, formatDate } from "../lib/format";
 
@@ -13,6 +18,7 @@ export default function Page() {
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showMintForm, setShowMintForm] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 1. Connect Stellar Wallet (Freighter)
   const connectWallet = async () => {
@@ -61,7 +67,7 @@ export default function Page() {
           TradeFlow <span className="text-blue-400">RWA</span>
         </h1>
         <button
-          onClick={connectWallet}
+          onClick={() => setIsModalOpen(true)}
           className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition"
         >
           <Wallet size={18} />
@@ -155,6 +161,8 @@ export default function Page() {
               <LoanTable />
             </div>
           </div>
+
+      <WalletModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
       <button
         onClick={handleTestToast}
