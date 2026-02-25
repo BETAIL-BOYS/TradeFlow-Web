@@ -2,6 +2,7 @@ import "./globals.css";
 import React from "react";
 import { Inter } from "next/font/google";
 import ToasterProvider from "../components/general/ToasterProvider";
+import { SlippageProvider } from "../contexts/SlippageContext";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -21,7 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className="font-sans">
-        {children}
+        <SlippageProvider>
+          {children}
+        </SlippageProvider>
         <ToasterProvider />
       </body>
     </html>
