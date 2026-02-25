@@ -57,9 +57,31 @@ export default function SwapInterface() {
       </div>
 
       {/* Swap Button */}
-      <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition-colors">
+      <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition-colors mb-6">
         Swap Tokens
       </button>
+
+      {/* Transaction Details */}
+      <div className="space-y-3 pt-4 border-t border-slate-700/50">
+        <div className="flex justify-between text-sm">
+          <span 
+            className="text-slate-400 underline decoration-dotted decoration-slate-600 cursor-help"
+            title="The difference between the expected price of a trade and the executed price."
+          >
+            Slippage Tolerance
+          </span>
+          <span className="text-slate-200">0.5%</span>
+        </div>
+        <div className="flex justify-between text-sm">
+          <span 
+            className="text-slate-400 underline decoration-dotted decoration-slate-600 cursor-help"
+            title="A fee paid to liquidity providers who facilitate this trade."
+          >
+            Liquidity Provider Fee
+          </span>
+          <span className="text-slate-200">0.3%</span>
+        </div>
+      </div>
     </div>
   );
 }
