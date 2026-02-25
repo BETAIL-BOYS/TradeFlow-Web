@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Wallet } from "lucide-react";
+import { Wallet, Copy, Check } from "lucide-react";
 
 interface NavbarProps {
   address?: string;
@@ -12,6 +12,19 @@ interface NavbarProps {
 
 export default function Navbar({ address, onConnect }: NavbarProps) {
   const pathname = usePathname();
+  const [copied, setCopied] = useState(false);
+
+  const copyToClipboard = async () => {
+    if (address) {
+      try {
+        await navigator.clipboard.writeText(address);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (err) {
+        console.error('Failed to copy address:', err);
+      }
+    }
+  };
 
   const navLinks = [
     { name: "Dashboard", href: "/" },
@@ -47,15 +60,33 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
         </nav>
       </div>
 
-      <button
-        onClick={onConnect}
-        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition"
-      >
-        <Wallet size={18} />
-        {address
-          ? `${address.slice(0, 6)}...${address.slice(-4)}`
-          : "Connect Wallet"}
-      </button>
+      {address ? (
+        <div className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition">
+          <Wallet size={18} />
+          <span className="text-sm">
+            {`${address.slice(0, 6)}...${address.slice(-4)}`}
+          </span>
+          <button
+            onClick={copyToClipboard}
+            className="ml-2 p-1 hover:bg-blue-500 rounded-full transition-colors"
+            title="Copy address"
+          >
+            {copied ? (
+              <Check size={16} className="text-green-300" />
+            ) : (
+              <Copy size={16} className="text-white" />
+            )}
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={onConnect}
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition"
+        >
+          <Wallet size={18} />
+          Connect Wallet
+        </button>
+      )}
     </div>
   );
 }

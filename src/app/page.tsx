@@ -9,6 +9,7 @@ import Navbar from "../../Navbar";
 import Card from "../components/Card";
 import WalletModal from "../components/WalletModal";
 import InvoiceMintForm from "../components/InvoiceMintForm";
+import NewsBanner from "../components/NewsBanner";
 import useTransactionToast from "../lib/useTransactionToast";
 import { formatCurrency, formatDate } from "../lib/format";
 
@@ -60,6 +61,9 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-tradeflow-dark text-white font-sans flex flex-col">
+      {/* News Banner */}
+      <NewsBanner />
+      
       {/* Header */}
       <Navbar
         address={address}

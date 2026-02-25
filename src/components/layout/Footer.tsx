@@ -1,4 +1,5 @@
 import React from "react";
+import { ExternalLink } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -35,9 +36,10 @@ export default function Footer() {
               href="https://twitter.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-slate-400 hover:text-white transition-colors text-sm"
+              className="flex items-center gap-1 text-slate-400 hover:text-white transition-colors text-sm"
             >
               Twitter
+              <ExternalLink size={12} className="w-4 h-4" />
             </a>
           </nav>
         </div>
