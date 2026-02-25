@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { checkConnection, getPublicKey } from "@stellar/freighter-api";
-import { Wallet, PlusCircle, ShieldCheck, Landmark } from "lucide-react";
+import { PlusCircle, ShieldCheck, Landmark } from "lucide-react";
 import LoanTable from "../components/LoanTable";
 import SkeletonRow from "../components/SkeletonRow";
+import Navbar from "../components/Navbar";
 import useTransactionToast from "../lib/useTransactionToast";
 import { formatCurrency, formatDate } from "../lib/format";
 
@@ -57,20 +58,10 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-slate-900 text-white font-sans flex flex-col">
       {/* Header */}
-      <div className="flex justify-between items-center mb-12 p-8">
-        <h1 className="text-3xl font-bold tracking-tight">
-          TradeFlow <span className="text-blue-400">RWA</span>
-        </h1>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition"
-        >
-          <Wallet size={18} />
-          {address
-            ? `${address.slice(0, 6)}...${address.slice(-4)}`
-            : "Connect Wallet"}
-        </button>
-      </div>
+      <Navbar 
+        address={address} 
+        onConnect={() => setIsModalOpen(true)} 
+      />
 
       {/* Main Content */}
       <div className="flex-1 px-8">
