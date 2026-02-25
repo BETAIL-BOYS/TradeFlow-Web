@@ -6,6 +6,7 @@ import { PlusCircle, ShieldCheck, Landmark } from "lucide-react";
 import LoanTable from "../components/LoanTable";
 import SkeletonRow from "../components/SkeletonRow";
 import Navbar from "../components/Navbar";
+import Card from "../components/ui/Card";
 import useTransactionToast from "../lib/useTransactionToast";
 import { formatCurrency, formatDate } from "../lib/format";
 
@@ -67,16 +68,16 @@ export default function Page() {
       <div className="flex-1 px-8">
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700">
+          <Card>
             <ShieldCheck className="text-green-400 mb-4" />
             <h3 className="text-slate-400 text-sm">Risk Engine Status</h3>
             <p className="text-2xl font-semibold text-green-400">Active (Mock)</p>
-          </div>
-          <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700">
+          </Card>
+          <Card>
             <Landmark className="text-blue-400 mb-4" />
             <h3 className="text-slate-400 text-sm">Protocol Liquidity</h3>
             <p className="text-2xl font-semibold">$1,250,000 USDC</p>
-          </div>
+          </Card>
           <button
             onClick={() => setShowMintForm(true)}
             className="bg-blue-600/10 border-2 border-dashed border-blue-500/50 p-6 rounded-2xl flex flex-col items-center justify-center hover:bg-blue-600/20 transition"

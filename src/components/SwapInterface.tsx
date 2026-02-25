@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ArrowUpDown } from "lucide-react";
 import TokenDropdown from "./TokenDropdown";
+import Card from "./ui/Card";
 
 export default function SwapInterface() {
   const [fromToken, setFromToken] = useState("XLM");
@@ -14,7 +15,7 @@ export default function SwapInterface() {
   };
 
   return (
-    <div className="bg-slate-800 rounded-2xl border border-slate-700 p-6 max-w-md mx-auto">
+    <Card className="max-w-md mx-auto">
       <h2 className="text-xl font-semibold mb-6 text-white">Swap Tokens</h2>
       
       {/* From Token */}
@@ -82,6 +83,6 @@ export default function SwapInterface() {
           <span className="text-slate-200">0.3%</span>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
