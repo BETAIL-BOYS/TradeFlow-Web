@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { X, Upload, Calendar, DollarSign } from "lucide-react";
+import Button from "./ui/Button";
 
 // Form validation schema
 const invoiceSchema = z.object({
@@ -160,13 +161,13 @@ export default function InvoiceMintForm({ onClose, onSubmit }: InvoiceMintFormPr
           </div>
 
           {/* Submit Button */}
-          <button
+          <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-800"
+            className="w-full py-3 px-4 disabled:bg-slate-600 disabled:cursor-not-allowed"
           >
             {isSubmitting ? "Processing..." : "Mint Invoice NFT"}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

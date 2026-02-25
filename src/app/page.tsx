@@ -59,11 +59,11 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white font-sans flex flex-col">
+    <div className="min-h-screen bg-tradeflow-dark text-white font-sans flex flex-col">
       {/* Header */}
-      <Navbar 
-        address={address} 
-        onConnect={() => setIsModalOpen(true)} 
+      <Navbar
+        address={address}
+        onConnect={() => setIsModalOpen(true)}
       />
 
       {/* Main Content */}
@@ -72,32 +72,32 @@ export default function Page() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <Card>
             <ShieldCheck className="text-green-400 mb-4" />
-            <h3 className="text-slate-400 text-sm">Risk Engine Status</h3>
+            <h3 className="text-tradeflow-muted text-sm">Risk Engine Status</h3>
             <p className="text-2xl font-semibold text-green-400">Active (Mock)</p>
           </Card>
           <Card>
             <Landmark className="text-blue-400 mb-4" />
-            <h3 className="text-slate-400 text-sm">Protocol Liquidity</h3>
+            <h3 className="text-tradeflow-muted text-sm">Protocol Liquidity</h3>
             <p className="text-2xl font-semibold">$1,250,000 USDC</p>
           </Card>
           <button
             onClick={() => setShowMintForm(true)}
-            className="bg-blue-600/10 border-2 border-dashed border-blue-500/50 p-6 rounded-2xl flex flex-col items-center justify-center hover:bg-blue-600/20 transition"
+            className="bg-tradeflow-accent/10 border-2 border-dashed border-tradeflow-accent/50 p-6 rounded-2xl flex flex-col items-center justify-center hover:bg-tradeflow-accent/20 transition"
           >
-            <PlusCircle className="text-blue-400 mb-2" size={32} />
-            <span className="font-medium text-blue-400">
+            <PlusCircle className="text-tradeflow-accent mb-2" size={32} />
+            <span className="font-medium text-tradeflow-accent">
               Mint New Invoice NFT
             </span>
           </button>
         </div>
 
         {/* Invoice Table */}
-        <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden mb-12">
+        <div className="bg-tradeflow-secondary rounded-2xl border border-tradeflow-muted overflow-hidden mb-12">
           <div className="p-6 border-b border-slate-700">
             <h2 className="text-xl font-semibold">Verified Asset Pipeline</h2>
           </div>
           <table className="w-full text-left">
-            <thead className="bg-slate-900/50 text-slate-400 text-sm uppercase">
+            <thead className="bg-tradeflow-dark/50 text-tradeflow-muted text-sm uppercase">
               <tr>
                 <th className="p-4">Invoice ID</th>
                 <th className="p-4">Risk Score</th>
@@ -115,13 +115,13 @@ export default function Page() {
                 invoices.map((inv: any) => (
                   <tr
                     key={inv.id}
-                    className="border-b border-slate-700/50 hover:bg-slate-700/30 transition"
+                    className="border-b border-tradeflow-muted/50 hover:bg-tradeflow-muted/20 transition"
                   >
                     <td className="p-4 font-mono text-sm text-blue-300">
                       #{inv.id.slice(-6)}
                     </td>
                     <td className="p-4">
-                      <div className="w-full bg-slate-700 h-2 rounded-full max-w-[100px]">
+                      <div className="w-full bg-tradeflow-muted h-2 rounded-full max-w-[100px]">
                         <div
                           className="bg-blue-500 h-2 rounded-full"
                           style={{ width: `${inv.riskScore}%` }}
@@ -130,7 +130,7 @@ export default function Page() {
                     </td>
                     <td className="p-4 text-sm font-medium">
                       <span
-                        className={`px-3 py-1 rounded-full ${inv.status === "Approved" ? "bg-green-500/20 text-green-400" : "bg-yellow-500/20 text-yellow-400"}`}
+                        className={`px-3 py-1 rounded-full ${inv.status === "Approved" ? "bg-tradeflow-success/20 text-tradeflow-success" : "bg-tradeflow-warning/20 text-tradeflow-warning"}`}
                       >
                         {inv.status}
                       </span>
@@ -144,11 +144,11 @@ export default function Page() {
         </div>
 
         {/* Active Loans Table (Issue #6) */}
-        <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
+        <div className="bg-tradeflow-secondary rounded-2xl border border-tradeflow-muted overflow-hidden">
           <div className="p-6 border-b border-slate-700">
             <h2 className="text-xl font-semibold">Active Loans Dashboard</h2>
           </div>
-          <div className="p-6 bg-slate-900/50">
+          <div className="p-6 bg-tradeflow-dark/50">
             <LoanTable />
           </div>
         </div>
