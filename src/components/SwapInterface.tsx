@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ArrowUpDown, Settings } from "lucide-react";
 import TokenDropdown from "./TokenDropdown";
 import SettingsModal from "./SettingsModal";
 import { useSlippage } from "../contexts/SlippageContext";
-import Card from "./ui/Card";
+import Card from "./Card";
 import Button from "./ui/Button";
 
 export default function SwapInterface() {
@@ -13,6 +13,28 @@ export default function SwapInterface() {
   const [toToken, setToToken] = useState("USDC");
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const { slippageTolerance } = useSlippage();
+
+  // Load saved token selections on mount
+  useEffect(() => {
+    const savedFromToken = localStorage.getItem('tradeflow-fromToken');
+    const savedToToken = localStorage.getItem('tradeflow-toToken');
+    
+    if (savedFromToken) {
+      setFromToken(savedFromToken);
+    }
+    if (savedToToken) {
+      setToToken(savedToToken);
+    }
+  }, []);
+
+  // Save token selections to localStorage when they change
+  useEffect(() => {
+    localStorage.setItem('tradeflow-fromToken', fromToken);
+  }, [fromToken]);
+
+  useEffect(() => {
+    localStorage.setItem('tradeflow-toToken', toToken);
+  }, [toToken]);
 
   const handleSwap = () => {
     const temp = fromToken;
