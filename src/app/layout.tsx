@@ -3,6 +3,7 @@ import React from "react";
 import { Inter } from "next/font/google";
 import ToasterProvider from "../components/general/ToasterProvider";
 import { SlippageProvider } from "../contexts/SlippageContext";
+import Footer from "../components/layout/Footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -21,10 +22,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="font-sans">
+      <body className="font-sans min-h-screen flex flex-col">
         <SlippageProvider>
-          {children}
+          <div className="flex-1">
+            {children}
+          </div>
         </SlippageProvider>
+        <Footer />
         <ToasterProvider />
       </body>
     </html>
