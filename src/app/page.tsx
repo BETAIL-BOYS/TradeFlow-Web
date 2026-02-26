@@ -5,8 +5,10 @@ import { checkConnection, getPublicKey } from "@stellar/freighter-api";
 import { PlusCircle, ShieldCheck, Landmark } from "lucide-react";
 import LoanTable from "../components/LoanTable";
 import SkeletonRow from "../components/SkeletonRow";
-import Navbar from "../components/Navbar";
-import Card from "../components/ui/Card";
+import Navbar from "../../Navbar";
+import Card from "../components/Card";
+import WalletModal from "../components/WalletModal";
+import InvoiceMintForm from "../components/InvoiceMintForm";
 import useTransactionToast from "../lib/useTransactionToast";
 import { formatCurrency, formatDate } from "../lib/format";
 
@@ -151,10 +153,6 @@ export default function Page() {
           </div>
         </div>
       </div>
-
-      <Footer />
-
-      <WalletModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
       <WalletModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 

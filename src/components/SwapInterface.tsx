@@ -1,11 +1,17 @@
+"use client";
+
 import React, { useState } from "react";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Settings } from "lucide-react";
 import TokenDropdown from "./TokenDropdown";
-import Card from "./ui/Card";
+import Card from "./Card";
+import SettingsModal from "./SettingsModal";
+import { useSlippage } from "../contexts/SlippageContext";
 
 export default function SwapInterface() {
   const [fromToken, setFromToken] = useState("XLM");
   const [toToken, setToToken] = useState("USDC");
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const { slippageTolerance } = useSlippage();
 
   const handleSwap = () => {
     // Swap the tokens
@@ -15,8 +21,17 @@ export default function SwapInterface() {
   };
 
   return (
-    <Card className="max-w-md mx-auto">
-      <h2 className="text-xl font-semibold mb-6 text-white">Swap Tokens</h2>
+    <>
+      <Card className="max-w-md mx-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-semibold text-white">Swap Tokens</h2>
+          <button
+            onClick={() => setIsSettingsOpen(true)}
+            className="text-slate-400 hover:text-white transition-colors"
+          >
+            <Settings size={20} />
+          </button>
+        </div>
       
       {/* From Token */}
       <div className="mb-4">
@@ -71,7 +86,7 @@ export default function SwapInterface() {
           >
             Slippage Tolerance
           </span>
-          <span className="text-slate-200">0.5%</span>
+          <span className="text-slate-200">{slippageTolerance}%</span>
         </div>
         <div className="flex justify-between text-sm">
           <span 
@@ -84,5 +99,11 @@ export default function SwapInterface() {
         </div>
       </div>
     </Card>
+    
+    <SettingsModal 
+      isOpen={isSettingsOpen} 
+      onClose={() => setIsSettingsOpen(false)} 
+    />
+  </>
   );
 }
