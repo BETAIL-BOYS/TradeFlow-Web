@@ -8,6 +8,7 @@ import HighSlippageWarning from "./HighSlippageWarning";
 import { useSlippage } from "../contexts/SlippageContext";
 import Card from "./Card";
 import Button from "./ui/Button";
+import Tooltip from "./ui/Tooltip";
 
 export default function SwapInterface() {
   const [fromToken, setFromToken] = useState("XLM");
@@ -153,35 +154,41 @@ export default function SwapInterface() {
         {/* Transaction Details */}
         <div className="space-y-3 pt-4 border-t border-slate-700/50">
           <div className="flex justify-between text-sm">
-            <span
-              className="text-slate-400 underline decoration-dotted decoration-slate-600 cursor-help"
-              title="The estimated change in price due to the size of your trade."
-            >
-              Price Impact
-            </span>
+            <Tooltip content="The estimated change in price due to the size of your trade.">
+              <span className="text-slate-400 underline decoration-dotted decoration-slate-600 cursor-help">
+                Price Impact
+              </span>
+            </Tooltip>
             <span className={`${priceImpact > 5 ? "text-red-500 font-bold" : "text-slate-200"}`}>
               {priceImpact.toFixed(2)}%
             </span>
           </div>
 
           <div className="flex justify-between text-sm">
-            <span
-              className="text-slate-400 underline decoration-dotted decoration-slate-600 cursor-help"
-              title="The difference between the expected price of a trade and the executed price."
-            >
-              Slippage Tolerance
-            </span>
+            <Tooltip content="The difference between the expected price of a trade and the executed price.">
+              <span className="text-slate-400 underline decoration-dotted decoration-slate-600 cursor-help">
+                Slippage Tolerance
+              </span>
+            </Tooltip>
             <span className="text-slate-200">{slippageTolerance}%</span>
           </div>
 
           <div className="flex justify-between text-sm">
-            <span
-              className="text-slate-400 underline decoration-dotted decoration-slate-600 cursor-help"
-              title="A fee paid to liquidity providers who facilitate this trade."
-            >
-              Liquidity Provider Fee
-            </span>
+            <Tooltip content="A fee paid to liquidity providers who facilitate this trade.">
+              <span className="text-slate-400 underline decoration-dotted decoration-slate-600 cursor-help">
+                Liquidity Provider Fee
+              </span>
+            </Tooltip>
             <span className="text-slate-200">0.3%</span>
+          </div>
+
+          <div className="flex justify-between text-sm">
+            <Tooltip content="The most efficient path through multiple liquidity pools to execute your trade.">
+              <span className="text-slate-400 underline decoration-dotted decoration-slate-600 cursor-help">
+                Route
+              </span>
+            </Tooltip>
+            <span className="text-slate-200">{fromToken} → {toToken}</span>
           </div>
         </div>
       </Card>
