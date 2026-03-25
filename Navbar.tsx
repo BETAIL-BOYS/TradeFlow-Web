@@ -33,6 +33,7 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
     { name: "Dashboard", href: "/" },
     { name: "Swap", href: "/swap" },
     { name: "Pools", href: "/pools" },
+    { name: "Portfolio", href: "/portfolio" },
     { name: "FAQ", href: "/faq" },
   ];
 
