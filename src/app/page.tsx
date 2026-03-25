@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { connectWallet } from "../lib/stellar";
+import { connectWallet, WalletType } from "../lib/stellar";
 import { PlusCircle, ShieldCheck, Landmark } from "lucide-react";
 import LoanTable from "../components/LoanTable";
 import SkeletonRow from "../components/SkeletonRow";
@@ -22,17 +22,17 @@ export default function Page() {
   const [showMintForm, setShowMintForm] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // 1. Connect Stellar Wallet (Freighter)
-  const handleConnectWallet = async () => {
+  // 1. Connect Stellar Wallet (supports Freighter, Albedo, xBull)
+  const handleConnectWallet = async (walletType: WalletType) => {
     try {
-      const userInfo = await connectWallet();
+      const userInfo = await connectWallet(walletType);
       if (userInfo && userInfo.publicKey) {
         setAddress(userInfo.publicKey);
-        console.log("Wallet connected:", userInfo.publicKey);
+        console.log("Wallet connected:", userInfo.publicKey, "Type:", userInfo.walletType);
       }
     } catch (e: any) {
       console.error("Connection failed:", e.message);
-      alert(e.message || "Failed to connect to Freighter wallet.");
+      alert(e.message || "Failed to connect to wallet.");
     }
   };
 

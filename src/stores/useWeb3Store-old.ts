@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { Server, Asset } from 'soroban-client';
-import { walletKit, FREIGHTER_ID, WalletType } from '../lib/stellar';
+import { freighterApi } from '@stellar/freighter-api';
 
 // Network configuration
 export const NETWORKS = {
@@ -19,7 +19,6 @@ const NETWORK_ENDPOINTS = {
 interface Web3State {
   // Wallet connection state
   walletAddress: string | null;
-  walletType: WalletType | null;
   isConnected: boolean;
   isConnecting: boolean;
   
@@ -36,7 +35,7 @@ interface Web3State {
 
 interface Web3Actions {
   // Wallet actions
-  connectWallet: (walletType?: WalletType) => Promise<void>;
+  connectWallet: () => Promise<void>;
   disconnectWallet: () => void;
   
   // Network actions
@@ -56,7 +55,6 @@ type Web3Store = Web3State & Web3Actions;
 export const useWeb3Store = create<Web3Store>((set, get) => ({
   // Initial state
   walletAddress: null,
-  walletType: null,
   isConnected: false,
   isConnecting: false,
   network: NETWORKS.TESTNET,
@@ -64,8 +62,8 @@ export const useWeb3Store = create<Web3Store>((set, get) => ({
   isLoading: false,
   error: null,
 
-  // Connect wallet using wallet kit
-  connectWallet: async (walletType: WalletType = FREIGHTER_ID) => {
+  // Connect wallet using Freighter
+  connectWallet: async () => {
     const { isConnected } = get();
     
     if (isConnected) {
@@ -76,35 +74,23 @@ export const useWeb3Store = create<Web3Store>((set, get) => ({
     set({ isConnecting: true, error: null });
 
     try {
-      // Set the wallet type
-      walletKit.setWallet(walletType);
+      // Check if Freighter is installed
+      const isFreighterInstalled = await freighterApi.isInstalled();
       
-      // Check if wallet is available
-      const isWalletAvailable = await walletKit.isWalletAvailable();
-      
-      if (!isWalletAvailable) {
-        const walletName = getWalletName(walletType);
-        throw new Error(`${walletName} is not available. Please install it to continue.`);
+      if (!isFreighterInstalled) {
+        throw new Error('Freighter wallet is not installed. Please install Freighter to continue.');
       }
 
-      // Get public key
-      const publicKey = await walletKit.getPublicKey();
+      // Get user permission and connect
+      const { address } = await freighterApi.connect();
       
-      if (!publicKey) {
-        throw new Error('Unable to retrieve public key.');
-      }
-
-      // Verify correct network (Testnet)
-      const network = await walletKit.getNetwork();
-      if (network !== "TESTNET") {
-        const walletName = getWalletName(walletType);
-        throw new Error(`Invalid network: ${network}. Please switch to TESTNET in ${walletName} settings.`);
+      if (!address) {
+        throw new Error('Failed to connect to wallet. Please try again.');
       }
 
       // Update state with connected wallet
       set({
-        walletAddress: publicKey,
-        walletType,
+        walletAddress: address,
         isConnected: true,
         isConnecting: false,
         error: null
@@ -123,16 +109,9 @@ export const useWeb3Store = create<Web3Store>((set, get) => ({
   },
 
   // Disconnect wallet
-  disconnectWallet: async () => {
-    try {
-      await walletKit.disconnect();
-    } catch (error) {
-      console.error('Wallet disconnection error:', error);
-    }
-    
+  disconnectWallet: () => {
     set({
       walletAddress: null,
-      walletType: null,
       isConnected: false,
       isConnecting: false,
       balances: {},
@@ -152,7 +131,7 @@ export const useWeb3Store = create<Web3Store>((set, get) => ({
 
     try {
       // In a real implementation, you might need to disconnect and reconnect
-      // or prompt the user to switch networks in their wallet
+      // or prompt the user to switch networks in Freighter
       set({ 
         network, 
         isLoading: false,
@@ -239,24 +218,10 @@ export const useWeb3Store = create<Web3Store>((set, get) => ({
   }
 }));
 
-// Helper function to get wallet display name
-function getWalletName(walletType: WalletType): string {
-  switch (walletType) {
-    case FREIGHTER_ID:
-      return "Freighter";
-    case 'xbull':
-      return "xBull";
-    case 'albedo':
-      return "Albedo";
-    default:
-      return "Wallet";
-  }
-}
-
 // Selectors for common use cases
 export const useWalletConnection = () => {
-  const { isConnected, walletAddress, walletType, isConnecting, connectWallet, disconnectWallet, error } = useWeb3Store();
-  return { isConnected, walletAddress, walletType, isConnecting, connectWallet, disconnectWallet, error };
+  const { isConnected, walletAddress, isConnecting, connectWallet, disconnectWallet, error } = useWeb3Store();
+  return { isConnected, walletAddress, isConnecting, connectWallet, disconnectWallet, error };
 };
 
 export const useNetwork = () => {

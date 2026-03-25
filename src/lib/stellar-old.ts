@@ -1,10 +1,10 @@
 import { 
-  walletKit,
-  FREIGHTER_ID,
-  XBULL_ID,
-  ALBEDO_ID,
-  WalletType
-} from "@creit.tech/stellar-wallets-kit";
+  requestAccess, 
+  getPublicKey, 
+  isConnected,
+  getNetwork,
+  signTransaction 
+} from "@stellar/freighter-api";
 import { 
   Server, 
   TransactionBuilder, 
@@ -19,90 +19,42 @@ const server = new Server(RPC_URL);
 
 const NETWORK_PASSPHRASE = Networks.TESTNET;
 
-// Initialize wallet kit
-walletKit.setWallet(FREIGHTER_ID);
-
-export interface WalletInfo {
-  publicKey: string;
-  walletType: WalletType;
-}
-
 /**
- * Connects to a Stellar wallet using the wallet kit.
- * Supports Freighter, Albedo, and xBull wallets.
+ * Connects to the Freighter wallet extension.
+ * 1. Checks if Freighter is installed and connected.
+ * 2. Requests access to the user's account.
+ * 3. Retrieves the public key (Stellar address).
  */
-export async function connectWallet(walletType: WalletType = FREIGHTER_ID): Promise<WalletInfo> {
+export async function connectWallet() {
+  if (!await isConnected()) {
+    throw new Error("Freighter extension not found. Please install it to continue.");
+  }
+
   try {
-    // Set the wallet type
-    walletKit.setWallet(walletType);
+    // requestAccess() prompts the user to authorize the app
+    const accessResponse = await requestAccess();
     
-    // Check if wallet is available
-    const isWalletAvailable = await walletKit.isWalletAvailable();
-    if (!isWalletAvailable) {
-      const walletName = getWalletName(walletType);
-      throw new Error(`${walletName} is not available. Please install it to continue.`);
+    if (!accessResponse) {
+      throw new Error("Access denied by user.");
     }
 
-    // Get public key
-    const publicKey = await walletKit.getPublicKey();
+    // After access is granted, we fetch the public key (Stellar address)
+    const publicKey = await getPublicKey();
     
     if (!publicKey) {
       throw new Error("Unable to retrieve public key.");
     }
 
     // Verify correct network (Testnet)
-    const network = await walletKit.getNetwork();
+    const network = await getNetwork();
     if (network !== "TESTNET") {
-      const walletName = getWalletName(walletType);
-      throw new Error(`Invalid network: ${network}. Please switch to TESTNET in ${walletName} settings.`);
+      throw new Error(`Invalid network: ${network}. Please switch to TESTNET in Freighter settings.`);
     }
 
-    return { publicKey, walletType };
+    return { publicKey };
   } catch (error: any) {
     console.error("Wallet connection error:", error);
     throw error;
-  }
-}
-
-/**
- * Gets the current connected wallet info
- */
-export async function getConnectedWallet(): Promise<WalletInfo | null> {
-  try {
-    const publicKey = await walletKit.getPublicKey();
-    if (!publicKey) return null;
-    
-    const currentWallet = walletKit.getWallet();
-    return { publicKey, walletType: currentWallet };
-  } catch (error) {
-    return null;
-  }
-}
-
-/**
- * Disconnects the current wallet
- */
-export async function disconnectWallet(): Promise<void> {
-  try {
-    await walletKit.disconnect();
-  } catch (error) {
-    console.error("Wallet disconnection error:", error);
-  }
-}
-
-/**
- * Gets the display name for a wallet type
- */
-function getWalletName(walletType: WalletType): string {
-  switch (walletType) {
-    case FREIGHTER_ID:
-      return "Freighter";
-    case XBULL_ID:
-      return "xBull";
-    case ALBEDO_ID:
-      return "Albedo";
-    default:
-      return "Wallet";
   }
 }
 
@@ -155,15 +107,9 @@ export async function waitForTransaction(hash: string): Promise<string> {
  * Adds a trustline for a Stellar asset (ChangeTrust operation).
  * @param assetCode - Code of the asset (e.g., "USDC")
  * @param assetIssuer - Issuer address of the asset
- * @param walletType - Optional wallet type override
  */
-export async function addTrustline(assetCode: string, assetIssuer: string, walletType?: WalletType) {
-  // If walletType is provided, set it temporarily
-  if (walletType) {
-    walletKit.setWallet(walletType);
-  }
-  
-  const publicKey = await walletKit.getPublicKey();
+export async function addTrustline(assetCode: string, assetIssuer: string) {
+  const { publicKey } = await connectWallet();
   
   // Fetch account details to get the current sequence number
   const account = await server.getAccount(publicKey);
@@ -178,9 +124,9 @@ export async function addTrustline(assetCode: string, assetIssuer: string, walle
     .setTimeout(60)
     .build();
 
-  // Request signature from the current wallet
+  // Request signature from Freighter
   const xdr = transaction.toXDR();
-  const signedXdr = await walletKit.signTransaction(xdr, {
+  const signedXdr = await signTransaction(xdr, {
     network: "TESTNET",
   });
 
@@ -193,41 +139,3 @@ export async function addTrustline(assetCode: string, assetIssuer: string, walle
   
   throw new Error("Transaction failed during submission.");
 }
-
-/**
- * Signs a transaction using the currently connected wallet
- */
-export async function signTransaction(xdr: string, options?: any): Promise<string> {
-  return await walletKit.signTransaction(xdr, {
-    network: "TESTNET",
-    ...options
-  });
-}
-
-/**
- * Gets the current network from the connected wallet
- */
-export async function getNetwork(): Promise<string> {
-  return await walletKit.getNetwork();
-}
-
-/**
- * Checks if a wallet is connected
- */
-export async function isWalletConnected(): Promise<boolean> {
-  try {
-    const publicKey = await walletKit.getPublicKey();
-    return !!publicKey;
-  } catch {
-    return false;
-  }
-}
-
-// Export wallet types and kit for use in other modules
-export { 
-  walletKit,
-  FREIGHTER_ID, 
-  XBULL_ID, 
-  ALBEDO_ID, 
-  WalletType 
-};

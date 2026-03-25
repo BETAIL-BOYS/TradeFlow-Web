@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { connectWallet } from "../lib/stellar";
+import { connectWallet, WalletType, FREIGHTER_ID } from "../lib/stellar";
 import Button from "./ui/Button";
 import { useTokenStore } from "../stores/tokenStore";
 
@@ -8,27 +8,27 @@ export default function ConnectWallet() {
       const [pubKey, setPubKey] = useState<string | null>(null);
       const { setConnected } = useTokenStore();
 
-      const handleConnect = async () => {
+      const handleConnect = async (walletType: WalletType = FREIGHTER_ID) => {
             try {
-                  // This calls the Freighter API directly
-                  const userInfo = await connectWallet();
+                  // This calls the wallet kit API
+                  const userInfo = await connectWallet(walletType);
                   if (userInfo.publicKey) {
                         setPubKey(userInfo.publicKey);
                         setConnected(true, userInfo.publicKey);
                   }
             } catch (e: any) {
                   console.error("Connection error:", e);
-                  alert(e.message || "Failed to connect to Freighter Wallet!");
+                  alert(e.message || "Failed to connect to wallet!");
             }
       };
 
       return (
             <div className="p-4">
                   <Button
-                        onClick={handleConnect}
+                        onClick={() => handleConnect(FREIGHTER_ID)}
                         className="bg-purple-600 hover:bg-purple-700 shadow-lg flex items-center gap-2 px-6 py-3"
                   >
-                        {pubKey ? `Connected: ${pubKey.slice(0, 4)}...${pubKey.slice(-4)}` : "Connect Freighter Wallet"}
+                        {pubKey ? `Connected: ${pubKey.slice(0, 4)}...${pubKey.slice(-4)}` : "Connect Wallet"}
                   </Button>
             </div>
       );

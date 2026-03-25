@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { connectWallet } from "../../lib/stellar";
+import { connectWallet, WalletType } from "../../lib/stellar";
 import Navbar from "../../../Navbar";
 import WalletModal from "../../components/WalletModal";
 import PortfolioChart from "../../components/PortfolioChart";
@@ -10,16 +10,16 @@ export default function PortfolioPage() {
   const [address, setAddress] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleConnectWallet = async () => {
+  const handleConnectWallet = async (walletType: WalletType) => {
     try {
-      const userInfo = await connectWallet();
+      const userInfo = await connectWallet(walletType);
       if (userInfo && userInfo.publicKey) {
         setAddress(userInfo.publicKey);
-        console.log("Wallet connected:", userInfo.publicKey);
+        console.log("Wallet connected:", userInfo.publicKey, "Type:", userInfo.walletType);
       }
     } catch (e: any) {
       console.error("Connection failed:", e.message);
-      alert(e.message || "Failed to connect to Freighter wallet.");
+      alert(e.message || "Failed to connect to wallet.");
     }
   };
 
