@@ -10,6 +10,7 @@ import Card from "./Card";
 import Button from "./ui/Button";
 import Tooltip from "./ui/Tooltip";
 import TradeReviewModal from "./TradeReviewModal";
+import LivePriceChart from "./LivePriceChart";
 
 export default function SwapInterface() {
   const [fromToken, setFromToken] = useState("XLM");
@@ -27,7 +28,7 @@ export default function SwapInterface() {
   useEffect(() => {
     const savedFromToken = localStorage.getItem('tradeflow-fromToken');
     const savedToToken = localStorage.getItem('tradeflow-toToken');
-    
+
     if (savedFromToken) {
       setFromToken(savedFromToken);
     }
@@ -48,7 +49,7 @@ export default function SwapInterface() {
   // Calculate price impact (mock calculation for demo)
   const calculatePriceImpact = (amount: string) => {
     if (!amount || parseFloat(amount) <= 0) return 0;
-    
+
     // Mock calculation: larger amounts have higher price impact
     const baseImpact = Math.min(parseFloat(amount) * 0.01, 15);
     const tokenMultiplier = fromToken === "XLM" ? 1.2 : 1.0;
@@ -67,7 +68,7 @@ export default function SwapInterface() {
     setFromAmount(value);
     const impact = calculatePriceImpact(value);
     setPriceImpact(impact);
-    
+
     // Calculate mock to amount
     if (value && parseFloat(value) > 0) {
       const mockRate = fromToken === "XLM" ? 0.15 : 6.67;
@@ -79,7 +80,7 @@ export default function SwapInterface() {
 
   const handleSwapClick = async () => {
     if (!fromAmount || parseFloat(fromAmount) <= 0) return;
-    
+
     if (priceImpact > 5) {
       setIsHighSlippageWarningOpen(true);
     } else {
@@ -151,6 +152,11 @@ export default function SwapInterface() {
 
   return (
     <>
+      {/* Live Price Chart */}
+      <div className="max-w-md mx-auto mb-6">
+        <LivePriceChart symbol={`${fromToken}/${toToken}`} height={300} />
+      </div>
+
       <Card className="max-w-md mx-auto">
         {/* Header with settings */}
         <div className="flex justify-between items-center mb-6">
@@ -207,30 +213,30 @@ export default function SwapInterface() {
         </div>
 
         {/* Swap CTA */}
-        <button 
-          onClick={handleSwapClick} 
+        <button
+          onClick={handleSwapClick}
           disabled={isSubmitting}
           className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-800 focus:ring-blue-500 py-3 mb-6"
         >
           {isSubmitting ? (
             <>
-              <svg 
-                className="animate-spin h-5 w-5 text-white" 
-                xmlns="http://www.w3.org/2000/svg" 
-                fill="none" 
+              <svg
+                className="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
                 viewBox="0 0 24 24"
               >
-                <circle 
-                  className="opacity-25" 
-                  cx="12" 
-                  cy="12" 
-                  r="10" 
-                  stroke="currentColor" 
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
                   strokeWidth="4"
                 />
-                <path 
-                  className="opacity-75" 
-                  fill="currentColor" 
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 />
               </svg>

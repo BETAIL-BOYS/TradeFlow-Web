@@ -14,6 +14,7 @@
     "@stellar/freighter-api": "^1.7.1",
     "@tailwindcss/postcss": "^4.0.0",
     "clsx": "^2.1.1",
+    "lightweight-charts": "^5.1.0",
     "lucide-react": "^0.300.0",
     "next": "^14.2.35",
     "react": "^18",
@@ -24,6 +25,7 @@
     "soroban-client": "^1.0.0",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.0.0",
+    "ws": "^8.20.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
