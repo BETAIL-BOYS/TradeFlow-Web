@@ -1,6 +1,7 @@
 import "./globals.css";
 import React from "react";
 import { Inter } from "next/font/google";
+import { Toaster } from "sonner";
 import ToasterProvider from "../components/general/ToasterProvider";
 import { SlippageProvider } from "../contexts/SlippageContext";
 import Footer from "../components/layout/Footer";
@@ -17,24 +18,12 @@ export const metadata = {
   description: "TradeFlow RWA Dashboard",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body className="font-sans min-h-screen flex flex-col">
-        <ErrorBoundary>
-          <SlippageProvider>
-            <NetworkCongestionBanner />
-            <div className="flex-1">
-              {children}
-            </div>
-          </SlippageProvider>
-          <Footer />
-          <ToasterProvider />
-        </ErrorBoundary>
+    <html lang="en">
+      <body>
+        {children}
+        <Toaster position="top-right" richColors closeButton />  {/* ← Add this */}
       </body>
     </html>
   );

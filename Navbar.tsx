@@ -4,9 +4,12 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Wallet, Copy, Check, CreditCard } from "lucide-react";
+import { toast } from "sonner";
+
+// Adjusted imports for src/components structure
 import NetworkSelector, { Network } from "./NetworkSelector";
 import FiatOnRampModal from "./FiatOnRampModal";
-import NetworkFeeIndicator from "./ui/NetworkFeeIndicator";   // ← New import
+import NetworkFeeIndicator from "./ui/NetworkFeeIndicator";
 
 interface NavbarProps {
   address?: string;
@@ -24,9 +27,10 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
         await navigator.clipboard.writeText(address);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
-        toast.success("Address copied to clipboard");   // Optional: add toast
+        toast.success("Address copied to clipboard");
       } catch (err) {
         console.error('Failed to copy address:', err);
+        toast.error("Failed to copy address");
       }
     }
   };
