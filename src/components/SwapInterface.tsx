@@ -25,8 +25,38 @@ export default function SwapInterface() {
   const [priceImpact, setPriceImpact] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isTradeReviewOpen, setIsTradeReviewOpen] = useState(false);
+  const [isTransactionSignatureOpen, setIsTransactionSignatureOpen] = useState(false);
+  const [submissionStartTime, setSubmissionStartTime] = useState<number | null>(null);
+  const [timeLeft, setTimeLeft] = useState<string>("");
   const [fromBalance] = useState("1240.50"); // Mock balance for Requirement #69
-  const { slippageTolerance } = useSlippage();
+  const { slippageTolerance, transactionDeadline } = useSlippage();
+
+  // Countdown timer effect
+  useEffect(() => {
+    let interval: any;
+    if (isSubmitting && submissionStartTime) {
+      interval = setInterval(() => {
+        const now = Date.now();
+        const elapsed = Math.floor((now - submissionStartTime) / 1000);
+        const totalSeconds = transactionDeadline * 60;
+        const remaining = totalSeconds - elapsed;
+
+        if (remaining <= 0) {
+          clearInterval(interval);
+          setIsSubmitting(false);
+          setIsTransactionSignatureOpen(false);
+          setIsTradeReviewOpen(false);
+          setSubmissionStartTime(null);
+          toast.error("Transaction Expired", { duration: 5000 });
+        } else {
+          const minutes = Math.floor(remaining / 60);
+          const seconds = remaining % 60;
+          setTimeLeft(`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+        }
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isSubmitting, submissionStartTime, transactionDeadline]);
 
   // Load saved token selections on mount
   useEffect(() => {
@@ -76,7 +106,7 @@ export default function SwapInterface() {
   };
 
   // Main Swap Handler with Toast
-    const handleSwapClick = async () => {
+  const handleSwapClick = async () => {
     if (!fromAmount || parseFloat(fromAmount) <= 0) {
       toast.error("Please enter an amount to swap");
       return;
@@ -98,35 +128,39 @@ export default function SwapInterface() {
         id: loadingToast,
       });
 
-    if (priceImpact > 5) {
-      setIsHighSlippageWarningOpen(true);
-    } else {
-      setIsTradeReviewOpen(true);
-    }
-  };
-
-  const handleTradeConfirm = async () => {
-    setIsTradeReviewOpen(false);
-    setIsSubmitting(true);
-    try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-    } finally {
-      setIsSubmitting(false);
-      // Generate mock transaction XDR
-      const mockTransactionXDR = "AAAAAK/eFzA7Jf5Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3XAAAABQAAAAAAAAAAA==";
-      const mockNetworkFee = "0.00001";
-      const mockContractAddress = "CC7H5QY7F3JQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQ";
-      
-      setIsTransactionSignatureOpen(true);
-      setIsSubmitting(true);
-
+      if (priceImpact > 5) {
+        setIsHighSlippageWarningOpen(true);
+      } else {
+        setIsTradeReviewOpen(true);
+      }
     } catch (error) {
       toast.error("Failed to process swap", {
         id: loadingToast,
       });
     }
   };
-  
+
+  const handleTradeConfirm = async () => {
+    setIsTradeReviewOpen(false);
+    setIsSubmitting(true);
+    setSubmissionStartTime(Date.now());
+    
+    try {
+      // Simulate transaction submission
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Generate mock transaction XDR
+      const mockTransactionXDR = "AAAAAK/eFzA7Jf5Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3XAAAABQAAAAAAAAAAA==";
+      console.log("Mock XDR generated:", mockTransactionXDR);
+      
+      setIsTransactionSignatureOpen(true);
+    } catch (error) {
+      toast.error("Failed to submit trade");
+      setIsSubmitting(false);
+      setSubmissionStartTime(null);
+    }
+  };
+
   const handleHighSlippageConfirm = async () => {
     const loadingToast = toast.loading("Processing high slippage swap...");
 
@@ -138,6 +172,8 @@ export default function SwapInterface() {
       });
 
       setIsTransactionSignatureOpen(true);
+      setIsSubmitting(true);
+      setSubmissionStartTime(Date.now());
     } catch (error) {
       toast.error("Swap failed", { id: loadingToast });
     } finally {
@@ -153,33 +189,14 @@ export default function SwapInterface() {
     });
 
     setIsTransactionSignatureOpen(false);
-    setIsTradeReviewOpen(true);
     setIsSubmitting(false);
+    setSubmissionStartTime(null);
 
     setTimeout(() => {
       setFromAmount("");
       setToAmount("");
       setPriceImpact(0);
     }, 1500);
-  };
-
-  const handleTradeConfirm = async () => {
-    const loadingToast = toast.loading("Finalizing trade...");
-
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      toast.success("Trade completed successfully!", {
-        id: loadingToast,
-      });
-
-      setIsTradeReviewOpen(false);
-      setFromAmount("");
-      setToAmount("");
-      setPriceImpact(0);
-    } catch (err) {
-      toast.error("Failed to finalize trade", { id: loadingToast });
-    }
   };
 
   // Check if any modal is open
@@ -221,7 +238,7 @@ export default function SwapInterface() {
           <h2 className="text-xl font-semibold text-white">Swap Tokens</h2>
           <button
             onClick={() => setIsSettingsOpen(true)}
-            className="text-slate-400 hover:text-white transition-colors"
+            className="text-slate-400 hover:text-white transition-all duration-300 hover:rotate-90 p-2 -mr-2"
           >
             <Settings size={20} />
           </button>
@@ -286,7 +303,7 @@ export default function SwapInterface() {
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
               </svg>
-              <span>Processing...</span>
+              <span>Confirming ({timeLeft})</span>
             </>
           ) : (
             "Swap Tokens"

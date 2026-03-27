@@ -5,15 +5,23 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 interface SlippageContextType {
   slippageTolerance: number;
   setSlippageTolerance: (value: number) => void;
+  transactionDeadline: number; // in minutes
+  setTransactionDeadline: (value: number) => void;
 }
 
 const SlippageContext = createContext<SlippageContextType | undefined>(undefined);
 
 export function SlippageProvider({ children }: { children: ReactNode }) {
   const [slippageTolerance, setSlippageTolerance] = useState(0.5);
+  const [transactionDeadline, setTransactionDeadline] = useState(20);
 
   return (
-    <SlippageContext.Provider value={{ slippageTolerance, setSlippageTolerance }}>
+    <SlippageContext.Provider value={{ 
+      slippageTolerance, 
+      setSlippageTolerance,
+      transactionDeadline,
+      setTransactionDeadline
+    }}>
       {children}
     </SlippageContext.Provider>
   );

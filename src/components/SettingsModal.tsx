@@ -13,7 +13,7 @@ interface SettingsModalProps {
 }
 
 export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
-  const { slippageTolerance, setSlippageTolerance } = useSlippage();
+  const { slippageTolerance, setSlippageTolerance, transactionDeadline, setTransactionDeadline } = useSlippage();
   const { isExpertMode, setExpertMode, hasAcceptedRisk, acceptRisk } = useExpertMode();
   const [isExpertModalOpen, setIsExpertModalOpen] = useState(false);
 
@@ -139,6 +139,26 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                   High slippage tolerance may result in a bad trade
                 </p>
               )}
+            {/* Transaction Deadline */}
+            <div>
+              <h3 className="text-lg font-medium text-white mb-4">Transaction Deadline</h3>
+              <p className="text-sm text-slate-400 mb-4">
+                Your transaction will revert if it is pending for more than this period
+              </p>
+              <div className="flex items-center gap-3">
+                <input
+                  type="number"
+                  value={transactionDeadline}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value);
+                    if (!isNaN(val) && val > 0) setTransactionDeadline(val);
+                  }}
+                  min="1"
+                  className="flex-1 bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                  placeholder="20"
+                />
+                <span className="text-slate-400">minutes</span>
+              </div>
             </div>
           </div>
         </Card>

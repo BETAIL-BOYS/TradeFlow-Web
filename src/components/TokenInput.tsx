@@ -15,9 +15,15 @@ const TokenInput: React.FC<TokenInputProps> = ({ value, onChange, balance, place
   return (
     <div className="relative flex items-center w-full">
       <input
-        type="number"
+        type="text"
+        inputMode="decimal"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {
+          const val = e.target.value;
+          if (val === '' || /^[0-9]*\.?[0-9]*$/.test(val)) {
+            onChange(val);
+          }
+        }}
         placeholder={placeholder}
         className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 pr-14 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors"
       />
