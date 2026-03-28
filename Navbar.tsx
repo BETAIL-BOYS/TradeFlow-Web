@@ -105,9 +105,13 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
             </button>
           </div>
         ) : (
+          /* * ISSUE #108: Added `animate-pulse` to draw attention to the primary CTA.
+           * Because this button is isolated within the `false` branch of the `address` check,
+           * the animation is naturally removed when the user connects their wallet.
+           */
           <button
             onClick={onConnect}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition"
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition animate-pulse"
           >
             <Wallet size={18} />
             Connect Wallet

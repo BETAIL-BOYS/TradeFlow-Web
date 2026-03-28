@@ -1,109 +1,129 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
-import ConnectWallet from './ConnectWallet';
 
-const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+import React, { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Wallet, Copy, Check, CreditCard } from "lucide-react";
+import toast from "react-hot-toast";
+
+// Corrected imports based on your actual file structure
+import NetworkSelector from "../NetworkSelector";
+import FiatOnRampModal from "../FiatOnRampModal";
+import NetworkFeeIndicator from "./ui/NetworkFeeIndicator";
+
+interface NavbarProps {
+  address?: string;
+  onConnect?: () => void;
+}
+
+export default function Navbar({ address, onConnect }: NavbarProps) {
+  const pathname = usePathname();
+  const [copied, setCopied] = useState(false);
+  const [isFiatModalOpen, setIsFiatModalOpen] = useState(false);
+
+  const copyToClipboard = async () => {
+    if (address) {
+      try {
+        await navigator.clipboard.writeText(address);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+
+        toast.success("Address copied to clipboard!");
+      } catch (err) {
+        console.error('Failed to copy address:', err);
+        toast.error("Failed to copy address");
+      }
+    }
+  };
 
   const navLinks = [
-    { name: 'Trade', href: '/swap' },
-    { name: 'Markets', href: '/markets' },
-    { name: 'Portfolio', href: '/portfolio' },
-    { name: 'History', href: '/history' },
+    { name: "Dashboard", href: "/" },
+    { name: "Swap", href: "/swap" },
+    { name: "Pools", href: "/pools" },
+    { name: "Portfolio", href: "/portfolio" },
+    { name: "FAQ", href: "/faq" },
   ];
 
-  const toggleMenu = () => setIsOpen(!isOpen);
-
-  // Lock body scroll when mobile menu is open
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => { document.body.style.overflow = 'unset'; };
-  }, [isOpen]);
-
   return (
-    <nav className="bg-slate-900 border-b border-slate-800 text-white sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          {/* Logo Section */}
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center font-bold">TF</div>
-            <span className="text-xl font-bold tracking-tight">TradeFlow</span>
-          </div>
+    <div className="flex justify-between items-center mb-12 p-8">
+      <div className="flex items-center gap-12">
+        <h1 className="text-3xl font-bold tracking-tight">
+          TradeFlow <span className="text-blue-400">RWA</span>
+        </h1>
 
-          {/* Desktop Navigation - Hidden on sm/mobile */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <Link 
-                key={link.name} 
-                href={link.href} 
-                className="text-slate-300 hover:text-white transition-colors text-sm font-medium"
+        <nav className="hidden md:flex gap-8">
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-sm font-medium transition-colors ${
+                  isActive
+                    ? "text-cyan-400"
+                    : "text-slate-400 hover:text-white"
+                }`}
               >
                 {link.name}
               </Link>
-            ))}
-            <ConnectWallet />
-          </div>
-
-          {/* Hamburger Icon - Visible only on mobile */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={toggleMenu}
-              className="text-slate-300 hover:text-white p-2 transition-colors"
-              aria-label="Toggle menu"
-            >
-              <Menu size={24} />
-            </button>
-          </div>
-        </div>
+            );
+          })}
+        </nav>
       </div>
 
-      {/* Mobile Sidebar Overlay */}
-      {isOpen && (
-        <div 
-          className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-[60] md:hidden" 
-          onClick={() => setIsOpen(false)}
-        />
-      )}
+      <div className="flex items-center gap-4">
+        <NetworkSelector />
 
-      {/* Mobile Sidebar */}
-      <div className={`fixed top-0 right-0 h-full w-72 bg-slate-900 border-l border-slate-800 z-[70] transform transition-transform duration-300 ease-in-out md:hidden ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-        <div className="p-6 flex flex-col h-full">
-          <div className="flex justify-between items-center mb-10">
-            <span className="text-xl font-bold">Menu</span>
+        {/* Gas Tank / Network Fee Indicator */}
+        <NetworkFeeIndicator />
+
+        {/* Buy Crypto Button */}
+        <button
+          onClick={() => setIsFiatModalOpen(true)}
+          className="flex items-center gap-2 bg-green-600 hover:bg-green-700 px-6 py-2 rounded-full transition"
+        >
+          <CreditCard size={18} />
+          Buy Crypto
+        </button>
+
+        {address ? (
+          <div className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition">
+            <Wallet size={18} />
+            <span className="text-sm">
+              {`${address.slice(0, 6)}...${address.slice(-4)}`}
+            </span>
             <button
-              onClick={() => setIsOpen(false)}
-              className="text-slate-300 hover:text-white p-2"
-              aria-label="Close menu"
+              onClick={copyToClipboard}
+              className="ml-2 p-1 hover:bg-blue-500 rounded-full transition-colors"
+              title="Copy address"
             >
-              <X size={24} />
+              {copied ? (
+                <Check size={16} className="text-green-300" />
+              ) : (
+                <Copy size={16} className="text-white" />
+              )}
             </button>
           </div>
-          
-          <div className="flex flex-col space-y-6">
-            {navLinks.map((link) => (
-              <Link 
-                key={link.name} 
-                href={link.href} 
-                className="text-slate-300 hover:text-white text-lg font-medium py-2 border-b border-slate-800/50"
-                onClick={() => setIsOpen(false)}
-              >
-                {link.name}
-              </Link>
-            ))}
-            <div className="mt-4">
-              <ConnectWallet />
-            </div>
-          </div>
-        </div>
+        ) : (
+          /* * ISSUE #108: Added `animate-pulse` to draw attention to the primary CTA.
+           * Because this button is isolated within the `false` branch of the `address` check,
+           * the animation is naturally removed when the user connects their wallet.
+           */
+          <button
+            onClick={onConnect}
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition animate-pulse"
+          >
+            <Wallet size={18} />
+            Connect Wallet
+          </button>
+        )}
       </div>
-    </nav>
+
+      {/* Fiat On-Ramp Modal */}
+      <FiatOnRampModal
+        isOpen={isFiatModalOpen}
+        onClose={() => setIsFiatModalOpen(false)}
+      />
+    </div>
   );
-};
-
-export default Navbar;
+}
