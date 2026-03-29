@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { ChevronDown, Search, X } from "lucide-react";
+import { ChevronDown, Search, X, Copy } from "lucide-react";
 import { useDebounce } from "../hooks/useDebounce";
 import { useRecentTokens } from "../hooks/useRecentTokens";
 import { useWatchlist } from "../hooks/useWatchlist";
 import StarIcon from "./StarIcon";
+import toast from "react-hot-toast";
 
 interface TokenDropdownProps {
   onTokenChange?: (token: string) => void;
@@ -21,8 +22,15 @@ export default function TokenDropdown({ onTokenChange }: TokenDropdownProps) {
   // Debounce the search input with 300ms delay
   const debouncedSearch = useDebounce(searchInput, 300);
 
-  // Hardcoded array of tokens as required
+  // Hardcoded array of tokens
   const tokens = ["XLM", "USDC", "yXLM"];
+
+  // Mock addresses so the copy function has something to grab
+  const mockAddresses: Record<string, string> = {
+    "XLM": "native",
+    "USDC": "CBQ6O7Y4O7Z5J2...", // Dummy Stellar contract address
+    "yXLM": "CBP3T2...",
+  };
 
   // Memoize filtered tokens based on debounced search value
   const filteredTokens = useMemo(() => {
@@ -61,6 +69,21 @@ export default function TokenDropdown({ onTokenChange }: TokenDropdownProps) {
     }
   };
 
+  /* * ISSUE #86: Handler to copy token address to clipboard without closing the dropdown */
+  const handleCopyAddress = (e: React.MouseEvent, token: string) => {
+    e.stopPropagation(); // Prevents the parent button's onClick (handleTokenSelect) from firing
+    const address = mockAddresses[token] || "Unknown Address";
+
+    navigator.clipboard.writeText(address)
+      .then(() => {
+        toast.success("Token Address Copied!");
+      })
+      .catch((err) => {
+        console.error("Failed to copy text: ", err);
+        toast.error("Failed to copy address");
+      });
+  };
+
   return (
     <div className="relative" ref={dropdownRef}>
       {/* Selected Token Button */}
@@ -69,8 +92,8 @@ export default function TokenDropdown({ onTokenChange }: TokenDropdownProps) {
         className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 transition-colors min-w-[120px] justify-between"
       >
         <span className="font-medium text-white">{selectedToken}</span>
-        <ChevronDown 
-          size={16} 
+        <ChevronDown
+          size={16}
           className={`text-slate-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
         />
       </button>
@@ -122,6 +145,14 @@ export default function TokenDropdown({ onTokenChange }: TokenDropdownProps) {
                     >
                       <div className="flex items-center gap-2">
                         <span className="font-medium">{token}</span>
+                        {/* Copy Button */}
+                        <div
+                          onClick={(e) => handleCopyAddress(e, token)}
+                          className="text-slate-500 hover:text-white transition-colors cursor-pointer p-1"
+                          title="Copy Contract Address"
+                        >
+                          <Copy size={14} />
+                        </div>
                         <StarIcon
                           isStarred={isInWatchlist(token)}
                           onClick={() => toggleWatchlist(token)}
@@ -150,6 +181,14 @@ export default function TokenDropdown({ onTokenChange }: TokenDropdownProps) {
                 >
                   <div className="flex items-center gap-2">
                     <span className="font-medium">{token}</span>
+                    {/* Copy Button */}
+                    <div
+                      onClick={(e) => handleCopyAddress(e, token)}
+                      className="text-slate-500 hover:text-white transition-colors cursor-pointer p-1"
+                      title="Copy Contract Address"
+                    >
+                      <Copy size={14} />
+                    </div>
                     <StarIcon
                       isStarred={isInWatchlist(token)}
                       onClick={() => toggleWatchlist(token)}
