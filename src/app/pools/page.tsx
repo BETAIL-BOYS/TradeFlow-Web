@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Plus, TrendingUp, DollarSign, Percent } from "lucide-react";
 import Navbar from "../../../Navbar";
 import { useWatchlist } from "../../hooks/useWatchlist";
 import StarIcon from "../../components/StarIcon";
+import TableSkeleton from "../../components/TableSkeleton";
 
 interface LiquidityPool {
   id: string;
@@ -57,6 +58,7 @@ const dummyPools: LiquidityPool[] = [
 
 export default function PoolsPage() {
   const { toggleWatchlist, isInWatchlist } = useWatchlist();
+  const [isLoading, setIsLoading] = useState(false);
   
   const handleAddLiquidity = (pool: LiquidityPool) => {
     alert(`Add Liquidity functionality for ${pool.pair} would be implemented here. This is a mock message.`);
@@ -119,7 +121,10 @@ export default function PoolsPage() {
             <h2 className="text-xl font-semibold">Available Pools</h2>
           </div>
           
-          <div className="overflow-x-auto">
+          {isLoading ? (
+            <TableSkeleton />
+          ) : (
+            <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-tradeflow-dark/50 text-tradeflow-muted text-sm uppercase">
                 <tr>
@@ -182,6 +187,7 @@ export default function PoolsPage() {
               </tbody>
             </table>
           </div>
+          )}
         </div>
       </div>
     </div>
