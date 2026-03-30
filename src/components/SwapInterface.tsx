@@ -205,6 +205,16 @@ export default function SwapInterface() {
   const isAnyModalOpen = isSettingsOpen || isHighSlippageWarningOpen || isTradeReviewOpen || isSuccessModalOpen;
   const isSwapValid = fromAmount && parseFloat(fromAmount) > 0 && !isSubmitting;
 
+  // Determine button state based on slippage tolerance
+  const isSlippageExceeded = priceImpact > slippageTolerance;
+  const buttonState = {
+    disabled: !isSwapValid || isSlippageExceeded,
+    text: isSlippageExceeded ? "Slippage Tolerance Exceeded" : "Swap",
+    className: isSlippageExceeded
+      ? "bg-slate-700 cursor-not-allowed"
+      : "bg-blue-600 hover:bg-blue-700"
+  };
+
   // Dynamic Price Impact color logic
   const getPriceImpactColor = () => {
     if (priceImpact < 1) {
