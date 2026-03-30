@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { ArrowUpDown, Settings } from "lucide-react";
+import { ArrowUpDown, Settings, RefreshCw } from "lucide-react";
 import toast from "react-hot-toast";
 import TokenDropdown from "./TokenDropdown";
 import SettingsModal from "./SettingsModal";
@@ -34,8 +34,20 @@ export default function SwapInterface() {
 
   const [submissionStartTime, setSubmissionStartTime] = useState<number | null>(null);
   const [timeLeft, setTimeLeft] = useState<string>("");
-  const [fromBalance] = useState("1240.50");
+  const [fromBalance, setFromBalance] = useState("1240.50");
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const { slippageTolerance, transactionDeadline } = useSlippage();
+
+  const handleRefreshData = () => {
+    setIsRefreshing(true);
+    // Simulate network fetch
+    setTimeout(() => {
+      // Trigger a state update for mocked balances
+      const randomOffset = (Math.random() * 20 - 10).toFixed(2);
+      setFromBalance((prev) => (Math.max(0, parseFloat(prev) + parseFloat(randomOffset))).toFixed(2));
+      setIsRefreshing(false);
+    }, 1500);
+  };
 
   // Countdown timer effect
   useEffect(() => {
@@ -205,6 +217,16 @@ export default function SwapInterface() {
   const isAnyModalOpen = isSettingsOpen || isHighSlippageWarningOpen || isTradeReviewOpen || isSuccessModalOpen;
   const isSwapValid = fromAmount && parseFloat(fromAmount) > 0 && !isSubmitting;
 
+  // Determine button state based on slippage tolerance
+  const isSlippageExceeded = priceImpact > slippageTolerance;
+  const buttonState = {
+    disabled: !isSwapValid || isSlippageExceeded,
+    text: isSlippageExceeded ? "Slippage Tolerance Exceeded" : "Swap",
+    className: isSlippageExceeded
+      ? "bg-slate-700 cursor-not-allowed"
+      : "bg-blue-600 hover:bg-blue-700"
+  };
+
   // Dynamic Price Impact color logic
   const getPriceImpactColor = () => {
     if (priceImpact < 1) {
@@ -243,12 +265,22 @@ export default function SwapInterface() {
       <Card className="max-w-md mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold text-white">Swap Tokens</h2>
-          <button
-            onClick={() => setIsSettingsOpen(true)}
-            className="text-slate-400 hover:text-white transition-all duration-300 hover:rotate-90 p-2 -mr-2"
-          >
-            <Settings size={20} />
-          </button>
+          <div className="flex items-center gap-1 -mr-2">
+            <button
+              onClick={handleRefreshData}
+              disabled={isRefreshing}
+              className="text-slate-400 hover:text-white transition-all duration-300 p-2"
+              aria-label="Refresh Data"
+            >
+              <RefreshCw size={20} className={isRefreshing ? "animate-spin" : ""} />
+            </button>
+            <button
+              onClick={() => setIsSettingsOpen(true)}
+              className="text-slate-400 hover:text-white transition-all duration-300 hover:rotate-90 p-2"
+            >
+              <Settings size={20} />
+            </button>
+          </div>
         </div>
 
         <div className="mb-4">

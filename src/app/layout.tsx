@@ -1,17 +1,18 @@
 import "./globals.css";
 import React from "react";
-import { Inter } from "next/font/google";
+// import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
 import ToasterProvider from "../components/general/ToasterProvider";
 import { SlippageProvider } from "../contexts/SlippageContext";
+import { NetworkCongestionProvider } from "../contexts/NetworkCongestionContext";
 import Footer from "../components/layout/Footer";
 import NetworkCongestionBanner from "../components/NetworkCongestionBanner";
 import ErrorBoundary from "../components/ErrorBoundary";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
+// const inter = Inter({
+//   subsets: ["latin"],
+//   variable: "--font-inter",
+// });
 
 export const metadata = {
   title: "TradeFlow",
@@ -21,9 +22,18 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>
-        {children}
-        <Toaster position="top-right" richColors closeButton />  {/* ← Add this */}
+      <body className="font-sans antialiased">
+        <ErrorBoundary>
+          <NetworkCongestionProvider>
+            <SlippageProvider>
+              {/* <ToasterProvider /> */}
+              {/* <Toaster position="top-right" richColors closeButton /> */}
+              <NetworkCongestionBanner />
+              {children}
+              <Footer />
+            </SlippageProvider>
+          </NetworkCongestionProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

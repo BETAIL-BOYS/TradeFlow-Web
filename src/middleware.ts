@@ -1,16 +1,8 @@
-import { NextRequest } from 'next/server';
-import * as Sentry from '@sentry/nextjs';
+import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  // You can add custom middleware logic here
-  // For example, tracking user sessions, adding headers, etc.
-  
-  return Sentry.continueTrace({
-    name: 'middleware',
-    op: 'http.server',
-  }, () => {
-    // Continue with the request
-  });
+  // Bypassing Sentry middleware wrapper to rule out initialization hangs
+  return NextResponse.next();
 }
 
 export const config = {

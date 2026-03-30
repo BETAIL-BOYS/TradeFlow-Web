@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Plus, TrendingUp, DollarSign, Percent } from "lucide-react";
 import Navbar from "../../components/Navbar";
 import { useWatchlist } from "../../hooks/useWatchlist";
 import StarIcon from "../../components/StarIcon";
+import AnimatedCounter from "../../components/AnimatedCounter";
 
 interface LiquidityPool {
   id: string;
@@ -57,7 +58,8 @@ const dummyPools: LiquidityPool[] = [
 
 export default function PoolsPage() {
   const { toggleWatchlist, isInWatchlist } = useWatchlist();
-
+  const [isLoading, setIsLoading] = useState(false);
+  
   const handleAddLiquidity = (pool: LiquidityPool) => {
     alert(
       `Add Liquidity functionality for ${pool.pair} would be implemented here. This is a mock message.`,
@@ -85,7 +87,9 @@ export default function PoolsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-tradeflow-muted text-sm mb-1">Total TVL</p>
-                <p className="text-2xl font-bold">$8,505,000</p>
+                <p className="text-2xl font-bold">
+                  <AnimatedCounter end={8505000} duration={1.5} prefix="$" />
+                </p>
               </div>
               <DollarSign className="text-tradeflow-accent" size={24} />
             </div>
@@ -95,7 +99,9 @@ export default function PoolsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-tradeflow-muted text-sm mb-1">24h Volume</p>
-                <p className="text-2xl font-bold">$701,000</p>
+                <p className="text-2xl font-bold">
+                  <AnimatedCounter end={701000} duration={1.5} prefix="$" />
+                </p>
               </div>
               <TrendingUp className="text-green-400" size={24} />
             </div>
@@ -119,6 +125,11 @@ export default function PoolsPage() {
           </div>
 
           <div className="overflow-x-auto">
+          
+          {isLoading ? (
+            <TableSkeleton />
+          ) : (
+            <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-tradeflow-dark/50 text-tradeflow-muted text-sm uppercase">
                 <tr>
@@ -183,6 +194,7 @@ export default function PoolsPage() {
               </tbody>
             </table>
           </div>
+          )}
         </div>
       </div>
     </div>

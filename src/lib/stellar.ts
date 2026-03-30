@@ -1,10 +1,13 @@
-import {
+import { 
   StellarWalletsKit,
   WalletNetwork,
+  allowAllModules,
   FREIGHTER_ID,
   XBULL_ID,
   ALBEDO_ID,
-  allowAllModules,
+  RABET_ID,
+  LOBSTR_ID,
+  HANA_ID
 } from "@creit.tech/stellar-wallets-kit";
 import {
   Server,
@@ -14,17 +17,25 @@ import {
   Networks,
 } from "soroban-client";
 
+// Re-export constants for backward compatibility if needed, 
+// though we use the ones from the kit now.
+export { FREIGHTER_ID, XBULL_ID, ALBEDO_ID };
+
+// Define WalletType as string to match the kit's expected IDs
 export type WalletType = string;
 
+// Default to Testnet for development
 const RPC_URL = "https://soroban-testnet.stellar.org";
 const server = new Server(RPC_URL);
 const NETWORK_PASSPHRASE = Networks.TESTNET;
 
-const kit = new StellarWalletsKit({
-  network: WalletNetwork.TESTNET,
-  selectedWalletId: FREIGHTER_ID,
-  modules: allowAllModules(),
-});
+// Initialize wallet kit instance (only in browser)
+export const walletKit = typeof window !== "undefined" 
+  ? new StellarWalletsKit({
+      network: WalletNetwork.TESTNET,
+      modules: allowAllModules(),
+    })
+  : null as unknown as StellarWalletsKit;
 
 export interface WalletInfo {
   publicKey: string;
@@ -35,27 +46,31 @@ export interface WalletInfo {
  * Connects to a Stellar wallet using the wallet kit.
  * Supports Freighter, Albedo, and xBull wallets.
  */
-export async function connectWallet(
-  walletType: WalletType = FREIGHTER_ID,
-): Promise<WalletInfo> {
+export async function connectWallet(walletType: WalletType = FREIGHTER_ID): Promise<WalletInfo> {
+  if (!walletKit) throw new Error("Wallet kit is not available in this environment.");
+  
   try {
-    kit.setWallet(walletType);
-
-    const { address: publicKey } = await kit.getAddress();
-
-    if (!publicKey) {
+    // Set the wallet type
+    walletKit.setWallet(walletType);
+    
+    // Get public key / address
+    const { address } = await walletKit.getAddress();
+    
+    if (!address) {
       throw new Error("Unable to retrieve public key.");
     }
 
-    const { network } = await kit.getNetwork();
-    if (!network.includes("Test")) {
+    // Verify correct network (Testnet)
+    const { network } = await walletKit.getNetwork();
+    // The kit might return "TESTNET" or the passphrase
+    if (network !== "TESTNET" && network !== WalletNetwork.TESTNET) {
       const walletName = getWalletName(walletType);
       throw new Error(
         `Invalid network. Please switch to TESTNET in ${walletName} settings.`,
       );
     }
 
-    return { publicKey, walletType };
+    return { publicKey: address, walletType };
   } catch (error: any) {
     console.error("Wallet connection error:", error);
     throw error;
@@ -64,12 +79,19 @@ export async function connectWallet(
 
 /**
  * Gets the current connected wallet info
+ * Note: The kit doesn't have a direct 'getWallet' that returns the ID easily without tracking it,
+ * but we can at least try to get the address.
  */
 export async function getConnectedWallet(): Promise<WalletInfo | null> {
+  if (!walletKit) return null;
+  
   try {
-    const { address: publicKey } = await kit.getAddress();
-    if (!publicKey) return null;
-    return { publicKey, walletType: FREIGHTER_ID };
+    const { address } = await walletKit.getAddress({ skipRequestAccess: true });
+    if (!address) return null;
+    
+    // We don't easily know the walletType here unless we stored it.
+    // Defaulting to FREIGHTER_ID or similar might be inaccurate.
+    return { publicKey: address, walletType: FREIGHTER_ID }; 
   } catch (error) {
     return null;
   }
@@ -79,8 +101,12 @@ export async function getConnectedWallet(): Promise<WalletInfo | null> {
  * Disconnects the current wallet
  */
 export async function disconnectWallet(): Promise<void> {
+  if (!walletKit) return;
+  
   try {
-    await kit.disconnect();
+    if (walletKit.disconnect) {
+      await walletKit.disconnect();
+    }
   } catch (error) {
     console.error("Wallet disconnection error:", error);
   }
@@ -97,6 +123,12 @@ function getWalletName(walletType: WalletType): string {
       return "xBull";
     case ALBEDO_ID:
       return "Albedo";
+    case RABET_ID:
+      return "Rabet";
+    case LOBSTR_ID:
+      return "Lobstr";
+    case HANA_ID:
+      return "Hana";
     default:
       return "Wallet";
   }
@@ -161,16 +193,17 @@ export async function waitForTransaction(hash: string): Promise<string> {
  * @param assetIssuer - Issuer address of the asset
  * @param walletType - Optional wallet type override
  */
-export async function addTrustline(
-  assetCode: string,
-  assetIssuer: string,
-  walletType?: WalletType,
-) {
+export async function addTrustline(assetCode: string, assetIssuer: string, walletType?: WalletType) {
+  if (!walletKit) throw new Error("Wallet kit is not available in this environment.");
+
+  // If walletType is provided, set it temporarily
   if (walletType) {
     kit.setWallet(walletType);
   }
-
-  const { address: publicKey } = await kit.getAddress();
+  
+  const { address: publicKey } = await walletKit.getAddress();
+  
+  // Fetch account details to get the current sequence number
   const account = await server.getAccount(publicKey);
   const asset = new Asset(assetCode, assetIssuer);
 
@@ -183,8 +216,7 @@ export async function addTrustline(
     .build();
 
   const xdr = transaction.toXDR();
-  await kit.signTransaction(xdr, {
-    address: publicKey,
+  const { signedTxXdr } = await walletKit.signTransaction(xdr, {
     networkPassphrase: NETWORK_PASSPHRASE,
   });
 
@@ -214,14 +246,18 @@ export async function signTransaction(
 }
 
 export async function getNetwork(): Promise<string> {
-  const { network } = await kit.getNetwork();
+  if (!walletKit) throw new Error("Wallet kit is not available in this environment.");
+
+  const { network } = await walletKit.getNetwork();
   return network;
 }
 
 export async function isWalletConnected(): Promise<boolean> {
+  if (!walletKit) return false;
+
   try {
-    const { address: publicKey } = await kit.getAddress();
-    return !!publicKey;
+    const { address } = await walletKit.getAddress({ skipRequestAccess: true });
+    return !!address;
   } catch {
     return false;
   }

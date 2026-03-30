@@ -1,13 +1,39 @@
-import React from 'react';
-import { ArrowDown } from 'lucide-react';
+"use client";
+
+import React, { useState } from 'react';
+import { ArrowDown, RefreshCw } from 'lucide-react';
 import { TokenInput } from './TokenInput';
 
 export const SwapCard = () => {
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = () => {
+    if (isRefreshing) return;
+    setIsRefreshing(true);
+    // Simulate network fetch
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 1500);
+  };
+
   return (
-    <div className="w-full max-w-lg rounded-3xl bg-white p-4 shadow-xl border border-gray-100">
-      <div className="flex flex-col gap-1">
+    <div className="w-full max-w-lg rounded-3xl bg-white p-4 shadow-xl border border-gray-100 relative">
+      {/* Refresh Button */}
+      <button
+        onClick={handleRefresh}
+        className="absolute top-4 right-4 p-2 text-gray-400 hover:text-blue-600 transition-colors rounded-full hover:bg-gray-100"
+        aria-label="Refresh data"
+        disabled={isRefreshing}
+      >
+        <RefreshCw 
+          size={18} 
+          className={isRefreshing ? "animate-spin text-blue-600" : ""} 
+        />
+      </button>
+
+      <div className="flex flex-col gap-1 mt-6">
         <TokenInput label="From" value="" tokenSymbol="XLM" onSelectClick={() => {}} />
-        
+...
         <div className="relative h-2 flex items-center justify-center z-10">
           {/* Swap Arrow Button - Increased padding to p-3 for mobile tap targets (#103) */}
           <button 
