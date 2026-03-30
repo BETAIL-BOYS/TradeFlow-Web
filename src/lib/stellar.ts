@@ -1,26 +1,30 @@
-import { 
-  walletKit,
+import {
+  StellarWalletsKit,
+  WalletNetwork,
   FREIGHTER_ID,
   XBULL_ID,
   ALBEDO_ID,
-  WalletType
+  allowAllModules,
 } from "@creit.tech/stellar-wallets-kit";
-import { 
-  Server, 
-  TransactionBuilder, 
-  Asset, 
-  Operation, 
-  Networks 
+import {
+  Server,
+  TransactionBuilder,
+  Asset,
+  Operation,
+  Networks,
 } from "soroban-client";
 
-// Default to Testnet for development
+export type WalletType = string;
+
 const RPC_URL = "https://soroban-testnet.stellar.org";
 const server = new Server(RPC_URL);
-
 const NETWORK_PASSPHRASE = Networks.TESTNET;
 
-// Initialize wallet kit
-walletKit.setWallet(FREIGHTER_ID);
+const kit = new StellarWalletsKit({
+  network: WalletNetwork.TESTNET,
+  selectedWalletId: FREIGHTER_ID,
+  modules: allowAllModules(),
+});
 
 export interface WalletInfo {
   publicKey: string;
@@ -31,30 +35,24 @@ export interface WalletInfo {
  * Connects to a Stellar wallet using the wallet kit.
  * Supports Freighter, Albedo, and xBull wallets.
  */
-export async function connectWallet(walletType: WalletType = FREIGHTER_ID): Promise<WalletInfo> {
+export async function connectWallet(
+  walletType: WalletType = FREIGHTER_ID,
+): Promise<WalletInfo> {
   try {
-    // Set the wallet type
-    walletKit.setWallet(walletType);
-    
-    // Check if wallet is available
-    const isWalletAvailable = await walletKit.isWalletAvailable();
-    if (!isWalletAvailable) {
-      const walletName = getWalletName(walletType);
-      throw new Error(`${walletName} is not available. Please install it to continue.`);
-    }
+    kit.setWallet(walletType);
 
-    // Get public key
-    const publicKey = await walletKit.getPublicKey();
-    
+    const { address: publicKey } = await kit.getAddress();
+
     if (!publicKey) {
       throw new Error("Unable to retrieve public key.");
     }
 
-    // Verify correct network (Testnet)
-    const network = await walletKit.getNetwork();
-    if (network !== "TESTNET") {
+    const { network } = await kit.getNetwork();
+    if (!network.includes("Test")) {
       const walletName = getWalletName(walletType);
-      throw new Error(`Invalid network: ${network}. Please switch to TESTNET in ${walletName} settings.`);
+      throw new Error(
+        `Invalid network. Please switch to TESTNET in ${walletName} settings.`,
+      );
     }
 
     return { publicKey, walletType };
@@ -69,11 +67,9 @@ export async function connectWallet(walletType: WalletType = FREIGHTER_ID): Prom
  */
 export async function getConnectedWallet(): Promise<WalletInfo | null> {
   try {
-    const publicKey = await walletKit.getPublicKey();
+    const { address: publicKey } = await kit.getAddress();
     if (!publicKey) return null;
-    
-    const currentWallet = walletKit.getWallet();
-    return { publicKey, walletType: currentWallet };
+    return { publicKey, walletType: FREIGHTER_ID };
   } catch (error) {
     return null;
   }
@@ -84,7 +80,7 @@ export async function getConnectedWallet(): Promise<WalletInfo | null> {
  */
 export async function disconnectWallet(): Promise<void> {
   try {
-    await walletKit.disconnect();
+    await kit.disconnect();
   } catch (error) {
     console.error("Wallet disconnection error:", error);
   }
@@ -109,7 +105,7 @@ function getWalletName(walletType: WalletType): string {
 /**
  * Monitors the status of a Stellar transaction until it succeeds, fails, or times out.
  * Polls the network every 2 seconds.
- * 
+ *
  * @param hash - The transaction hash to monitor
  * @returns Promise that resolves to "SUCCESS" if successful
  */
@@ -118,27 +114,35 @@ export async function waitForTransaction(hash: string): Promise<string> {
   const POLLING_INTERVAL_MS = 2000;
   const startTime = Date.now();
 
-  console.log(`[waitForTransaction] Starting monitoring for transaction: ${hash}`);
+  console.log(
+    `[waitForTransaction] Starting monitoring for transaction: ${hash}`,
+  );
 
   while (Date.now() - startTime < TIMEOUT_MS) {
     try {
       // Attempt to fetch transaction status
       const tx = await server.getTransaction(hash);
-      
-      console.log(`[waitForTransaction] Polling ${hash}: Status = ${tx.status}`);
+
+      console.log(
+        `[waitForTransaction] Polling ${hash}: Status = ${tx.status}`,
+      );
 
       if (tx.status === "SUCCESS") {
-        console.log(`[waitForTransaction] Transaction ${hash} confirmed successfully.`);
+        console.log(
+          `[waitForTransaction] Transaction ${hash} confirmed successfully.`,
+        );
         return "SUCCESS";
       } else if (tx.status === "FAILED") {
         console.error(`[waitForTransaction] Transaction ${hash} failed.`);
         throw new Error(`Transaction failed with status: ${tx.status}`);
       }
-      
+
       // If status is NOT_FOUND or other pending states, continue polling
     } catch (error: any) {
       // Log error but continue polling (common for 404 Not Found initially)
-      console.warn(`[waitForTransaction] Polling attempt failed (retrying): ${error.message}`);
+      console.warn(
+        `[waitForTransaction] Polling attempt failed (retrying): ${error.message}`,
+      );
     }
 
     // Wait before next poll
@@ -157,77 +161,70 @@ export async function waitForTransaction(hash: string): Promise<string> {
  * @param assetIssuer - Issuer address of the asset
  * @param walletType - Optional wallet type override
  */
-export async function addTrustline(assetCode: string, assetIssuer: string, walletType?: WalletType) {
-  // If walletType is provided, set it temporarily
+export async function addTrustline(
+  assetCode: string,
+  assetIssuer: string,
+  walletType?: WalletType,
+) {
   if (walletType) {
-    walletKit.setWallet(walletType);
+    kit.setWallet(walletType);
   }
-  
-  const publicKey = await walletKit.getPublicKey();
-  
-  // Fetch account details to get the current sequence number
+
+  const { address: publicKey } = await kit.getAddress();
   const account = await server.getAccount(publicKey);
   const asset = new Asset(assetCode, assetIssuer);
-  
-  // Construct the transaction
+
   const transaction = new TransactionBuilder(account, {
-    fee: "1000", // Standard fee in stroops
+    fee: "1000",
     networkPassphrase: NETWORK_PASSPHRASE,
   })
     .addOperation(Operation.changeTrust({ asset }))
     .setTimeout(60)
     .build();
 
-  // Request signature from the current wallet
   const xdr = transaction.toXDR();
-  const signedXdr = await walletKit.signTransaction(xdr, {
-    network: "TESTNET",
+  await kit.signTransaction(xdr, {
+    address: publicKey,
+    networkPassphrase: NETWORK_PASSPHRASE,
   });
 
-  // Submit to the network
   const response = await server.sendTransaction(transaction);
-  
+
   if (response.hash) {
     return await waitForTransaction(response.hash);
   }
-  
+
   throw new Error("Transaction failed during submission.");
 }
 
 /**
  * Signs a transaction using the currently connected wallet
  */
-export async function signTransaction(xdr: string, options?: any): Promise<string> {
-  return await walletKit.signTransaction(xdr, {
-    network: "TESTNET",
-    ...options
+export async function signTransaction(
+  xdr: string,
+  options?: any,
+): Promise<string> {
+  const { address: publicKey } = await kit.getAddress();
+  const { signedTxXdr } = await kit.signTransaction(xdr, {
+    address: publicKey,
+    networkPassphrase: NETWORK_PASSPHRASE,
+    ...options,
   });
+  return signedTxXdr;
 }
 
-/**
- * Gets the current network from the connected wallet
- */
 export async function getNetwork(): Promise<string> {
-  return await walletKit.getNetwork();
+  const { network } = await kit.getNetwork();
+  return network;
 }
 
-/**
- * Checks if a wallet is connected
- */
 export async function isWalletConnected(): Promise<boolean> {
   try {
-    const publicKey = await walletKit.getPublicKey();
+    const { address: publicKey } = await kit.getAddress();
     return !!publicKey;
   } catch {
     return false;
   }
 }
 
-// Export wallet types and kit for use in other modules
-export { 
-  walletKit,
-  FREIGHTER_ID, 
-  XBULL_ID, 
-  ALBEDO_ID, 
-  WalletType 
-};
+export { kit as walletKit, FREIGHTER_ID, XBULL_ID, ALBEDO_ID };
