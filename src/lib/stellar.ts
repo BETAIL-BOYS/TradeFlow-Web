@@ -9,12 +9,12 @@ import {
   LOBSTR_ID,
   HANA_ID
 } from "@creit.tech/stellar-wallets-kit";
-import { 
-  Server, 
-  TransactionBuilder, 
-  Asset, 
-  Operation, 
-  Networks 
+import {
+  Server,
+  TransactionBuilder,
+  Asset,
+  Operation,
+  Networks,
 } from "soroban-client";
 
 // Re-export constants for backward compatibility if needed, 
@@ -27,7 +27,6 @@ export type WalletType = string;
 // Default to Testnet for development
 const RPC_URL = "https://soroban-testnet.stellar.org";
 const server = new Server(RPC_URL);
-
 const NETWORK_PASSPHRASE = Networks.TESTNET;
 
 // Initialize wallet kit instance (only in browser)
@@ -66,7 +65,9 @@ export async function connectWallet(walletType: WalletType = FREIGHTER_ID): Prom
     // The kit might return "TESTNET" or the passphrase
     if (network !== "TESTNET" && network !== WalletNetwork.TESTNET) {
       const walletName = getWalletName(walletType);
-      throw new Error(`Invalid network: ${network}. Please switch to TESTNET in ${walletName} settings.`);
+      throw new Error(
+        `Invalid network. Please switch to TESTNET in ${walletName} settings.`,
+      );
     }
 
     return { publicKey: address, walletType };
@@ -136,7 +137,7 @@ function getWalletName(walletType: WalletType): string {
 /**
  * Monitors the status of a Stellar transaction until it succeeds, fails, or times out.
  * Polls the network every 2 seconds.
- * 
+ *
  * @param hash - The transaction hash to monitor
  * @returns Promise that resolves to "SUCCESS" if successful
  */
@@ -145,27 +146,35 @@ export async function waitForTransaction(hash: string): Promise<string> {
   const POLLING_INTERVAL_MS = 2000;
   const startTime = Date.now();
 
-  console.log(`[waitForTransaction] Starting monitoring for transaction: ${hash}`);
+  console.log(
+    `[waitForTransaction] Starting monitoring for transaction: ${hash}`,
+  );
 
   while (Date.now() - startTime < TIMEOUT_MS) {
     try {
       // Attempt to fetch transaction status
       const tx = await server.getTransaction(hash);
-      
-      console.log(`[waitForTransaction] Polling ${hash}: Status = ${tx.status}`);
+
+      console.log(
+        `[waitForTransaction] Polling ${hash}: Status = ${tx.status}`,
+      );
 
       if (tx.status === "SUCCESS") {
-        console.log(`[waitForTransaction] Transaction ${hash} confirmed successfully.`);
+        console.log(
+          `[waitForTransaction] Transaction ${hash} confirmed successfully.`,
+        );
         return "SUCCESS";
       } else if (tx.status === "FAILED") {
         console.error(`[waitForTransaction] Transaction ${hash} failed.`);
         throw new Error(`Transaction failed with status: ${tx.status}`);
       }
-      
+
       // If status is NOT_FOUND or other pending states, continue polling
     } catch (error: any) {
       // Log error but continue polling (common for 404 Not Found initially)
-      console.warn(`[waitForTransaction] Polling attempt failed (retrying): ${error.message}`);
+      console.warn(
+        `[waitForTransaction] Polling attempt failed (retrying): ${error.message}`,
+      );
     }
 
     // Wait before next poll
@@ -189,7 +198,7 @@ export async function addTrustline(assetCode: string, assetIssuer: string, walle
 
   // If walletType is provided, set it temporarily
   if (walletType) {
-    walletKit.setWallet(walletType);
+    kit.setWallet(walletType);
   }
   
   const { address: publicKey } = await walletKit.getAddress();
@@ -197,48 +206,45 @@ export async function addTrustline(assetCode: string, assetIssuer: string, walle
   // Fetch account details to get the current sequence number
   const account = await server.getAccount(publicKey);
   const asset = new Asset(assetCode, assetIssuer);
-  
-  // Construct the transaction
+
   const transaction = new TransactionBuilder(account, {
-    fee: "1000", // Standard fee in stroops
+    fee: "1000",
     networkPassphrase: NETWORK_PASSPHRASE,
   })
     .addOperation(Operation.changeTrust({ asset }))
     .setTimeout(60)
     .build();
 
-  // Request signature from the current wallet
   const xdr = transaction.toXDR();
   const { signedTxXdr } = await walletKit.signTransaction(xdr, {
     networkPassphrase: NETWORK_PASSPHRASE,
   });
 
-  // Submit to the network
   const response = await server.sendTransaction(transaction);
-  
+
   if (response.hash) {
     return await waitForTransaction(response.hash);
   }
-  
+
   throw new Error("Transaction failed during submission.");
 }
 
 /**
  * Signs a transaction using the currently connected wallet
  */
-export async function signTransaction(xdr: string, options?: any): Promise<string> {
-  if (!walletKit) throw new Error("Wallet kit is not available in this environment.");
-
-  const { signedTxXdr } = await walletKit.signTransaction(xdr, {
+export async function signTransaction(
+  xdr: string,
+  options?: any,
+): Promise<string> {
+  const { address: publicKey } = await kit.getAddress();
+  const { signedTxXdr } = await kit.signTransaction(xdr, {
+    address: publicKey,
     networkPassphrase: NETWORK_PASSPHRASE,
-    ...options
+    ...options,
   });
   return signedTxXdr;
 }
 
-/**
- * Gets the current network from the connected wallet
- */
 export async function getNetwork(): Promise<string> {
   if (!walletKit) throw new Error("Wallet kit is not available in this environment.");
 
@@ -246,9 +252,6 @@ export async function getNetwork(): Promise<string> {
   return network;
 }
 
-/**
- * Checks if a wallet is connected
- */
 export async function isWalletConnected(): Promise<boolean> {
   if (!walletKit) return false;
 
@@ -259,3 +262,5 @@ export async function isWalletConnected(): Promise<boolean> {
     return false;
   }
 }
+
+export { kit as walletKit, FREIGHTER_ID, XBULL_ID, ALBEDO_ID };
