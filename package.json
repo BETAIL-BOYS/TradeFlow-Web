@@ -45,5 +45,11 @@
     "eslint": "^8.57.0",
     "eslint-config-next": "^16.2.4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "axios": "^1.15.0",
+    "elliptic": "^6.5.6",
+    "protobufjs": "^8.0.1",
+    "tiny-secp256k1": "^2.2.3"
   }
 }
