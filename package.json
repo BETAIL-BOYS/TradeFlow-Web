@@ -18,6 +18,7 @@
     "@sentry/nextjs": "^10.49.0",
     "@stellar/freighter-api": "^1.7.1",
     "@tailwindcss/postcss": "^4.0.0",
+    "@radix-ui/react-dialog": "^1.1.15",
     "axios": "^1.15.0",
     "clsx": "^2.1.1",
     "is-callable": "^1.2.7",
