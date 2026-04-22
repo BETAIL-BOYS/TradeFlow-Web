@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connectWallet, WalletType } from "../lib/stellar";
 import { PlusCircle, ShieldCheck, Landmark, Star } from "lucide-react";
 import LoanTable from "../components/LoanTable";
@@ -19,6 +19,7 @@ import { useWatchlist } from "../hooks/useWatchlist";
 import StarIcon from "../components/StarIcon";
 import { api } from "../lib/api";
 import type { InvoiceSummary } from "../../types/api";
+import { RiskSocketClient } from "../lib/riskSocket";
 
 export default function Page() {
   const [address, setAddress] = useState("");
@@ -28,6 +29,7 @@ export default function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
   const { toggleWatchlist, isInWatchlist } = useWatchlist();
+  const riskSocketRef = useRef<RiskSocketClient | null>(null);
 
   // 1. Connect Stellar Wallet (supports Freighter, Albedo, xBull)
   const handleConnectWallet = async (walletType: WalletType) => {
@@ -67,6 +69,42 @@ export default function Page() {
       controller.abort();
     };
   }, []);
+
+  useEffect(() => {
+    if (!address) {
+      riskSocketRef.current?.disconnect();
+      riskSocketRef.current = null;
+      return;
+    }
+
+    const socketClient = riskSocketRef.current ?? new RiskSocketClient();
+    riskSocketRef.current = socketClient;
+    socketClient.connect();
+
+    const unsubscribe = socketClient.on((event) => {
+      if (event.event !== "risk_update") return;
+      const { invoiceId, riskScore } = event.data;
+
+      setInvoices((prev) =>
+        prev.map((inv) => (inv.id === invoiceId ? { ...inv, riskScore } : inv)),
+      );
+    });
+
+    return () => {
+      unsubscribe();
+      socketClient.disconnect();
+      if (riskSocketRef.current === socketClient) {
+        riskSocketRef.current = null;
+      }
+    };
+  }, [address]);
+
+  useEffect(() => {
+    if (!address) return;
+    if (invoices.length === 0) return;
+
+    riskSocketRef.current?.syncInvoices(invoices.map((i) => i.id));
+  }, [address, invoices]);
   const toast = useTransactionToast();
 
   const handleTestToast = () => {
