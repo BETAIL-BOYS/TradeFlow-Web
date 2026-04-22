@@ -5,15 +5,22 @@ import dynamic from "next/dynamic";
 import Toggle from "../app/Toggle";
 import { useTokenStore } from "../stores/tokenStore";
 import PremiumUnlockModal from "./PremiumUnlockModal";
+import Skeleton from "./ui/Skeleton";
 
 // Dynamically import the heavy chart component with loading fallback
 const LivePriceChart = dynamic(() => import("../components/LivePriceChart"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-96 bg-slate-800/50 rounded-xl border border-slate-700/50 flex items-center justify-center">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-3"></div>
-        <p className="text-slate-400 text-sm">Loading Pro Chart...</p>
+    <div className="w-full h-96 bg-slate-800/20 rounded-xl border border-slate-700/50 p-4">
+      <div className="flex justify-between mb-4">
+        <Skeleton className="h-6 w-32" />
+        <Skeleton className="h-6 w-24" />
+      </div>
+      <div className="relative h-full w-full">
+        <Skeleton className="absolute inset-0 opacity-20" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        </div>
       </div>
     </div>
   ),

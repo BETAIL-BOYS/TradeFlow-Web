@@ -2,10 +2,15 @@
 
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import ChartSkeleton from './ui/ChartSkeleton';
 
 interface PriceData {
   date: string;
   price: number;
+}
+
+interface PriceChartProps {
+  loading?: boolean;
 }
 
 const hardcodedData: PriceData[] = [
@@ -18,7 +23,11 @@ const hardcodedData: PriceData[] = [
   { date: 'Sun', price: 0.091 },
 ];
 
-export default function PriceChart() {
+export default function PriceChart({ loading = false }: PriceChartProps) {
+  if (loading) {
+    return <ChartSkeleton />;
+  }
+
   return (
     <div className="w-full h-64">
       <ResponsiveContainer width="100%" height="100%">

@@ -1,20 +1,20 @@
 import React from 'react';
+import Skeleton from './ui/Skeleton';
 
-const SkeletonRow = () => {
+interface SkeletonRowProps {
+  columns?: number;
+}
+
+const SkeletonRow = ({ columns = 4 }: SkeletonRowProps) => {
   return (
     <tr className="border-b border-slate-700/50">
-      <td className="p-4">
-        <div className="h-4 w-20 bg-slate-700 rounded animate-pulse"></div>
-      </td>
-      <td className="p-4">
-        <div className="h-2 w-full max-w-[100px] bg-slate-700 rounded-full animate-pulse"></div>
-      </td>
-      <td className="p-4">
-        <div className="h-6 w-20 bg-slate-700 rounded-full animate-pulse"></div>
-      </td>
-      <td className="p-4">
-        <div className="h-5 w-16 bg-slate-700 rounded animate-pulse"></div>
-      </td>
+      {[...Array(columns)].map((_, i) => (
+        <td key={i} className="p-4">
+          <Skeleton 
+            className={i === columns - 1 ? "ml-auto h-4 w-16" : "h-4 w-24"} 
+          />
+        </td>
+      ))}
     </tr>
   );
 };

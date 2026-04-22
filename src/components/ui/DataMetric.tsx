@@ -1,10 +1,12 @@
 import React from "react";
+import MetricSkeleton from "./MetricSkeleton";
 
 interface DataMetricProps {
   title: string;
   value: string | number;
   trend?: string;
   className?: string;
+  loading?: boolean;
 }
 
 export default function DataMetric({
@@ -12,7 +14,11 @@ export default function DataMetric({
   value,
   trend,
   className = "",
+  loading = false,
 }: DataMetricProps) {
+  if (loading) {
+    return <MetricSkeleton />;
+  }
   const isPositive = trend?.startsWith("+");
   const isNegative = trend?.startsWith("-");
 

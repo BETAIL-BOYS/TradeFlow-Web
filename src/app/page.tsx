@@ -383,7 +383,7 @@ export default function Page() {
                 <h2 className="text-xl font-semibold">Active Loans Dashboard</h2>
               </div>
               <div className="p-6 bg-tradeflow-dark/50">
-                <LoanTable />
+                <LoanTable loading={loading} />
               </div>
             </div>
 

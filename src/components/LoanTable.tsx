@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { formatCurrency, formatDate } from '../lib/format';
+import SkeletonRow from './SkeletonRow';
 
 // --- Types & Interfaces ---
 type LoanStatus = 'Active' | 'Overdue' | 'Repaid';
@@ -13,6 +14,10 @@ interface Loan {
   interestRate: number; // Annual rate in percentage (e.g., 5 for 5%)
   startDate: string;    // ISO string date
   status: LoanStatus;
+}
+
+interface LoanTableProps {
+  loading?: boolean;
 }
 
 // --- Mock Data ---
@@ -49,7 +54,7 @@ const StatusBadge = ({ status }: { status: LoanStatus }) => {
 };
 
 // --- Main Component ---
-export default function LoanTable() {
+export default function LoanTable({ loading = false }: LoanTableProps) {
   const handleRepay = (loanId: string) => {
     console.log(`Initiating repayment for loan: ${loanId}`);
   };
@@ -67,34 +72,40 @@ export default function LoanTable() {
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-700/30">
-          {MOCK_LOANS.map((loan) => (
-            <tr key={loan.id} className="hover:bg-slate-800/30 transition-colors">
-              <td className="px-6 py-4 font-medium text-blue-300 font-mono">
-                {loan.invoiceId}
-              </td>
-              <td className="px-6 py-4 text-slate-200">
-                {formatCurrency(loan.amountBorrowed, false)}
-              </td>
-              <td className="px-6 py-4 text-slate-200">
-                {formatCurrency(calculateInterest(loan.amountBorrowed, loan.interestRate, loan.startDate), false)}
-              </td>
-              <td className="px-6 py-4">
-                <StatusBadge status={loan.status} />
-              </td>
-              <td className="px-6 py-4 text-right">
-                <button
-                  onClick={() => handleRepay(loan.id)}
-                  disabled={loan.status === 'Repaid'}
-                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${loan.status === 'Repaid'
-                    ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
-                    : 'bg-tradeflow-accent hover:bg-blue-600 text-white shadow-lg shadow-blue-500/20'
-                    }`}
-                >
-                  Repay
-                </button>
-              </td>
-            </tr>
-          ))}
+          {loading ? (
+            [...Array(3)].map((_, i) => (
+              <SkeletonRow key={i} columns={5} />
+            ))
+          ) : (
+            MOCK_LOANS.map((loan) => (
+              <tr key={loan.id} className="hover:bg-slate-800/30 transition-colors">
+                <td className="px-6 py-4 font-medium text-blue-300 font-mono">
+                  {loan.invoiceId}
+                </td>
+                <td className="px-6 py-4 text-slate-200">
+                  {formatCurrency(loan.amountBorrowed, false)}
+                </td>
+                <td className="px-6 py-4 text-slate-200">
+                  {formatCurrency(calculateInterest(loan.amountBorrowed, loan.interestRate, loan.startDate), false)}
+                </td>
+                <td className="px-6 py-4">
+                  <StatusBadge status={loan.status} />
+                </td>
+                <td className="px-6 py-4 text-right">
+                  <button
+                    onClick={() => handleRepay(loan.id)}
+                    disabled={loan.status === 'Repaid'}
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${loan.status === 'Repaid'
+                      ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
+                      : 'bg-tradeflow-accent hover:bg-blue-600 text-white shadow-lg shadow-blue-500/20'
+                      }`}
+                  >
+                    Repay
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

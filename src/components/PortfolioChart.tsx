@@ -12,6 +12,7 @@ import {
   TooltipProps
 } from "recharts";
 import { api } from "../lib/api";
+import ChartSkeleton from "./ui/ChartSkeleton";
 
 interface PnLData {
   date: string;
@@ -109,11 +110,7 @@ export default function PortfolioChart() {
   }, [data]);
 
   if (loading) {
-    return (
-      <div className="h-64 flex items-center justify-center">
-        <div className="animate-pulse text-tradeflow-muted">Loading chart data...</div>
-      </div>
-    );
+    return <ChartSkeleton />;
   }
 
   return (
