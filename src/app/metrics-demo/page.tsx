@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import DataMetric from "../../components/ui/DataMetric";
 import Navbar from "../../components/Navbar";
 import { api } from "../../lib/api";
+import { RiskSocketClient } from "../../lib/riskSocket";
 
 const metrics = [
   { title: "Total Volume (24h)", value: "$4,821,093", trend: "+12.4%" },
@@ -56,6 +57,25 @@ export default function MetricsDemoPage() {
 
     return () => {
       controller.abort();
+    };
+  }, []);
+
+  useEffect(() => {
+    const socketClient = new RiskSocketClient();
+    socketClient.connect();
+    socketClient.subscribeInvoice("INV-DEMO-001");
+
+    const unsubscribe = socketClient.on((event) => {
+      if (event.event !== "risk_update") return;
+      if (event.data.invoiceId !== "INV-DEMO-001") return;
+      console.log("[ws] risk_update", event.data);
+      setRiskValue(String(event.data.riskScore));
+      setRiskTrend(`invoiceId=${event.data.invoiceId}`);
+    });
+
+    return () => {
+      unsubscribe();
+      socketClient.disconnect();
     };
   }, []);
 

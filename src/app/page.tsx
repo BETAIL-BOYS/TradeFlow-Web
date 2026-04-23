@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connectWallet, WalletType } from "../lib/stellar";
 import { PlusCircle, ShieldCheck, Landmark, Star } from "lucide-react";
 import LoanTable from "../components/LoanTable";
 import SkeletonRow from "../components/SkeletonRow";
 import Navbar from "../components/Navbar";
+import StickyHeader from "../components/StickyHeader";
 import Card from "../components/Card";
 import WalletModal from "../components/WalletModal";
 import InvoiceMintForm from "../components/InvoiceMintForm";
@@ -19,6 +20,7 @@ import { useWatchlist } from "../hooks/useWatchlist";
 import StarIcon from "../components/StarIcon";
 import { api } from "../lib/api";
 import type { InvoiceSummary } from "../../types/api";
+import { RiskSocketClient } from "../lib/riskSocket";
 
 export default function Page() {
   const [address, setAddress] = useState("");
@@ -28,6 +30,7 @@ export default function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
   const { toggleWatchlist, isInWatchlist } = useWatchlist();
+  const riskSocketRef = useRef<RiskSocketClient | null>(null);
 
   // 1. Connect Stellar Wallet (supports Freighter, Albedo, xBull)
   const handleConnectWallet = async (walletType: WalletType) => {
@@ -67,6 +70,42 @@ export default function Page() {
       controller.abort();
     };
   }, []);
+
+  useEffect(() => {
+    if (!address) {
+      riskSocketRef.current?.disconnect();
+      riskSocketRef.current = null;
+      return;
+    }
+
+    const socketClient = riskSocketRef.current ?? new RiskSocketClient();
+    riskSocketRef.current = socketClient;
+    socketClient.connect();
+
+    const unsubscribe = socketClient.on((event) => {
+      if (event.event !== "risk_update") return;
+      const { invoiceId, riskScore } = event.data;
+
+      setInvoices((prev) =>
+        prev.map((inv) => (inv.id === invoiceId ? { ...inv, riskScore } : inv)),
+      );
+    });
+
+    return () => {
+      unsubscribe();
+      socketClient.disconnect();
+      if (riskSocketRef.current === socketClient) {
+        riskSocketRef.current = null;
+      }
+    };
+  }, [address]);
+
+  useEffect(() => {
+    if (!address) return;
+    if (invoices.length === 0) return;
+
+    riskSocketRef.current?.syncInvoices(invoices.map((i) => i.id));
+  }, [address, invoices]);
   const toast = useTransactionToast();
 
   const handleTestToast = () => {
@@ -87,18 +126,15 @@ export default function Page() {
   ];
 
   return (
-    <div className="min-h-screen bg-tradeflow-dark text-white font-sans flex flex-col">
-      {/* News Banner */}
-      <NewsBanner />
-
-      {/* Header */}
-      <Navbar
-        address={address}
-        onConnect={() => setIsModalOpen(true)}
+    <div className="min-h-screen bg-tradeflow-dark text-white font-sans">
+      {/* Sticky Header */}
+      <StickyHeader
+        title="Marketplace"
+        subtitle="Trade and manage Real World Asset tokens"
       />
 
       {/* Main Content */}
-      <div className="flex-1 px-8">
+      <div className="px-4 lg:px-8 py-6">
         {/* Tab Navigation */}
         <TabNavigation
           tabs={tabs}
@@ -106,71 +142,80 @@ export default function Page() {
           onTabChange={setActiveTab}
         />
 
-        {/* Tab Content */}
-        {activeTab === "watchlist" ? (
-          <WatchlistTab />
-        ) : (
-          <>
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-              <Card>
-                <ShieldCheck className="text-green-400 mb-4" />
-                <h3 className="text-tradeflow-muted text-sm">Risk Engine Status</h3>
-                <p className="text-2xl font-semibold text-green-400">Active (Mock)</p>
-              </Card>
-              <Card>
-                <Landmark className="text-blue-400 mb-4" />
-                <h3 className="text-tradeflow-muted text-sm">Protocol Liquidity</h3>
-                <p className="text-2xl font-semibold">$1,250,000 USDC</p>
-              </Card>
-              <button
-                onClick={() => setShowMintForm(true)}
-                className="bg-tradeflow-accent/10 border-2 border-dashed border-tradeflow-accent/50 p-6 rounded-2xl flex flex-col items-center justify-center hover:bg-tradeflow-accent/20 transition"
-              >
-                <PlusCircle className="text-tradeflow-accent mb-2" size={32} />
-                <span className="font-medium text-tradeflow-accent">
-                  Mint New Invoice NFT
-                </span>
-              </button>
-            </div>
+        {/* Main Content */}
+        <div className="flex-1 px-4 lg:px-8">
+          {/* Tab Navigation */}
+          <TabNavigation
+            tabs={tabs}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+          />
 
-            {/* Wallet Assets (Trustline Section) */}
-            <div className="bg-slate-800/40 rounded-2xl border border-slate-700/50 p-6 mb-12 flex flex-col md:flex-row gap-8 items-center justify-between">
-              <div className="flex-1">
-                <h2 className="text-xl font-semibold text-white mb-2">My Stellar Wallet</h2>
-                <p className="text-slate-400 text-sm">Establish trustlines to receive and trade these assets on-chain.</p>
+          {/* Tab Content */}
+          {activeTab === "watchlist" ? (
+            <WatchlistTab />
+          ) : (
+            <>
+              {/* Stats Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <Card>
+                  <ShieldCheck className="text-green-400 mb-4" />
+                  <h3 className="text-tradeflow-muted text-sm">Risk Engine Status</h3>
+                  <p className="text-2xl font-semibold text-green-400">Active (Mock)</p>
+                </Card>
+                <Card>
+                  <Landmark className="text-blue-400 mb-4" />
+                  <h3 className="text-tradeflow-muted text-sm">Protocol Liquidity</h3>
+                  <p className="text-2xl font-semibold">$1,250,000 USDC</p>
+                </Card>
+                <button
+                  onClick={() => setShowMintForm(true)}
+                  className="bg-tradeflow-accent/10 border-2 border-dashed border-tradeflow-accent/50 p-6 rounded-2xl flex flex-col items-center justify-center hover:bg-tradeflow-accent/20 transition"
+                >
+                  <PlusCircle className="text-tradeflow-accent mb-2" size={32} />
+                  <span className="font-medium text-tradeflow-accent">
+                    Mint New Invoice NFT
+                  </span>
+                </button>
               </div>
-              <div className="flex flex-wrap gap-4">
-                <div className="flex items-center gap-3 bg-slate-900/50 p-3 rounded-xl border border-slate-700/50 min-w-[220px] justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-white">USDC</span>
-                    <StarIcon
-                      isStarred={isInWatchlist("USDC")}
-                      onClick={() => toggleWatchlist("USDC")}
-                      size={14}
+
+              {/* Wallet Assets (Trustline Section) */}
+              <div className="bg-slate-800/40 rounded-2xl border border-slate-700/50 p-6 mb-12 flex flex-col md:flex-row gap-8 items-center justify-between">
+                <div className="flex-1">
+                  <h2 className="text-xl font-semibold text-white mb-2">My Stellar Wallet</h2>
+                  <p className="text-slate-400 text-sm">Establish trustlines to receive and trade these assets on-chain.</p>
+                </div>
+                <div className="flex flex-wrap gap-4">
+                  <div className="flex items-center gap-3 bg-slate-900/50 p-3 rounded-xl border border-slate-700/50 min-w-[220px] justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-white">USDC</span>
+                      <StarIcon
+                        isStarred={isInWatchlist("USDC")}
+                        onClick={() => toggleWatchlist("USDC")}
+                        size={14}
+                      />
+                    </div>
+                    <AddTrustlineButton
+                      assetCode="USDC"
+                      assetIssuer="GBBD67IF633ZHJ2CCYBT6RILOY7Y6S6M5SOW2S2ZQRAGI7XRYB2TOC6S"
                     />
                   </div>
-                  <AddTrustlineButton
-                    assetCode="USDC"
-                    assetIssuer="GBBD67IF633ZHJ2CCYBT6RILOY7Y6S6M5SOW2S2ZQRAGI7XRYB2TOC6S"
-                  />
-                </div>
-                <div className="flex items-center gap-3 bg-slate-900/50 p-3 rounded-xl border border-slate-700/50 min-w-[220px] justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-white">yXLM</span>
-                    <StarIcon
-                      isStarred={isInWatchlist("yXLM")}
-                      onClick={() => toggleWatchlist("yXLM")}
-                      size={14}
+                  <div className="flex items-center gap-3 bg-slate-900/50 p-3 rounded-xl border border-slate-700/50 min-w-[220px] justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-white">yXLM</span>
+                      <StarIcon
+                        isStarred={isInWatchlist("yXLM")}
+                        onClick={() => toggleWatchlist("yXLM")}
+                        size={14}
+                      />
+                    </div>
+                    <AddTrustlineButton
+                      assetCode="yXLM"
+                      assetIssuer="GBDUE7TSYHCWW2NQCXHTS7F7W4R4SXY5NCCO4I734XOYLGGUKJALTCYI"
                     />
                   </div>
-                  <AddTrustlineButton
-                    assetCode="yXLM"
-                    assetIssuer="GBDUE7TSYHCWW2NQCXHTS7F7W4R4SXY5NCCO4I734XOYLGGUKJALTCYI"
-                  />
                 </div>
               </div>
-            </div>
 
             {/* Invoice Table */}
             <div className="bg-tradeflow-secondary rounded-2xl border border-tradeflow-muted overflow-hidden mb-12">
@@ -232,27 +277,37 @@ export default function Page() {
               <div className="p-6 bg-tradeflow-dark/50">
                 <LoanTable />
               </div>
-            </div>
 
-            {/* Pro Mode Charts (Lazy-loaded) */}
-            <ProModeSection />
-          </>
+              {/* Active Loans Table (Issue #6) */}
+              <div className="bg-tradeflow-secondary rounded-2xl border border-tradeflow-muted overflow-hidden">
+                <div className="p-6 border-b border-slate-700">
+                  <h2 className="text-xl font-semibold">Active Loans Dashboard</h2>
+                </div>
+                <div className="p-6 bg-tradeflow-dark/50">
+                  <LoanTable />
+                </div>
+              </div>
+
+              {/* Pro Mode Charts (Lazy-loaded) */}
+              <ProModeSection />
+            </>
+          )}
+        </div>
+
+        <WalletModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onConnect={handleConnectWallet}
+        />
+
+        {/* Invoice Mint Form Modal */}
+        {showMintForm && (
+          <InvoiceMintForm
+            onClose={() => setShowMintForm(false)}
+            onSubmit={handleInvoiceMint}
+          />
         )}
       </div>
-
-      <WalletModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onConnect={handleConnectWallet}
-      />
-
-      {/* Invoice Mint Form Modal */}
-      {showMintForm && (
-        <InvoiceMintForm
-          onClose={() => setShowMintForm(false)}
-          onSubmit={handleInvoiceMint}
-        />
-      )}
     </div>
   );
 }
