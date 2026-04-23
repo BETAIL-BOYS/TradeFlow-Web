@@ -12,7 +12,6 @@ import {
   TooltipProps
 } from "recharts";
 import { api } from "../lib/api";
-import ChartSkeleton from "./ui/ChartSkeleton";
 
 interface PnLData {
   date: string;

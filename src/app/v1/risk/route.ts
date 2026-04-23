@@ -28,23 +28,6 @@ function isSafeInvoiceId(invoiceId: string): boolean {
   return /^[a-zA-Z0-9._:-]+$/.test(invoiceId);
 }
 
-function buildMockFactors(invoiceId: string): Record<string, number> {
-  const seed = invoiceId.split("").reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
-  const s1 = (seed % 17) / 100;
-  const s2 = ((seed >> 3) % 19) / 100;
-  const s3 = ((seed >> 5) % 23) / 100;
-
-  return {
-    debtor_clean_payment_history_years: 0.25 + s1,
-    invoice_verification: 0.12 + s2,
-    payment_terms_alignment: 0.08 + s3,
-    sector_volatility: -(0.18 + s2),
-    buyer_concentration: -(0.1 + s1),
-    macroeconomic_headwinds: -(0.07 + s3),
-    invoice_amount: 0,
-  };
-}
-
 export async function OPTIONS(request: NextRequest) {
   return new NextResponse(null, { status: 204, headers: getCorsHeaders(request) });
 }
@@ -68,7 +51,6 @@ export async function GET(request: NextRequest) {
       {
         invoiceId,
         riskScore: score,
-        factors: buildMockFactors(invoiceId),
         updatedAt: new Date().toISOString(),
       },
       { status: 200, headers: corsHeaders },
