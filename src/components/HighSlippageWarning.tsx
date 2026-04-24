@@ -1,5 +1,8 @@
-import React, { useState } from "react";
-import Button from "./ui/Button";
+"use client";
+
+import React from "react";
+import { AlertTriangle, X, ArrowRight } from "lucide-react";
+import Card from "./Card";
 
 interface HighSlippageWarningProps {
   isOpen: boolean;
@@ -8,130 +11,72 @@ interface HighSlippageWarningProps {
   priceImpact: number;
 }
 
-export default function HighSlippageWarning({ 
-  isOpen, 
-  onClose, 
-  onConfirm, 
-  priceImpact 
+export default function HighSlippageWarning({
+  isOpen,
+  onClose,
+  onConfirm,
+  priceImpact,
 }: HighSlippageWarningProps) {
-  const [confirmText, setConfirmText] = useState("");
-  const isConfirmEnabled = confirmText === "CONFIRM";
-
   if (!isOpen) return null;
 
-  const handleConfirm = () => {
-    if (isConfirmEnabled) {
-      onConfirm();
-      onClose();
-      setConfirmText("");
-    }
-  };
-
-  const handleClose = () => {
-    onClose();
-    setConfirmText("");
-  };
-
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-slate-800 rounded-2xl border border-slate-700 p-6 max-w-md w-full">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold text-white">High Price Impact Warning</h2>
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-[110] p-4">
+      <Card className="w-full max-w-md border-red-500/30 shadow-2xl shadow-red-900/20 bg-slate-950">
+        <div className="flex justify-between items-start mb-6">
+          <div className="flex items-center gap-3 text-red-500">
+            <div className="p-2 bg-red-500/10 rounded-lg">
+              <AlertTriangle size={24} />
+            </div>
+            <h2 className="text-xl font-bold text-white">High Price Impact</h2>
+          </div>
           <button
-            onClick={handleClose}
+            onClick={onClose}
             className="text-slate-400 hover:text-white transition-colors"
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            <X size={20} />
           </button>
         </div>
 
-        {/* Warning Icon */}
-        <div className="flex justify-center mb-6">
-          <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center">
-            <svg
-              className="w-8 h-8 text-red-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-              />
-            </svg>
+        <div className="space-y-4 mb-8">
+          <div className="p-4 bg-red-500/5 border border-red-500/10 rounded-2xl flex items-center justify-between">
+            <span className="text-slate-400">Estimated Price Impact</span>
+            <span className="text-2xl font-bold text-red-500">{priceImpact.toFixed(2)}%</span>
+          </div>
+
+          <p className="text-slate-300 leading-relaxed text-sm">
+            This trade has a high price impact, meaning you will receive significantly less value than the current market price. This usually happens in pools with low liquidity.
+          </p>
+
+          <div className="bg-slate-900 rounded-xl p-4 border border-slate-800">
+            <ul className="text-xs text-slate-400 space-y-2">
+              <li className="flex gap-2">
+                <span className="text-red-500 font-bold">•</span>
+                Your trade may result in a significant loss of value.
+              </li>
+              <li className="flex gap-2">
+                <span className="text-red-500 font-bold">•</span>
+                Consider breaking your trade into smaller amounts.
+              </li>
+            </ul>
           </div>
         </div>
 
-        {/* Warning Message */}
-        <div className="text-center mb-6">
-          <p className="text-red-500 font-bold text-lg mb-2">
-            High Price Impact. You will lose a significant portion of your funds.
-          </p>
-          <p className="text-slate-300">
-            This trade has a price impact of <span className="font-bold text-red-500">{priceImpact.toFixed(2)}%</span>
-          </p>
-          <p className="text-slate-400 text-sm mt-2">
-            This means you'll receive significantly less than expected due to low liquidity.
-          </p>
-        </div>
-
-        {/* Confirmation Input */}
-        <div className="mb-6">
-          <label className="block text-sm text-slate-400 mb-2">
-            Type "CONFIRM" to proceed with this risky trade:
-          </label>
-          <input
-            type="text"
-            value={confirmText}
-            onChange={(e) => setConfirmText(e.target.value)}
-            placeholder="CONFIRM"
-            className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white placeholder-slate-400 focus:outline-none focus:border-red-500"
-          />
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex gap-3">
-          <Button
-            variant="secondary"
-            onClick={handleClose}
-            className="flex-1"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleConfirm}
-            disabled={!isConfirmEnabled}
-            className={`flex-1 ${
-              isConfirmEnabled
-                ? "bg-red-600 hover:bg-red-700 text-white"
-                : "bg-slate-700 text-slate-400 cursor-not-allowed"
-            }`}
+        <div className="flex flex-col gap-3">
+          <button
+            onClick={onConfirm}
+            className="w-full py-4 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 group shadow-lg shadow-red-900/20"
           >
             Swap Anyway
-          </Button>
+            <ArrowRight size={18} className="translate-x-0 group-hover:translate-x-1 transition-transform" />
+          </button>
+          <button
+            onClick={onClose}
+            className="w-full py-3 text-slate-400 hover:text-white font-medium transition-colors"
+          >
+            Cancel and Go Back
+          </button>
         </div>
-
-        {/* Additional Warning */}
-        <div className="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
-          <p className="text-xs text-red-400 text-center">
-            ⚠️ This action cannot be undone. You are trading at a significant disadvantage.
-          </p>
-        </div>
-      </div>
+      </Card>
     </div>
   );
 }

@@ -19,6 +19,16 @@ const config: Config = {
           warning: "#f59e0b", // amber-500 equivalent
         },
       },
+      scrollbar: {
+        thin: 'thin',
+        track: {
+          transparent: 'transparent',
+        },
+        thumb: {
+          'tradeflow-muted': '#475569',
+          'tradeflow-accent': '#3b82f6',
+        },
+      },
     },
   },
   plugins: [],

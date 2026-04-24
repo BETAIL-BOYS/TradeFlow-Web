@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { FREIGHTER_ID, XBULL_ID, ALBEDO_ID, WalletType } from "../lib/stellar";
 

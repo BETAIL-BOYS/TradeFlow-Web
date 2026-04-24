@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
-import { X, CreditCard, TrendingUp } from "lucide-react";
-import Button from "./ui/Button";
-import useTransactionToast from "../lib/useTransactionToast";
+import React from "react";
+import { X, ExternalLink, CreditCard, ShieldCheck, Zap } from "lucide-react";
+import Card from "./Card";
 
 interface FiatOnRampModalProps {
   isOpen: boolean;
@@ -11,135 +10,87 @@ interface FiatOnRampModalProps {
 }
 
 export default function FiatOnRampModal({ isOpen, onClose }: FiatOnRampModalProps) {
-  const [usdAmount, setUsdAmount] = useState<string>("");
-  const toast = useTransactionToast();
-
-  // Mock XLM price - in real implementation this would come from an API
-  const mockXlmPrice = 0.084; // $0.084 per XLM
-  const estimatedXlm = usdAmount && !isNaN(parseFloat(usdAmount)) 
-    ? (parseFloat(usdAmount) / mockXlmPrice).toFixed(2)
-    : "0.00";
-
-  const handleContinue = () => {
-    if (!usdAmount || parseFloat(usdAmount) <= 0) {
-      toast.error("Please enter a valid amount");
-      return;
-    }
-    
-    // Mock success - in real implementation this would integrate with MoonPay/Stripe
-    toast.success(`Successfully initiated purchase of ${estimatedXlm} XLM for $${usdAmount}`);
-    onClose();
-    setUsdAmount("");
-  };
-
-  const handleClose = () => {
-    onClose();
-    setUsdAmount("");
-  };
-
   if (!isOpen) return null;
 
+  const providers = [
+    {
+      name: "MoonPay",
+      description: "Fast and easy with credit card or bank transfer.",
+      fee: "Starting at 1.0%",
+      speed: "Minutes",
+      badge: "Most Popular",
+      color: "blue"
+    },
+    {
+      name: "Transak",
+      description: "Competitive rates and global support.",
+      fee: "Starting at 0.5%",
+      speed: "10-30 min",
+      badge: "Lower Fees",
+      color: "green"
+    }
+  ];
+
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-slate-800 rounded-2xl border border-slate-700 p-6 max-w-md w-full">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold text-white">Buy Crypto</h2>
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[120] p-4">
+      <Card className="w-full max-w-lg shadow-2xl bg-slate-950 border-slate-800">
+        <div className="flex justify-between items-start mb-8">
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-1">Buy Crypto</h2>
+            <p className="text-slate-400 text-sm">On-ramp fiat currency to the Stellar network</p>
+          </div>
           <button
-            onClick={handleClose}
-            className="text-slate-400 hover:text-white transition-colors"
+            onClick={onClose}
+            className="text-slate-400 hover:text-white transition-colors p-2 hover:bg-slate-900 rounded-full"
           >
             <X size={20} />
           </button>
         </div>
 
-        {/* Header Icon */}
-        <div className="flex justify-center mb-6">
-          <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center">
-            <CreditCard className="w-8 h-8 text-blue-500" />
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div className="space-y-6">
-          {/* USD Input */}
-          <div>
-            <label className="block text-sm font-medium text-white mb-2">
-              How much USD do you want to spend?
-            </label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400">
-                $
-              </span>
-              <input
-                type="number"
-                value={usdAmount}
-                onChange={(e) => setUsdAmount(e.target.value)}
-                placeholder="0.00"
-                min="1"
-                step="0.01"
-                className="w-full bg-slate-700 border border-slate-600 rounded-lg pl-8 pr-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 text-lg"
-              />
-            </div>
-            <p className="text-xs text-slate-400 mt-2">
-              Minimum: $10.00
-            </p>
-          </div>
-
-          {/* Estimated XLM Output */}
-          {usdAmount && parseFloat(usdAmount) > 0 && (
-            <div className="bg-slate-700/50 rounded-lg p-4 border border-slate-600">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-green-400" />
-                  <span className="text-sm text-slate-300">Estimated XLM you'll receive</span>
+        <div className="grid gap-4 mb-8">
+          {providers.map((p) => (
+            <button
+              key={p.name}
+              className="group text-left p-5 rounded-2xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900 hover:border-slate-700 transition-all active:scale-[0.98]"
+            >
+              <div className="flex justify-between items-start mb-3">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                    <CreditCard className="text-blue-400" size={20} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-white text-lg">{p.name}</h3>
+                    <div className="flex items-center gap-4 mt-1">
+                       <span className="text-xs text-slate-500 flex items-center gap-1">
+                         <ShieldCheck size={12} className="text-green-500" /> Secure
+                       </span>
+                       <span className="text-xs text-slate-500 flex items-center gap-1">
+                         <Zap size={12} className="text-orange-500" /> {p.speed}
+                       </span>
+                    </div>
+                  </div>
                 </div>
-                <span className="text-lg font-semibold text-white">
-                  {estimatedXlm} XLM
+                {p.badge && (
+                  <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20`}>
+                    {p.badge}
+                  </span>
+                )}
+              </div>
+              <p className="text-sm text-slate-400 mb-4">{p.description}</p>
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-slate-500">Processing Fee: <span className="text-slate-300">{p.fee}</span></span>
+                <span className="text-blue-400 font-medium flex items-center gap-1">
+                  Continue to {p.name} <ExternalLink size={14} />
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-2">
-                Based on current price: ${mockXlmPrice}/XLM
-              </p>
-            </div>
-          )}
-
-          {/* Provider Info */}
-          <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
-            <p className="text-xs text-blue-400 text-center">
-              Powered by MoonPay • Secure & instant crypto purchases
-            </p>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex gap-3">
-            <Button
-              variant="secondary"
-              onClick={handleClose}
-              className="flex-1"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleContinue}
-              disabled={!usdAmount || parseFloat(usdAmount) <= 0}
-              className={`flex-1 ${
-                !usdAmount || parseFloat(usdAmount) <= 0
-                  ? "bg-slate-700 text-slate-400 cursor-not-allowed"
-                  : ""
-              }`}
-            >
-              Continue with Credit Card
-            </Button>
-          </div>
-
-          {/* Disclaimer */}
-          <div className="text-center">
-            <p className="text-xs text-slate-400">
-              By continuing, you agree to MoonPay's Terms of Service
-            </p>
-          </div>
+            </button>
+          ))}
         </div>
-      </div>
+
+        <p className="text-[10px] text-slate-500 text-center leading-relaxed">
+          By continuing, you will be redirected to a third-party provider. TradeFlow does not process your fiat payments and is not responsible for any issues with third-party services.
+        </p>
+      </Card>
     </div>
   );
 }

@@ -73,30 +73,27 @@ export const useWeb3Store = create<Web3Store>((set, get) => ({
       return;
     }
 
+    if (!walletKit) {
+      set({ error: 'Wallet kit is not available in this environment' });
+      return;
+    }
+
     set({ isConnecting: true, error: null });
 
     try {
       // Set the wallet type
       walletKit.setWallet(walletType);
       
-      // Check if wallet is available
-      const isWalletAvailable = await walletKit.isWalletAvailable();
-      
-      if (!isWalletAvailable) {
-        const walletName = getWalletName(walletType);
-        throw new Error(`${walletName} is not available. Please install it to continue.`);
-      }
-
-      // Get public key
-      const publicKey = await walletKit.getPublicKey();
+      // Get public key / address
+      const { address: publicKey } = await walletKit.getAddress();
       
       if (!publicKey) {
         throw new Error('Unable to retrieve public key.');
       }
 
       // Verify correct network (Testnet)
-      const network = await walletKit.getNetwork();
-      if (network !== "TESTNET") {
+      const { network } = await walletKit.getNetwork();
+      if (network !== "TESTNET" && !network.includes("Test SDF Network")) {
         const walletName = getWalletName(walletType);
         throw new Error(`Invalid network: ${network}. Please switch to TESTNET in ${walletName} settings.`);
       }
@@ -125,7 +122,9 @@ export const useWeb3Store = create<Web3Store>((set, get) => ({
   // Disconnect wallet
   disconnectWallet: async () => {
     try {
-      await walletKit.disconnect();
+      if (walletKit && walletKit.disconnect) {
+        await walletKit.disconnect();
+      }
     } catch (error) {
       console.error('Wallet disconnection error:', error);
     }
