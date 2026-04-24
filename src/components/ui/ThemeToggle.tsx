@@ -1,11 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const toggleTheme = () => {
     if (theme === "light") {
@@ -18,6 +23,9 @@ export function ThemeToggle() {
   };
 
   const getIcon = () => {
+    if (!mounted) {
+      return <Sun className="h-4 w-4" />;
+    }
     if (theme === "light") {
       return <Sun className="h-4 w-4" />;
     } else if (theme === "dark") {
@@ -29,6 +37,7 @@ export function ThemeToggle() {
   };
 
   const getLabel = () => {
+    if (!mounted) return "Loading theme...";
     if (theme === "light") return "Light mode";
     if (theme === "dark") return "Dark mode";
     return "System theme";

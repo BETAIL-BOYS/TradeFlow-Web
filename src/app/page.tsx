@@ -66,7 +66,7 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen bg-tradeflow-dark text-white font-sans flex flex-col">
+    <div className="min-h-screen bg-background text-foreground font-sans flex flex-col">
       {/* News Banner */}
       <NewsBanner />
 

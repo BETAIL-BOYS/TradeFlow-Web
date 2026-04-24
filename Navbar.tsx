@@ -42,7 +42,7 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
     <div className="flex justify-between items-center mb-12 p-8">
       <div className="flex items-center gap-12">
         <h1 className="text-3xl font-bold tracking-tight">
-          TradeFlow <span className="text-blue-400">RWA</span>
+          TradeFlow <span className="text-primary">RWA</span>
         </h1>
         
         <nav className="hidden md:flex gap-8">
@@ -54,8 +54,8 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
                 href={link.href}
                 className={`text-sm font-medium transition-colors ${
                   isActive 
-                    ? "text-cyan-400" 
-                    : "text-slate-400 hover:text-white"
+                    ? "text-primary" 
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {link.name}
