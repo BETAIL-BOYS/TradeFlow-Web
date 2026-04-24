@@ -1,16 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ArrowUpDown, Settings, BarChart3, LineChart, TrendingUp } from "lucide-react";
 import TokenDropdown from "./TokenDropdown";
 import SettingsModal from "./SettingsModal";
 import { useSettings } from "../lib/context/SettingsContext";
+import toast from "react-hot-toast";
+import Card from "./Card";
+import HighSlippageWarning from "./HighSlippageWarning";
+import TransactionSignatureModal from "./TransactionSignatureModal";
+import TradeReviewModal from "./TradeReviewModal";
 
 export default function SwapInterface() {
   const [fromToken, setFromToken] = useState("XLM");
   const [toToken, setToToken] = useState("USDC");
+  const [fromAmount, setFromAmount] = useState("");
+  const [toAmount, setToAmount] = useState("");
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isProMode, setIsProMode] = useState(false);
-  
+  const [isHighSlippageWarningOpen, setIsHighSlippageWarningOpen] = useState(false);
+  const [isTradeReviewOpen, setIsTradeReviewOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [priceImpact, setPriceImpact] = useState(0);
+  const [slippageTolerance, setSlippageTolerance] = useState(3);
+  const [submissionStartTime, setSubmissionStartTime] = useState<number | null>(null);
+  const [isTransactionSignatureOpen, setIsTransactionSignatureOpen] = useState(false);
+
   const { deadline } = useSettings();
+
+  const calculatePriceImpact = (amount: string): number => {
+    if (!amount || parseFloat(amount) <= 0) return 0;
+    const baseImpact = 0.5;
+    const amountMultiplier = Math.min(parseFloat(amount) / 1000, 2);
+    return Math.min(baseImpact * amountMultiplier, 10);
+  };
 
   const handleSwap = () => {
     const temp = fromToken;
@@ -191,6 +213,7 @@ export default function SwapInterface() {
             }`}
           />
         </button>
+      </div>
 
       {/* Advanced Chart Area (Issue #83) */}
       {isProMode && (
@@ -277,7 +300,7 @@ export default function SwapInterface() {
             Swap Assets
           </button>
         </div>
-      </Card>
+      </div>
 
       {/* Modals */}
       <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
@@ -293,9 +316,9 @@ export default function SwapInterface() {
         isOpen={isTransactionSignatureOpen}
         onClose={() => setIsTransactionSignatureOpen(false)}
         onSuccess={handleTransactionSuccess}
-        transactionXDR="AAAAAK/eFzA7Jf5Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3XAAAABQAAAAAAAAAAA=="
+        transactionXDR="AAAAAK/eFzA7Jf5Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3XAAAABQAAAAAAAAAAA=="
         networkFee="0.00001"
-        contractAddress="CC7H5QY7F3JQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQ"
+        contractAddress="CC7H5QY7F3JQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQ"
       />
 
       <TradeReviewModal

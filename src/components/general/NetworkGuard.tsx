@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { getNetwork, isAllowed } from "@stellar/freighter-api";
-import UnsupportedNetwork from "../components/UnsupportedNetwork";
+import UnsupportedNetwork from "../UnsupportedNetwork";
 
 export default function NetworkGuard({ children }: { children: React.ReactNode }) {
   const [currentNetwork, setCurrentNetwork] = useState<string | null>(null);

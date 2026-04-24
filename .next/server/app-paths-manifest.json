@@ -1,1 +1,17 @@
-{}
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/upload/route": "app/api/upload/route.js",
+  "/api/pnl/route": "app/api/pnl/route.js",
+  "/faq/page": "app/faq/page.js",
+  "/api/v1/network/fees/route": "app/api/v1/network/fees/route.js",
+  "/health/route": "app/health/route.js",
+  "/legal/terms/page": "app/legal/terms/page.js",
+  "/page": "app/page.js",
+  "/marketplace/inv-123/page": "app/marketplace/inv-123/page.js",
+  "/metrics-demo/page": "app/metrics-demo/page.js",
+  "/pools/page": "app/pools/page.js",
+  "/settings/page": "app/settings/page.js",
+  "/portfolio/page": "app/portfolio/page.js",
+  "/swap/page": "app/swap/page.js",
+  "/v1/risk/route": "app/v1/risk/route.js"
+}
