@@ -5,9 +5,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { X, Upload, Calendar, DollarSign } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Button from "./ui/Button";
+import { useMintInvoice } from "@/hooks/useMintInvoice";
 
-// Form validation schema
 const invoiceSchema = z.object({
   amount: z
     .number()
@@ -16,36 +17,29 @@ const invoiceSchema = z.object({
   dueDate: z
     .string()
     .min(1, "Due date is required")
-    .refine(
-      (date) => {
-        const selectedDate = new Date(date);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        return selectedDate > today;
-      },
-      "Due date must be in the future"
-    ),
+    .refine((date) => {
+      const selectedDate = new Date(date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return selectedDate > today;
+    }, "Due date must be in the future"),
   invoiceFile: z
     .instanceof(File)
-    .refine(
-      (file) => file.type === "application/pdf",
-      "Only PDF files are allowed"
-    )
-    .refine(
-      (file) => file.size <= 5 * 1024 * 1024, // 5MB
-      "File size must be less than 5MB"
-    ),
+    .refine((file) => file.type === "application/pdf", "Only PDF files are allowed")
+    .refine((file) => file.size <= 5 * 1024 * 1024, "File size must be less than 5MB"),
 });
 
 type InvoiceFormData = z.infer<typeof invoiceSchema>;
 
 interface InvoiceMintFormProps {
   onClose: () => void;
-  onSubmit: (data: InvoiceFormData) => void;
+  onSuccess?: (txStatus: string) => void;
 }
 
-export default function InvoiceMintForm({ onClose, onSubmit }: InvoiceMintFormProps) {
+export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormProps) {
   const [filePreview, setFilePreview] = useState<string | null>(null);
+  const { data: session } = useSession();
+  const { mint, loading: minting, error: mintError, txStatus } = useMintInvoice();
 
   const {
     register,
@@ -58,8 +52,6 @@ export default function InvoiceMintForm({ onClose, onSubmit }: InvoiceMintFormPr
     resolver: zodResolver(invoiceSchema),
   });
 
-  const watchedFile = watch("invoiceFile");
-
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -68,30 +60,47 @@ export default function InvoiceMintForm({ onClose, onSubmit }: InvoiceMintFormPr
     }
   };
 
-  const onFormSubmit = (data: InvoiceFormData) => {
-    console.log("Invoice minting data:", data);
-    onSubmit(data);
-    reset();
-    setFilePreview(null);
+  const onFormSubmit = async (data: InvoiceFormData) => {
+    const publicKey = (session?.user as any)?.publicKey;
+    if (!publicKey) {
+      alert("Please connect your Stellar wallet first.");
+      return;
+    }
+
+    // Convert dollar amount to stroops (1 XLM = 10,000,000 stroops)
+    const amountInStroops = BigInt(Math.round(data.amount * 10_000_000));
+    const invoiceId = `INV-${Date.now()}`;
+
+    try {
+      const status = await mint({
+        invoiceId,
+        amount: amountInStroops,
+        recipient: publicKey,
+        callerPublicKey: publicKey,
+      });
+
+      reset();
+      setFilePreview(null);
+      onSuccess?.(status);
+      onClose();
+    } catch {
+      // mintError state handles display below
+    }
   };
+
+  const busy = isSubmitting || minting;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-slate-800 rounded-2xl border border-slate-700 w-full max-w-md">
-        {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-slate-700">
           <h2 className="text-xl font-semibold text-white">Mint Invoice NFT</h2>
-          <button
-            onClick={onClose}
-            className="text-slate-400 hover:text-white transition-colors"
-          >
+          <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors">
             <X size={20} />
           </button>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit(onFormSubmit)} className="p-6 space-y-6">
-          {/* Amount Field */}
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
               <DollarSign size={16} className="inline mr-1" />
@@ -105,12 +114,9 @@ export default function InvoiceMintForm({ onClose, onSubmit }: InvoiceMintFormPr
               {...register("amount", { valueAsNumber: true })}
               className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
-            {errors.amount && (
-              <p className="mt-2 text-sm text-red-400">{errors.amount.message}</p>
-            )}
+            {errors.amount && <p className="mt-2 text-sm text-red-400">{errors.amount.message}</p>}
           </div>
 
-          {/* Due Date Field */}
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
               <Calendar size={16} className="inline mr-1" />
@@ -121,12 +127,9 @@ export default function InvoiceMintForm({ onClose, onSubmit }: InvoiceMintFormPr
               {...register("dueDate")}
               className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
-            {errors.dueDate && (
-              <p className="mt-2 text-sm text-red-400">{errors.dueDate.message}</p>
-            )}
+            {errors.dueDate && <p className="mt-2 text-sm text-red-400">{errors.dueDate.message}</p>}
           </div>
 
-          {/* File Upload Field */}
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
               <Upload size={16} className="inline mr-1" />
@@ -145,28 +148,30 @@ export default function InvoiceMintForm({ onClose, onSubmit }: InvoiceMintFormPr
                 className="flex items-center justify-center w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg cursor-pointer hover:bg-slate-600 transition-colors"
               >
                 <Upload size={16} className="mr-2 text-slate-400" />
-                <span className="text-slate-300">
-                  {filePreview || "Choose PDF file"}
-                </span>
+                <span className="text-slate-300">{filePreview || "Choose PDF file"}</span>
               </label>
             </div>
             {errors.invoiceFile && (
               <p className="mt-2 text-sm text-red-400">{errors.invoiceFile.message}</p>
             )}
-            {filePreview && (
-              <p className="mt-2 text-sm text-slate-400">
-                Selected: {filePreview}
-              </p>
-            )}
           </div>
 
-          {/* Submit Button */}
+          {/* Contract error feedback */}
+          {mintError && (
+            <p className="text-sm text-red-400 bg-red-400/10 px-3 py-2 rounded-lg">{mintError}</p>
+          )}
+          {txStatus && (
+            <p className="text-sm text-green-400 bg-green-400/10 px-3 py-2 rounded-lg">
+              On-chain: {txStatus}
+            </p>
+          )}
+
           <Button
             type="submit"
-            disabled={isSubmitting}
+            disabled={busy}
             className="w-full py-3 px-4 disabled:bg-slate-600 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? "Processing..." : "Mint Invoice NFT"}
+            {busy ? "Submitting to Stellar..." : "Mint Invoice NFT"}
           </Button>
         </form>
       </div>
