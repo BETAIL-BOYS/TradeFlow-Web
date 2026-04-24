@@ -1,5 +1,8 @@
+"use client";
+
 import React from 'react';
 import { Wallet } from 'lucide-react';
+import { WalletType } from '../lib/stellar';
 
 interface EmptyStateProps {
   onConnectWallet: () => void;
@@ -19,7 +22,8 @@ export default function EmptyState({ onConnectWallet }: EmptyStateProps) {
       </h2>
       
       <p className="text-slate-400 text-lg max-w-md mb-8 leading-relaxed">
-        Please connect your wallet to view your invoices and access the TradeFlow RWA platform.
+        Please connect your wallet to view your invoices and access the TradeFlow RWA platform. 
+        We support Freighter, Albedo, and xBull wallets.
       </p>
 
       {/* Connect Wallet Button */}
@@ -33,7 +37,7 @@ export default function EmptyState({ onConnectWallet }: EmptyStateProps) {
 
       {/* Additional Info */}
       <div className="mt-8 text-sm text-slate-500">
-        <p>Using Freighter Wallet for Stellar network</p>
+        <p>Supporting multiple Stellar wallets for your convenience</p>
       </div>
     </div>
   );

@@ -71,8 +71,8 @@ export default function FAQ() {
           </h3>
           <p className="text-slate-300 leading-relaxed">
             Currently, TradeFlow supports Freighter wallet, the most popular wallet in the Stellar 
-            ecosystem. We're working on adding support for additional wallets including MetaMask and 
-            WalletConnect in future updates. All wallet connections are secured by Stellar's built-in 
+            ecosystem. We&apos;re working on adding support for additional wallets including MetaMask and 
+            WalletConnect in future updates. All wallet connections are secured by Stellar&apos;s built-in 
             encryption and multi-signature support.
           </p>
         </div>

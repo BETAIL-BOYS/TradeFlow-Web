@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { Home, Search } from "lucide-react";
@@ -14,10 +16,10 @@ export default function NotFound() {
 
         {/* Error Message */}
         <div className="mb-12">
-          <h2 className="text-3xl font-semibold mb-4">This pool doesn't exist</h2>
+          <h2 className="text-3xl font-semibold mb-4">This pool doesn&apos;t exist</h2>
           <p className="text-slate-400 text-lg max-w-md mx-auto">
-            The trading pool or page you're looking for seems to have vanished into the void. 
-            Let's get you back to the dashboard where the action is.
+            The trading pool or page you&apos;re looking for seems to have vanished into the void. 
+            Let&apos;s get you back to the dashboard where the action is.
           </p>
         </div>
 

@@ -16,7 +16,155 @@ export default function SwapInterface() {
     const temp = fromToken;
     setFromToken(toToken);
     setToToken(temp);
+    setFromAmount(toAmount);
+    setToAmount(fromAmount);
   };
+
+  const handleFromAmountChange = (value: string) => {
+    setFromAmount(value);
+    const impact = calculatePriceImpact(value);
+    setPriceImpact(impact);
+
+    if (value && parseFloat(value) > 0) {
+      const mockRate = fromToken === "XLM" ? 0.15 : 6.67;
+      setToAmount((parseFloat(value) * mockRate * (1 - impact / 100)).toFixed(6));
+    } else {
+      setToAmount("");
+    }
+  };
+
+  const handleSwapClick = async () => {
+    if (!fromAmount || parseFloat(fromAmount) <= 0) {
+      toast.error("Please enter an amount to swap");
+      return;
+    }
+
+    const loadingToast = toast.loading("Processing swap...");
+
+    try {
+      if (priceImpact > 5) {
+        setIsHighSlippageWarningOpen(true);
+        toast.dismiss(loadingToast);
+        return;
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 1800));
+
+      toast.success(`Swapped ${fromAmount} ${fromToken} → ${toAmount} ${toToken}`, {
+        id: loadingToast,
+      });
+
+      if (priceImpact > 5) {
+        setIsHighSlippageWarningOpen(true);
+      } else {
+        setIsTradeReviewOpen(true);
+      }
+    } catch (error) {
+      toast.error("Failed to process swap", {
+        id: loadingToast,
+      });
+    }
+  };
+
+  const handleTradeConfirm = async () => {
+    setIsTradeReviewOpen(false);
+    setIsSubmitting(true);
+    setSubmissionStartTime(Date.now());
+
+    try {
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      // Generate mock transaction XDR
+      const mockTransactionXDR = "AAAAAK/eFzA7Jf5Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3XAAAABQAAAAAAAAAAA==";
+      console.log("Mock XDR generated:", mockTransactionXDR);
+
+      setIsTransactionSignatureOpen(true);
+    } catch (error) {
+      toast.error("Failed to submit trade");
+      setIsSubmitting(false);
+      setSubmissionStartTime(null);
+    }
+  };
+
+  const handleHighSlippageConfirm = async () => {
+    const loadingToast = toast.loading("Processing high slippage swap...");
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1800));
+      toast.success("High slippage swap initiated successfully", { id: loadingToast });
+      setIsTransactionSignatureOpen(true);
+      setIsSubmitting(true);
+      setSubmissionStartTime(Date.now());
+    } catch (error) {
+      toast.error("Swap failed", { id: loadingToast });
+    } finally {
+      setIsHighSlippageWarningOpen(false);
+    }
+  };
+
+  /* ISSUE #87: Trigger the success modal when the transaction is signed */
+  const handleTransactionSuccess = (signedXDR: string) => {
+    console.log("Transaction signed:", signedXDR);
+
+    toast.success("Transaction signed successfully!", {
+      icon: "✅",
+    });
+
+    setIsTransactionSignatureOpen(false);
+    setIsSubmitting(false);
+    setSubmissionStartTime(null);
+
+    // Show the Growth/Share modal
+    setIsSuccessModalOpen(true);
+
+    setTimeout(() => {
+      setFromAmount("");
+      setToAmount("");
+      setPriceImpact(0);
+    }, 1500);
+  };
+
+  const isAnyModalOpen = isSettingsOpen || isHighSlippageWarningOpen || isTradeReviewOpen || isSuccessModalOpen;
+  const isSwapValid = fromAmount && parseFloat(fromAmount) > 0 && !isSubmitting;
+
+  // Determine button state based on slippage tolerance
+  const isSlippageExceeded = priceImpact > slippageTolerance;
+  const buttonState = {
+    disabled: !isSwapValid || isSlippageExceeded,
+    text: isSlippageExceeded ? "Slippage Tolerance Exceeded" : "Swap",
+    className: isSlippageExceeded
+      ? "bg-slate-700 cursor-not-allowed"
+      : "bg-blue-600 hover:bg-blue-700"
+  };
+
+  // Dynamic Price Impact color logic
+  const getPriceImpactColor = () => {
+    if (priceImpact < 1) {
+      return "text-emerald-400"; // Green for low impact (< 1%)
+    } else if (priceImpact >= 1 && priceImpact < 3) {
+      return "text-yellow-400"; // Yellow for medium impact (1% - 3%)
+    } else {
+      return "text-red-500 font-bold"; // Red for high impact (>= 3%)
+    }
+  };
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (isAnyModalOpen) return;
+      if (event.key === 'Enter' && isSwapValid) {
+        event.preventDefault();
+        handleSwapClick();
+      }
+      if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+        event.preventDefault();
+        handleSwap();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isAnyModalOpen, isSwapValid]);
 
   return (
     <div className="w-full max-w-2xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -43,7 +191,6 @@ export default function SwapInterface() {
             }`}
           />
         </button>
-      </div>
 
       {/* Advanced Chart Area (Issue #83) */}
       {isProMode && (
@@ -130,7 +277,40 @@ export default function SwapInterface() {
             Swap Assets
           </button>
         </div>
-      </div>
+      </Card>
+
+      {/* Modals */}
+      <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+
+      <HighSlippageWarning
+        isOpen={isHighSlippageWarningOpen}
+        onClose={() => setIsHighSlippageWarningOpen(false)}
+        onConfirm={handleHighSlippageConfirm}
+        priceImpact={priceImpact}
+      />
+
+      <TransactionSignatureModal
+        isOpen={isTransactionSignatureOpen}
+        onClose={() => setIsTransactionSignatureOpen(false)}
+        onSuccess={handleTransactionSuccess}
+        transactionXDR="AAAAAK/eFzA7Jf5Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3XAAAABQAAAAAAAAAAA=="
+        networkFee="0.00001"
+        contractAddress="CC7H5QY7F3JQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQ"
+      />
+
+      <TradeReviewModal
+        isOpen={isTradeReviewOpen}
+        onClose={() => setIsTradeReviewOpen(false)}
+        onConfirm={handleTradeConfirm}
+        fromAmount={fromAmount}
+        fromToken={fromToken}
+        toAmount={toAmount}
+        toToken={toToken}
+        priceImpact={priceImpact}
+        slippageTolerance={slippageTolerance}
+        fee="0.3%"
+        route={`${fromToken} → ${toToken}`}
+      />
 
       <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
     </div>

@@ -1,12 +1,53 @@
+"use client";
+
 import React from "react";
+import { FREIGHTER_ID, XBULL_ID, ALBEDO_ID, WalletType } from "../lib/stellar";
 
 interface WalletModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onConnect?: (walletType: WalletType) => void;
 }
 
-export default function WalletModal({ isOpen, onClose }: WalletModalProps) {
+interface WalletOption {
+  id: WalletType;
+  name: string;
+  description: string;
+  icon: string;
+  bgColor: string;
+}
+
+const walletOptions: WalletOption[] = [
+  {
+    id: FREIGHTER_ID,
+    name: "Freighter",
+    description: "Popular browser extension wallet",
+    icon: "M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z",
+    bgColor: "bg-blue-500"
+  },
+  {
+    id: XBULL_ID,
+    name: "xBull",
+    description: "Mobile-first Stellar wallet",
+    icon: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z",
+    bgColor: "bg-orange-500"
+  },
+  {
+    id: ALBEDO_ID,
+    name: "Albedo",
+    description: "Web-based Stellar wallet",
+    icon: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z",
+    bgColor: "bg-purple-500"
+  }
+];
+
+export default function WalletModal({ isOpen, onClose, onConnect }: WalletModalProps) {
   if (!isOpen) return null;
+
+  const handleWalletSelect = (walletType: WalletType) => {
+    if (onConnect) onConnect(walletType);
+    onClose();
+  };
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -34,55 +75,23 @@ export default function WalletModal({ isOpen, onClose }: WalletModalProps) {
         </div>
 
         <div className="space-y-3">
-          <button
-            className="w-full bg-slate-700 hover:bg-slate-600 border border-slate-600 rounded-lg p-4 flex items-center gap-3 transition-colors"
-            onClick={() => {
-              console.log("Freighter wallet selected");
-              onClose();
-            }}
-          >
-            <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
-              </svg>
-            </div>
-            <div className="text-left">
-              <div className="font-medium text-white">Freighter</div>
-              <div className="text-sm text-slate-400">Stellar ecosystem wallet</div>
-            </div>
-          </button>
-
-          <button
-            className="w-full bg-slate-700 hover:bg-slate-600 border border-slate-600 rounded-lg p-4 flex items-center gap-3 transition-colors opacity-50 cursor-not-allowed"
-            disabled
-          >
-            <div className="w-10 h-10 bg-slate-600 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-slate-400" fill="currentColor" viewBox="0 0 24 24">
-                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                <line x1="8" y1="21" x2="16" y2="21"/>
-                <line x1="12" y1="17" x2="12" y2="21"/>
-              </svg>
-            </div>
-            <div className="text-left">
-              <div className="font-medium text-slate-400">MetaMask</div>
-              <div className="text-sm text-slate-500">Coming soon</div>
-            </div>
-          </button>
-
-          <button
-            className="w-full bg-slate-700 hover:bg-slate-600 border border-slate-600 rounded-lg p-4 flex items-center gap-3 transition-colors opacity-50 cursor-not-allowed"
-            disabled
-          >
-            <div className="w-10 h-10 bg-slate-600 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-slate-400" fill="currentColor" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="10"/>
-              </svg>
-            </div>
-            <div className="text-left">
-              <div className="font-medium text-slate-400">WalletConnect</div>
-              <div className="text-sm text-slate-500">Coming soon</div>
-            </div>
-          </button>
+          {walletOptions.map((wallet) => (
+            <button
+              key={wallet.id}
+              className="w-full bg-slate-700 hover:bg-slate-600 border border-slate-600 rounded-lg p-4 flex items-center gap-3 transition-colors"
+              onClick={() => handleWalletSelect(wallet.id)}
+            >
+              <div className={`w-10 h-10 ${wallet.bgColor} rounded-lg flex items-center justify-center`}>
+                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d={wallet.icon}/>
+                </svg>
+              </div>
+              <div className="text-left">
+                <div className="font-medium text-white">{wallet.name}</div>
+                <div className="text-sm text-slate-400">{wallet.description}</div>
+              </div>
+            </button>
+          ))}
         </div>
 
         <div className="mt-6 p-4 bg-slate-900/50 rounded-lg">

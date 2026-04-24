@@ -1,17 +1,19 @@
 /**
- * Format currency values from blockchain (USDC with 7 decimals)
- * @param amount - Raw amount from blockchain (e.g., 10000000 for 1 USDC)
- * @returns Formatted USD string (e.g., "$1.00")
+ * Format currency values
+ * @param amount - Amount to format
+ * @param isRaw - If true, divides by 10^7 (standard for USDC on Stellar)
+ * @returns Formatted USD string
  */
-export const formatCurrency = (amount: number | string): string => {
+export const formatCurrency = (amount: number | string, isRaw: boolean = true): string => {
   const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
   
   if (isNaN(numAmount)) {
     return '$0.00';
   }
   
-  // USDC has 7 decimals, so divide by 10^7
-  const usdcAmount = numAmount / 10000000;
+  // If raw from blockchain (USDC has 7 decimals), divide by 10^7
+  // Otherwise, use the number as is (pre-calculated USD)
+  const usdcAmount = isRaw ? numAmount / 10000000 : numAmount;
   
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
