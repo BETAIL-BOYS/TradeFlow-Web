@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Wallet, Copy, Check, CreditCard } from "lucide-react";
 import NetworkSelector, { Network } from "./src/components/NetworkSelector";
 import FiatOnRampModal from "./src/components/FiatOnRampModal";
+import { ThemeToggle } from "./src/components/ui/ThemeToggle";
 
 interface NavbarProps {
   address?: string;
@@ -65,6 +66,7 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
       </div>
 
       <div className="flex items-center gap-4">
+        <ThemeToggle />
         <NetworkSelector />
         
         {/* Buy Crypto Button */}

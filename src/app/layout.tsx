@@ -1,6 +1,7 @@
 import "./globals.css";
 import React from "react";
 import { Inter } from "next/font/google";
+import { ThemeProvider } from "next-themes";
 import ToasterProvider from "../components/general/ToasterProvider";
 import { SlippageProvider } from "../contexts/SlippageContext";
 import Footer from "../components/layout/Footer";
@@ -23,17 +24,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body className="font-sans min-h-screen flex flex-col">
         <ErrorBoundary>
-          <SlippageProvider>
-            <NetworkCongestionBanner />
-            <div className="flex-1">
-              {children}
-            </div>
-          </SlippageProvider>
-          <Footer />
-          <ToasterProvider />
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <SlippageProvider>
+              <NetworkCongestionBanner />
+              <div className="flex-1">
+                {children}
+              </div>
+            </SlippageProvider>
+            <Footer />
+            <ToasterProvider />
+          </ThemeProvider>
         </ErrorBoundary>
       </body>
     </html>
