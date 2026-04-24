@@ -3,6 +3,7 @@ import React from "react";
 import { Inter } from "next/font/google";
 import ToasterProvider from "../components/general/ToasterProvider";
 import { SlippageProvider } from "../contexts/SlippageContext";
+import { ThemeProvider } from "../contexts/ThemeContext";
 import Footer from "../components/layout/Footer";
 import NetworkCongestionBanner from "../components/NetworkCongestionBanner";
 import ErrorBoundary from "../components/ErrorBoundary";
@@ -26,14 +27,16 @@ export default function RootLayout({
     <html lang="en" className={inter.variable}>
       <body className="font-sans min-h-screen flex flex-col">
         <ErrorBoundary>
-          <SlippageProvider>
-            <NetworkCongestionBanner />
-            <div className="flex-1">
-              {children}
-            </div>
-          </SlippageProvider>
-          <Footer />
-          <ToasterProvider />
+          <ThemeProvider>
+            <SlippageProvider>
+              <NetworkCongestionBanner />
+              <div className="flex-1">
+                {children}
+              </div>
+            </SlippageProvider>
+            <Footer />
+            <ToasterProvider />
+          </ThemeProvider>
         </ErrorBoundary>
       </body>
     </html>
