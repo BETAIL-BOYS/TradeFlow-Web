@@ -5,6 +5,7 @@ import { X, Loader2, AlertCircle, CheckCircle } from "lucide-react";
 import Card from "./Card";
 import Button from "./ui/Button";
 import { signTransaction } from "../lib/stellar";
+import { useSigningActions, useIsSigning } from "../stores/signatureStore";
 
 interface TransactionSignatureModalProps {
   isOpen: boolean;
@@ -15,7 +16,7 @@ interface TransactionSignatureModalProps {
   contractAddress: string;
 }
 
-type SignatureState = "waiting" | "broadcasting" | "success" | "error";
+type SignatureState = "broadcasting" | "success" | "error";
 
 export default function TransactionSignatureModal({
   isOpen,
@@ -25,22 +26,35 @@ export default function TransactionSignatureModal({
   networkFee,
   contractAddress,
 }: TransactionSignatureModalProps) {
-  const [signatureState, setSignatureState] = useState<SignatureState>("waiting");
+  const [signatureState, setSignatureState] = useState<SignatureState>("broadcasting");
   const [error, setError] = useState<string>("");
+  const isSigning = useIsSigning();
+  const { startSigning, stopSigning, setTransactionDetails } = useSigningActions();
 
   // Reset state when modal opens
   useEffect(() => {
     if (isOpen) {
-      setSignatureState("waiting");
+      setSignatureState("broadcasting");
       setError("");
+      
+      // Set transaction details for the global overlay
+      setTransactionDetails({
+        networkFee,
+        contractAddress,
+      });
+      
       // Auto-start the signing process
       handleSignTransaction();
     }
-  }, [isOpen, transactionXDR]);
+  }, [isOpen, transactionXDR, networkFee, contractAddress, setTransactionDetails]);
 
   const handleSignTransaction = async () => {
     try {
-      setSignatureState("waiting");
+      // Start global signing state (this will show the overlay)
+      startSigning('Please sign the transaction in your wallet.', {
+        networkFee,
+        contractAddress,
+      });
       
       // Use the unified signTransaction function that works with all wallets
       const signedXDR = await signTransaction(transactionXDR);
@@ -49,11 +63,6 @@ export default function TransactionSignatureModal({
         throw new Error("Failed to get signature from wallet");
       }
 
-      setSignatureState("broadcasting");
-      
-      // Simulate broadcasting to network
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
       setSignatureState("success");
       onSuccess(signedXDR);
       
@@ -83,7 +92,8 @@ export default function TransactionSignatureModal({
     handleSignTransaction();
   };
 
-  if (!isOpen) return null;
+  // Don't show modal while global overlay is active
+  if (!isOpen || isSigning) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -101,12 +111,6 @@ export default function TransactionSignatureModal({
         <div className="text-center">
           {/* Status Icon */}
           <div className="flex justify-center mb-6">
-            {signatureState === "waiting" && (
-              <div className="relative">
-                <Loader2 className="w-12 h-12 text-blue-500 animate-spin" />
-                <div className="absolute inset-0 w-12 h-12 bg-blue-500 rounded-full opacity-20 animate-ping"></div>
-              </div>
-            )}
             {signatureState === "broadcasting" && (
               <div className="relative">
                 <Loader2 className="w-12 h-12 text-green-500 animate-spin" />
@@ -123,7 +127,6 @@ export default function TransactionSignatureModal({
 
           {/* Title */}
           <h3 className="text-xl font-semibold text-white mb-2">
-            {signatureState === "waiting" && "Waiting for Wallet Signature..."}
             {signatureState === "broadcasting" && "Broadcasting to Network"}
             {signatureState === "success" && "Transaction Successful!"}
             {signatureState === "error" && "Transaction Failed"}
@@ -131,9 +134,6 @@ export default function TransactionSignatureModal({
 
           {/* Description */}
           <p className="text-slate-400 mb-6">
-            {signatureState === "waiting" && 
-              "Please approve the transaction in your wallet."
-            }
             {signatureState === "broadcasting" && 
               "Your signed transaction is being broadcast to the Stellar network."
             }
@@ -180,16 +180,6 @@ export default function TransactionSignatureModal({
                   Close
                 </Button>
               </>
-            )}
-            
-            {signatureState === "waiting" && (
-              <Button
-                onClick={onClose}
-                className="w-full bg-slate-700 hover:bg-slate-600 text-white"
-                disabled
-              >
-                Waiting for Signature...
-              </Button>
             )}
             
             {signatureState === "broadcasting" && (

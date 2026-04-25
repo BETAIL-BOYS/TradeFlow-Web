@@ -174,10 +174,32 @@ export async function signTransaction(
 ): Promise<string> {
   if (!currentWalletConnector) throw new Error("No wallet connector available.");
   
-  return await currentWalletConnector.signTransaction(xdr, {
-    networkPassphrase: NETWORK_PASSPHRASE,
-    ...options,
-  });
+  try {
+    // Import here to avoid circular dependencies
+    const { useSignatureStore } = await import('../stores/signatureStore');
+    const signatureStore = useSignatureStore.getState();
+    
+    // Start global signing state
+    signatureStore.startSigning('Please sign the transaction in your wallet.', options?.transactionDetails);
+    
+    // Sign the transaction
+    const signedXDR = await currentWalletConnector.signTransaction(xdr, {
+      networkPassphrase: NETWORK_PASSPHRASE,
+      ...options,
+    });
+    
+    // Stop signing state on success
+    signatureStore.stopSigning();
+    
+    return signedXDR;
+  } catch (error) {
+    // Stop signing state on error
+    const { useSignatureStore } = await import('../stores/signatureStore');
+    const signatureStore = useSignatureStore.getState();
+    signatureStore.stopSigning();
+    
+    throw error;
+  }
 }
 
 export async function getNetwork(): Promise<string> {
