@@ -12,6 +12,7 @@ import PageTransition from "../components/PageTransition";
 import QueryProvider from "../providers/QueryClientProvider";
 import { SettingsProvider } from "../lib/context/SettingsContext";
 import NetworkGuard from "../components/general/NetworkGuard";
+import SignatureOverlay from "../components/SignatureOverlay";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,34 +26,27 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.variable}>
       <body className={`${inter.variable} font-sans antialiased`}>
         <ErrorBoundary>
-          <NetworkCongestionProvider>
-            <SlippageProvider>
-              <ToasterProvider />
-              {/* <Toaster position="top-right" richColors closeButton /> */}
-              <NetworkCongestionBanner />
-              <QueryProvider>
-                <PageTransition>
-                  {children}
-                </PageTransition>
-              </QueryProvider>
-              <PageTransition>
-                {children}
-              </PageTransition>
-              <Footer />
-            </SlippageProvider>
-          </NetworkCongestionProvider>
+          <SettingsProvider>
+            <NetworkCongestionProvider>
+              <SlippageProvider>
+                <QueryProvider>
+                  <NetworkGuard>
+                    <ToasterProvider />
+                    <NetworkCongestionBanner />
+                    <PageTransition>
+                      {children}
+                    </PageTransition>
+                    <SignatureOverlay />
+                    <Footer />
+                  </NetworkGuard>
+                </QueryProvider>
+              </SlippageProvider>
+            </NetworkCongestionProvider>
+          </SettingsProvider>
         </ErrorBoundary>
-    <html lang="en" className={inter.variable}>
-      <body className="font-sans">
-        <SettingsProvider>
-          <NetworkGuard>
-            {children}
-            <ToasterProvider />
-          </NetworkGuard>
-        </SettingsProvider>
       </body>
     </html>
   );
