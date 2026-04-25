@@ -3,6 +3,7 @@ import { ArrowUpDown, Settings, BarChart3, LineChart, TrendingUp } from "lucide-
 import TokenDropdown from "./TokenDropdown";
 import SettingsModal from "./SettingsModal";
 import { useSettings } from "../lib/context/SettingsContext";
+import { useSigningActions } from "../stores/signatureStore";
 
 export default function SwapInterface() {
   const [fromToken, setFromToken] = useState("XLM");
