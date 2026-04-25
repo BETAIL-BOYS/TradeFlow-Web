@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { Server, Asset } from 'soroban-client';
 import { FREIGHTER_ID, WalletType } from '../lib/stellar';
 import { createWalletConnector, getWalletDisplayName } from '../lib/walletConnector';
+import { getEffectiveNetwork, getNetworkConfig } from '../lib/networkConfig';
 
 // Network configuration
 export const NETWORKS = {
@@ -60,7 +61,7 @@ export const useWeb3Store = create<Web3Store>((set, get) => ({
   walletType: null,
   isConnected: false,
   isConnecting: false,
-  network: NETWORKS.TESTNET,
+  network: getEffectiveNetwork('Testnet'),
   balances: {},
   isLoading: false,
   error: null,
@@ -172,7 +173,7 @@ export const useWeb3Store = create<Web3Store>((set, get) => ({
 
   // Update all token balances
   updateBalances: async () => {
-    const { walletAddress, network } = get();
+    const { walletAddress } = get();
     
     if (!walletAddress) {
       set({ error: 'No wallet connected' });
@@ -182,7 +183,10 @@ export const useWeb3Store = create<Web3Store>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const server = new Server(NETWORK_ENDPOINTS[network]);
+      // Use effective network configuration
+      const network = getEffectiveNetwork('Testnet');
+      const config = getNetworkConfig(network);
+      const server = new Server(config.horizonUrl);
       const account = await server.getAccount(walletAddress);
       
       const newBalances: Record<string, number> = {};
