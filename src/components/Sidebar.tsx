@@ -15,7 +15,8 @@ import {
   Wallet,
   Copy,
   Check,
-  CreditCard
+  CreditCard,
+  Activity
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -53,6 +54,11 @@ export default function Sidebar({ address, onConnect }: SidebarProps) {
       name: "Portfolio",
       href: "/portfolio",
       icon: <Briefcase size={20} />,
+    },
+    {
+      name: "Activity",
+      href: "/activity",
+      icon: <Activity size={20} />,
     },
     {
       name: "Settings",
