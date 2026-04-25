@@ -9,6 +9,9 @@ import Footer from "../components/layout/Footer";
 import NetworkCongestionBanner from "../components/NetworkCongestionBanner";
 import ErrorBoundary from "../components/ErrorBoundary";
 import PageTransition from "../components/PageTransition";
+import QueryProvider from "../providers/QueryClientProvider";
+import { SettingsProvider } from "../lib/context/SettingsContext";
+import NetworkGuard from "../components/general/NetworkGuard";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,6 +33,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <ToasterProvider />
               {/* <Toaster position="top-right" richColors closeButton /> */}
               <NetworkCongestionBanner />
+              <QueryProvider>
+                <PageTransition>
+                  {children}
+                </PageTransition>
+              </QueryProvider>
               <PageTransition>
                 {children}
               </PageTransition>
@@ -37,6 +45,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </SlippageProvider>
           </NetworkCongestionProvider>
         </ErrorBoundary>
+    <html lang="en" className={inter.variable}>
+      <body className="font-sans">
+        <SettingsProvider>
+          <NetworkGuard>
+            {children}
+            <ToasterProvider />
+          </NetworkGuard>
+        </SettingsProvider>
       </body>
     </html>
   );

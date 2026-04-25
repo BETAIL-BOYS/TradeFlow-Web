@@ -94,7 +94,6 @@ export default function InvoiceDetailPage() {
         }
       />
 
-      {/* Main Content */}
       <div className="px-4 lg:px-8 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column */}
@@ -102,10 +101,22 @@ export default function InvoiceDetailPage() {
             {/* Invoice Overview */}
             <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-6">
               <h2 className="text-xl font-semibold mb-4">Invoice Overview</h2>
+
+              {loading && (
+                <p className="text-slate-400 text-sm animate-pulse">Loading on-chain data...</p>
+              )}
+              {error && (
+                <p className="text-red-400 text-sm bg-red-400/10 px-3 py-2 rounded-lg mb-4">
+                  Could not load contract data: {error}
+                </p>
+              )}
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-slate-400 text-sm mb-1">Invoice ID</p>
-                  <p className="font-mono text-blue-300">INV-00123</p>
+                  <p className="font-mono text-blue-300">
+                    {invoice?.id ?? "INV-00123"}
+                  </p>
                 </div>
                 <div>
                   <p className="text-slate-400 text-sm mb-1">Token ID</p>
@@ -113,11 +124,17 @@ export default function InvoiceDetailPage() {
                 </div>
                 <div>
                   <p className="text-slate-400 text-sm mb-1">Principal Amount</p>
-                  <p className="text-xl font-bold">$50,000</p>
+                  <p className="text-xl font-bold">
+                    {invoice
+                      ? `$${(Number(invoice.amount) / 10_000_000).toLocaleString()}`
+                      : "$50,000"}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-slate-400 text-sm mb-1">Interest Rate</p>
-                  <p className="text-xl font-bold">8.5% APR</p>
+                  <p className="text-slate-400 text-sm mb-1">Recipient</p>
+                  <p className="font-mono text-sm truncate text-slate-300">
+                    {invoice?.recipient ?? "—"}
+                  </p>
                 </div>
                 <div>
                   <p className="text-slate-400 text-sm mb-1">Maturity Date</p>
@@ -126,13 +143,13 @@ export default function InvoiceDetailPage() {
                 <div>
                   <p className="text-slate-400 text-sm mb-1">Status</p>
                   <span className="px-3 py-1 rounded-full bg-green-600/20 text-green-400 text-sm font-medium">
-                    Active
+                    {invoice?.status ?? "Active"}
                   </span>
                 </div>
               </div>
             </div>
 
-            {/* Performance Chart */}
+            {/* Performance Chart — unchanged */}
             <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold">Performance</h2>
@@ -146,7 +163,7 @@ export default function InvoiceDetailPage() {
               </div>
             </div>
 
-            {/* Transaction History */}
+            {/* Transaction History — unchanged */}
             <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-6">
               <h2 className="text-xl font-semibold mb-4">Transaction History</h2>
               <div className="space-y-3">
@@ -173,9 +190,8 @@ export default function InvoiceDetailPage() {
             </div>
           </div>
 
-          {/* Sidebar */}
+          {/* Sidebar — unchanged */}
           <div className="space-y-6">
-            {/* Risk Assessment */}
             <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Shield className="text-blue-400" size={20} />
@@ -208,11 +224,10 @@ export default function InvoiceDetailPage() {
                   <div className="w-full bg-slate-700 h-2 rounded-full">
                     <div className="bg-purple-500 h-2 rounded-full" style={{ width: "90%" }} />
                   </div>
-                </div>
+                ))}
               </div>
             </div>
 
-            {/* Quick Actions */}
             <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-6">
               <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
               <div className="space-y-3">

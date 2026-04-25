@@ -10,6 +10,7 @@ import StickyHeader from "../components/StickyHeader";
 import Card from "../components/Card";
 import WalletModal from "../components/WalletModal";
 import InvoiceMintForm from "../components/InvoiceMintForm";
+import InvoiceTable from "../components/InvoiceTable";
 import NewsBanner from "../components/NewsBanner";
 import useTransactionToast from "../lib/useTransactionToast";
 import AddTrustlineButton from "../components/AddTrustlineButton";
@@ -126,12 +127,31 @@ export default function Page() {
   ];
 
   return (
-    <div className="min-h-screen bg-tradeflow-dark text-white font-sans">
-      {/* Sticky Header */}
-      <StickyHeader
-        title="Marketplace"
-        subtitle="Trade and manage Real World Asset tokens"
-      />
+    <div className="min-h-screen bg-slate-900 text-white font-sans flex flex-col">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-12 p-8 border-b border-slate-800/50">
+        <div className="flex items-center gap-12">
+          <h1 className="text-3xl font-bold tracking-tight">
+            TradeFlow <span className="text-blue-400">RWA</span>
+          </h1>
+          <nav className="hidden md:flex items-center gap-8">
+            <a href="/" className="text-white font-medium hover:text-blue-400 transition-colors">Dashboard</a>
+            <a href="/swap" className="text-slate-400 font-medium hover:text-white transition-colors">Swap</a>
+            <a href="/pools" className="text-slate-400 font-medium hover:text-white transition-colors">Pools</a>
+          </nav>
+        </div>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition shadow-lg shadow-blue-900/20"
+          >
+            <Wallet size={18} />
+            {address
+              ? `${address.slice(0, 6)}...${address.slice(-4)}`
+              : "Connect Wallet"}
+          </button>
+        </div>
+      </div>
 
       {/* Main Content */}
       <div className="px-4 lg:px-8 py-6">
@@ -217,6 +237,66 @@ export default function Page() {
                 </div>
               </div>
 
+            {/* Invoice Table */}
+            <InvoiceTable />
+            <div className="bg-tradeflow-secondary rounded-2xl border border-tradeflow-muted overflow-hidden mb-12">
+              <div className="p-6 border-b border-slate-700">
+                <h2 className="text-xl font-semibold">Verified Asset Pipeline</h2>
+              </div>
+              <table className="w-full text-left">
+                <thead className="bg-tradeflow-dark/50 text-tradeflow-muted text-sm uppercase">
+                  <tr>
+                    <th className="p-4">Invoice ID</th>
+                    <th className="p-4">Risk Score</th>
+                    <th className="p-4">Status</th>
+                    <th className="p-4">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loading ? (
+                    // Show 5 skeleton rows while loading
+                    Array.from({ length: 5 }).map((_, index) => (
+                      <SkeletonRow key={`skeleton-${index}`} />
+                    ))
+                  ) : (
+                    invoices.map((inv) => (
+                      <tr
+                        key={inv.id}
+                        className="border-b border-tradeflow-muted/50 hover:bg-tradeflow-muted/20 transition"
+                      >
+                        <td className="p-4 font-mono text-sm text-blue-300">
+                          #{inv.id.slice(-6)}
+                        </td>
+                        <td className="p-4">
+                          <div className="w-full bg-tradeflow-muted h-2 rounded-full max-w-[100px]">
+                            <div
+                              className="bg-blue-500 h-2 rounded-full"
+                              style={{ width: `${inv.riskScore}%` }}
+                            ></div>
+                          </div>
+                        </td>
+                        <td className="p-4 text-sm font-medium">
+                          <span
+                            className={`px-3 py-1 rounded-full ${inv.status === "Approved" ? "bg-tradeflow-success/20 text-tradeflow-success" : "bg-tradeflow-warning/20 text-tradeflow-warning"}`}
+                          >
+                            {inv.status}
+                          </span>
+                        </td>
+                        <td className="p-4 font-bold text-lg">${inv.amount}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Active Loans Table (Issue #6) */}
+            <div className="bg-tradeflow-secondary rounded-2xl border border-tradeflow-muted overflow-hidden">
+              <div className="p-6 border-b border-slate-700">
+                <h2 className="text-xl font-semibold">Active Loans Dashboard</h2>
+              </div>
+              <div className="p-6 bg-tradeflow-dark/50">
+                <LoanTable />
               {/* Invoice Table */}
               <div className="bg-tradeflow-secondary rounded-2xl border border-tradeflow-muted overflow-hidden mb-12">
                 <div className="p-6 border-b border-slate-700">
