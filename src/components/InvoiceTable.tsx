@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import PaginationControls from './PaginationControls';
 import SkeletonRow from './SkeletonRow';
+import DataUnavailable from './DataUnavailable';
+import { useBackendHealth } from '../contexts/BackendHealthContext';
+import { isBackendHealthError } from '../lib/apiHealth';
 
 interface Invoice {
   id: string;
@@ -39,6 +42,7 @@ interface InvoiceTableProps {
 const InvoiceTable: React.FC<InvoiceTableProps> = ({ filters }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
+  const { reportError, reportSuccess } = useBackendHealth();
 
   // Build query string from filters
   const queryString = new URLSearchParams({
@@ -60,8 +64,23 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ filters }) => {
       const response = await fetch(`/api/invoices?${queryString}`);
       if (!response.ok) {
         throw new Error('Failed to fetch invoices');
+      try {
+        const response = await fetch(
+          `/api/invoices?page=${currentPage}&limit=${itemsPerPage}`
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        const data = await response.json();
+        reportSuccess('/api/invoices');
+        return data;
+      } catch (err) {
+        const error = err as Error;
+        if (isBackendHealthError(error)) {
+          reportError(error, '/api/invoices');
+        }
+        throw error;
       }
-      return response.json();
     },
     keepPreviousData: true, // Prevents UI from flashing empty while fetching next page
     staleTime: 1000 * 60 * 5, // 5 minutes
@@ -73,10 +92,12 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ filters }) => {
 
   if (error) {
     return (
-      <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-red-400">
-        <p className="font-medium">Error loading invoices</p>
-        <p className="text-sm opacity-80">{error.message}</p>
-      </div>
+      <DataUnavailable
+        title="Unable to Load Invoices"
+        message={error.message}
+        type="table"
+        onRetry={() => window.location.reload()}
+      />
     );
   }
 
@@ -142,8 +163,8 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ filters }) => {
                   <td className="p-4 text-sm font-medium">
                     <span
                       className={`px-3 py-1 rounded-full ${invoice.status === "Approved"
-                          ? "bg-tradeflow-success/20 text-tradeflow-success"
-                          : "bg-tradeflow-warning/20 text-tradeflow-warning"
+                        ? "bg-tradeflow-success/20 text-tradeflow-success"
+                        : "bg-tradeflow-warning/20 text-tradeflow-warning"
                         }`}
                     >
                       {invoice.status}
