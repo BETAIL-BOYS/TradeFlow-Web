@@ -9,7 +9,7 @@ import SkeletonRow from "../components/SkeletonRow";
 import Navbar from "../components/Navbar";
 import StickyHeader from "../components/StickyHeader";
 import Card from "../components/Card";
-import WalletModal from "../components/WalletModal";
+import FreighterConnectModal from "../components/FreighterConnectModal";
 import InvoiceMintForm from "../components/InvoiceMintForm";
 import InvoiceTable from "../components/InvoiceTable";
 import InvoiceFilter, { InvoiceFilters } from "../components/InvoiceFilter";
@@ -24,13 +24,14 @@ import StarIcon from "../components/StarIcon";
 import { api } from "../lib/api";
 import type { InvoiceSummary } from "../../types/api";
 import { RiskSocketClient } from "../lib/riskSocket";
+import { useWalletConnection } from "../stores/useWeb3Store";
 import { showError, showSuccess } from "../lib/toast";
 import Icon from "../components/ui/Icon";
 
 export default function Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [address, setAddress] = useState("");
+  const { isConnected, walletAddress, isConnecting } = useWalletConnection();
   const [invoices, setInvoices] = useState<InvoiceSummary[]>([]);
   const [loading, setLoading] = useState(false);
   const [showMintForm, setShowMintForm] = useState(false);
@@ -58,6 +59,7 @@ export default function Page() {
     router.replace(newUrl);
   }, [filters, router]);
 
+  
   // 1. Connect Stellar Wallet (supports Freighter, Albedo, xBull)
   const handleConnectWallet = async (walletType: WalletType) => {
     try {
@@ -99,7 +101,7 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
-    if (!address) {
+    if (!walletAddress) {
       riskSocketRef.current?.disconnect();
       riskSocketRef.current = null;
       return;
@@ -125,14 +127,14 @@ export default function Page() {
         riskSocketRef.current = null;
       }
     };
-  }, [address]);
+  }, [walletAddress]);
 
   useEffect(() => {
-    if (!address) return;
+    if (!walletAddress) return;
     if (invoices.length === 0) return;
 
     riskSocketRef.current?.syncInvoices(invoices.map((i) => i.id));
-  }, [address, invoices]);
+  }, [walletAddress, invoices]);
   const toast = useTransactionToast();
 
   const handleTestToast = () => {
@@ -169,8 +171,17 @@ export default function Page() {
         <div className="flex items-center gap-4">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition shadow-lg shadow-blue-900/20"
+            disabled={isConnecting}
+            className={`flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:opacity-50 px-6 py-2 rounded-full transition shadow-lg shadow-blue-900/20 ${!walletAddress && !isConnecting ? 'animate-pulse' : ''}`}
           >
+            <Wallet size={18} />
+            {isConnecting ? (
+              "Connecting..."
+            ) : walletAddress ? (
+              `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
+            ) : (
+              "Connect Wallet"
+            )}
             <Icon icon={Wallet} dense />
             {address
               ? `${address.slice(0, 6)}...${address.slice(-4)}`
@@ -394,6 +405,10 @@ export default function Page() {
           )}
               </div>
 
+        <FreighterConnectModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
               <WalletModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
