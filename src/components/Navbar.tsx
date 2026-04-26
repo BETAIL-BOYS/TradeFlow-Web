@@ -10,6 +10,7 @@ import { showError, showSuccess } from "../lib/toast";
 import NetworkSelector from "./NetworkSelector";
 import FiatOnRampModal from "./FiatOnRampModal";
 import NetworkFeeIndicator from "./ui/NetworkFeeIndicator";
+import Icon from "./ui/Icon";
 
 interface NavbarProps {
   address?: string;
@@ -81,13 +82,13 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
           onClick={() => setIsFiatModalOpen(true)}
           className="flex items-center gap-2 bg-green-600 hover:bg-green-700 px-6 py-2 rounded-full transition"
         >
-          <CreditCard size={18} />
+          <Icon icon={CreditCard} />
           Buy Crypto
         </button>
 
         {address ? (
           <div className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition">
-            <Wallet size={18} />
+            <Icon icon={Wallet} />
             <span className="text-sm">
               {`${address.slice(0, 6)}...${address.slice(-4)}`}
             </span>
@@ -97,9 +98,9 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
               title="Copy address"
             >
               {copied ? (
-                <Check size={16} className="text-green-300" />
+                <Icon icon={Check} dense className="text-green-300" />
               ) : (
-                <Copy size={16} className="text-white" />
+                <Icon icon={Copy} dense className="text-white" />
               )}
             </button>
           </div>
@@ -112,7 +113,7 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
             onClick={onConnect}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition animate-pulse"
           >
-            <Wallet size={18} />
+            <Icon icon={Wallet} />
             Connect Wallet
           </button>
         )}

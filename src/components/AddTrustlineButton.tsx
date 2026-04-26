@@ -5,6 +5,7 @@ import { Plus, Check, Loader2 } from "lucide-react";
 import { addTrustline } from "../lib/stellar";
 import { dismissToast, showError, showLoading, showSuccess } from "../lib/toast";
 import Button from "./ui/Button";
+import Icon from "./ui/Icon";
 
 interface AddTrustlineButtonProps {
   assetCode: string;
@@ -59,11 +60,11 @@ export default function AddTrustlineButton({ assetCode, assetIssuer }: AddTrustl
         }`}
     >
       {status === "loading" ? (
-        <Loader2 size={14} className="animate-spin" />
+        <Icon icon={Loader2} dense className="animate-spin" />
       ) : status === "success" ? (
-        <Check size={14} />
+        <Icon icon={Check} dense />
       ) : (
-        <Plus size={14} />
+        <Icon icon={Plus} dense />
       )}
 
       <span>

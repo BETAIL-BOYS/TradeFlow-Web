@@ -5,6 +5,7 @@ import SettingsModal from "./SettingsModal";
 import { useSettings } from "../lib/context/SettingsContext";
 import { dismissToast, showError, showLoading, showSuccess } from "../lib/toast";
 import { useSigningActions } from "../stores/signatureStore";
+import Icon from "./ui/Icon";
 
 export default function SwapInterface() {
   const [fromToken, setFromToken] = useState("XLM");
@@ -174,7 +175,7 @@ export default function SwapInterface() {
       <div className="flex justify-between items-center bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 p-4 rounded-2xl">
         <div className="flex items-center gap-3">
           <div className={`p-2 rounded-xl ${isProMode ? "bg-blue-500/20 text-blue-400" : "bg-slate-700 text-slate-400"}`}>
-            <BarChart3 size={20} />
+            <Icon icon={BarChart3} />
           </div>
           <div>
             <h3 className="font-semibold text-white">Pro Mode</h3>
@@ -206,6 +207,19 @@ export default function SwapInterface() {
                   Real-time TradingView charts and liquidity depth analysis for professional traders.
                 </p>
               </div>
+      {/* Advanced Chart Area (Issue #83) */}
+      {isProMode && (
+        <div className="bg-slate-800 border border-slate-700 rounded-2xl p-8 flex flex-col items-center justify-center min-h-[300px] relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent pointer-events-none" />
+          <div className="relative z-10 flex flex-col items-center gap-4 text-center">
+            <div className="p-4 bg-blue-500/10 rounded-full text-blue-400 animate-pulse">
+              <Icon icon={TrendingUp} />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-white mb-2">Advanced Chart Area</h3>
+              <p className="text-slate-400 max-w-md">
+                Real-time TradingView charts and liquidity depth analysis for professional traders.
+              </p>
             </div>
             {/* Decorative Grid */}
             <div className="absolute bottom-0 left-0 w-full h-24 bg-[radial-gradient(circle_at_bottom,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent opacity-50" />
@@ -223,6 +237,34 @@ export default function SwapInterface() {
               >
                 <Settings size={20} />
               </button>
+          {/* Decorative Grid */}
+          <div className="absolute bottom-0 left-0 w-full h-24 bg-[radial-gradient(circle_at_bottom,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent opacity-50" />
+        </div>
+      )}
+
+      {/* Main Swap Card */}
+      <div className="bg-slate-800 rounded-3xl border border-slate-700 p-1 shadow-2xl relative">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold text-white">Swap Tokens</h2>
+            <button 
+              onClick={() => setIsSettingsOpen(true)}
+              className="p-2 hover:bg-slate-700 rounded-xl text-slate-400 hover:text-white transition-all transform hover:rotate-90"
+            >
+              <Icon icon={Settings} />
+            </button>
+          </div>
+          
+          {/* From Token */}
+          <div className="mb-2 bg-slate-900/50 p-4 rounded-2xl border border-slate-700/50">
+            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">From</label>
+            <div className="flex gap-4 items-center">
+              <TokenDropdown onTokenChange={setFromToken} />
+              <input
+                type="number"
+                placeholder="0.00"
+                className="flex-1 bg-transparent text-2xl font-bold text-white placeholder-slate-600 focus:outline-none"
+              />
             </div>
 
             {/* From Token */}
@@ -237,6 +279,15 @@ export default function SwapInterface() {
                 />
               </div>
             </div>
+          {/* Swap Button */}
+          <div className="relative h-4 flex justify-center items-center z-10">
+            <button
+              onClick={handleSwap}
+              className="bg-blue-600 hover:bg-blue-500 p-3 rounded-2xl transition-all shadow-xl shadow-blue-900/40 border-4 border-slate-800 transform hover:scale-110 active:scale-95"
+            >
+              <ArrowUpDown className="text-white" />
+            </button>
+          </div>
 
             {/* Swap Button */}
             <div className="relative h-4 flex justify-center items-center z-10">
@@ -315,4 +366,50 @@ export default function SwapInterface() {
         <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
       </div>
       );
+          {/* Action Button */}
+          <button 
+            className={`w-full ${buttonState.className} text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-blue-900/20 text-lg`}
+            disabled={buttonState.disabled}
+          >
+            {buttonState.text}
+          </button>
+        </div>
+      </div>
+
+      {/* Modals */}
+      <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+
+      <HighSlippageWarning
+        isOpen={isHighSlippageWarningOpen}
+        onClose={() => setIsHighSlippageWarningOpen(false)}
+        onConfirm={handleHighSlippageConfirm}
+        priceImpact={priceImpact}
+      />
+
+      <TransactionSignatureModal
+        isOpen={isTransactionSignatureOpen}
+        onClose={() => setIsTransactionSignatureOpen(false)}
+        onSuccess={handleTransactionSuccess}
+        transactionXDR="AAAAAK/eFzA7Jf5Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3XAAAABQAAAAAAAAAAA=="
+        networkFee="0.00001"
+        contractAddress="CC7H5QY7F3JQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQZJQ"
+      />
+
+      <TradeReviewModal
+        isOpen={isTradeReviewOpen}
+        onClose={() => setIsTradeReviewOpen(false)}
+        onConfirm={handleTradeConfirm}
+        fromAmount={fromAmount}
+        fromToken={fromToken}
+        toAmount={toAmount}
+        toToken={toToken}
+        priceImpact={priceImpact}
+        slippageTolerance={slippageTolerance}
+        fee="0.3%"
+        route={`${fromToken} → ${toToken}`}
+      />
+
+      <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+    </div>
+  );
 }
