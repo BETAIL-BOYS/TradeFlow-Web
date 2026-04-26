@@ -18,11 +18,19 @@ export interface Invoice {
   createdAt: number;
 }
 
+export interface InvoiceMetadata {
+  debtorName: string;
+  dueDate: string;
+  supportingDocumentUri: string | null;
+  timestamp: number;
+}
+
 export interface MintInvoiceParams {
   invoiceId: string;
   amount: bigint;
   recipient: string;
   callerPublicKey: string;
+  metadata?: InvoiceMetadata;
 }
 
 export async function getInvoice(invoiceId: string): Promise<Invoice> {
@@ -62,7 +70,7 @@ export async function getInvoice(invoiceId: string): Promise<Invoice> {
 }
 
 export async function mintInvoice(params: MintInvoiceParams): Promise<string> {
-  const { invoiceId, amount, recipient, callerPublicKey } = params;
+  const { invoiceId, amount, recipient, callerPublicKey, metadata } = params;
   const client = getSorobanClient();
   const { contractIds, networkPassphrase } = getSorobanConfig();
   const contract = new Contract(contractIds.invoice);
@@ -74,6 +82,17 @@ export async function mintInvoice(params: MintInvoiceParams): Promise<string> {
     nativeToScVal(amount, { type: "i128" }),
     nativeToScVal(recipient, { type: "address" }),
   ];
+
+  // Add metadata if provided
+  if (metadata) {
+    const metadataScVal = nativeToScVal({
+      debtor_name: metadata.debtorName,
+      due_date: metadata.dueDate,
+      supporting_doc_uri: metadata.supportingDocumentUri,
+      timestamp: metadata.timestamp
+    }, { type: "map" });
+    args.push(metadataScVal);
+  }
 
   const tx = new TransactionBuilder(account, {
     fee: "1000",
