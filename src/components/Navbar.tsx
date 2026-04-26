@@ -10,6 +10,7 @@ import { showError, showSuccess } from "../lib/toast";
 import NetworkSelector from "./NetworkSelector";
 import FiatOnRampModal from "./FiatOnRampModal";
 import NetworkFeeIndicator from "./ui/NetworkFeeIndicator";
+import WalletDropdown from "./WalletDropdown";
 import Icon from "./ui/Icon";
 
 interface NavbarProps {
@@ -21,6 +22,7 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
   const pathname = usePathname();
   const [copied, setCopied] = useState(false);
   const [isFiatModalOpen, setIsFiatModalOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const copyToClipboard = async () => {
     if (address) {
@@ -87,22 +89,47 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
         </button>
 
         {address ? (
+          <div className="relative">
           <div className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition">
             <Icon icon={Wallet} />
             <span className="text-sm">
               {`${address.slice(0, 6)}...${address.slice(-4)}`}
             </span>
             <button
-              onClick={copyToClipboard}
-              className="ml-2 p-1 hover:bg-blue-500 rounded-full transition-colors"
-              title="Copy address"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition"
             >
+              <Wallet size={18} />
+              <span className="text-sm">
+                {`${address.slice(0, 6)}...${address.slice(-4)}`}
+              </span>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  copyToClipboard();
+                }}
+                className="ml-2 p-1 hover:bg-blue-500 rounded-full transition-colors"
+                title="Copy address"
+              >
+                {copied ? (
+                  <Check size={16} className="text-green-300" />
+                ) : (
+                  <Copy size={16} className="text-white" />
+                )}
+              </button>
               {copied ? (
                 <Icon icon={Check} dense className="text-green-300" />
               ) : (
                 <Icon icon={Copy} dense className="text-white" />
               )}
             </button>
+            
+            {/* Wallet Dropdown */}
+            <WalletDropdown
+              address={address}
+              isOpen={isDropdownOpen}
+              onToggle={() => setIsDropdownOpen(!isDropdownOpen)}
+            />
           </div>
         ) : (
           /* * ISSUE #108: Added `animate-pulse` to draw attention to the primary CTA.
