@@ -7,6 +7,7 @@ import FractionalPurchaseModal, {
   type Invoice,
 } from "../../../components/FractionalPurchaseModal";
 import { useTokenStore } from "../../../stores/tokenStore";
+import { useTxWithToast } from "../../../hooks/useTxWithToast";
 import { ArrowLeft, ExternalLink, Shield, TrendingUp } from "lucide-react";
 import Link from "next/link";
 
@@ -32,6 +33,8 @@ export default function InvoiceDetailPage() {
   const [showBuyModal, setShowBuyModal] = useState(false);
   const [usdcBalance, setUsdcBalance] = useState("0");
 
+  const { executeTx } = useTxWithToast();
+
   // Fetch live USDC balance from Stellar network whenever wallet connects
   useEffect(() => {
     if (!isConnected || !publicKey) {
@@ -41,9 +44,12 @@ export default function InvoiceDetailPage() {
 
     const fetchBalance = async () => {
       try {
-        const accountResponse = await server.accounts().accountId(publicKey).call();
+        const accountResponse = await server
+          .accounts()
+          .accountId(publicKey)
+          .call();
         const usdcEntry = accountResponse.balances.find(
-          (b: any) =>
+          (b: { asset_code?: string; asset_issuer?: string }) =>
             b.asset_code === USDC_CODE && b.asset_issuer === USDC_ISSUER
         );
         setUsdcBalance(usdcEntry ? usdcEntry.balance : "0");
@@ -55,17 +61,21 @@ export default function InvoiceDetailPage() {
     fetchBalance();
   }, [isConnected, publicKey]);
 
+  // Wrapping the Soroban call with executeTx ensures any Freighter error
+  // (user rejection, network failure, contract error) fires the correct toast.
   const handleBuyFraction = async (
     amountStroops: string,
     invoiceId: string
-  ) => {
-    // TODO: Replace with your real Soroban client call, e.g.:
-    // await sorobanClient.buy_fraction({
-    //   invoice_id: invoiceId,
-    //   amount: BigInt(amountStroops),
-    // });
-    console.log("buy_fraction called:", { invoiceId, amountStroops });
-    await new Promise((r) => setTimeout(r, 1500));
+  ): Promise<void> => {
+    await executeTx(async () => {
+      // TODO: Replace the lines below with your real Soroban client call, e.g.:
+      // await sorobanClient.buy_fraction({
+      //   invoice_id: invoiceId,
+      //   amount: BigInt(amountStroops),
+      // });
+      console.log("buy_fraction called:", { invoiceId, amountStroops });
+      await new Promise((r) => setTimeout(r, 1500));
+    });
   };
 
   return (

@@ -1,7 +1,7 @@
 import "./globals.css";
 import React from "react";
 import { Inter } from "next/font/google";
-import { Toaster } from "sonner";
+
 import ToasterProvider from "../components/general/ToasterProvider";
 import { SlippageProvider } from "../contexts/SlippageContext";
 import { NetworkCongestionProvider } from "../contexts/NetworkCongestionContext";
@@ -28,7 +28,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <NetworkCongestionProvider>
             <SlippageProvider>
               <ToasterProvider />
-              {/* <Toaster position="top-right" richColors closeButton /> */}
               <NetworkCongestionBanner />
               <PageTransition>
                 {children}
