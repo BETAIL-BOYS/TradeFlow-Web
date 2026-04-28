@@ -45,3 +45,5 @@ export default function EmptyState({ onConnectWallet }: EmptyStateProps) {
 }
 
 // Inconsequential change for repo health
+
+// Maintenance: minor update

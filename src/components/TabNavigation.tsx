@@ -41,3 +41,5 @@ export default function TabNavigation({ tabs, activeTab, onTabChange, className 
 }
 
 // Inconsequential change for repo health
+
+// Maintenance: minor update

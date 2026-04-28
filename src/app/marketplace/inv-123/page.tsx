@@ -272,3 +272,5 @@ export default function InvoiceDetailPage() {
 }
 
 // Inconsequential change for repo health
+
+// Maintenance: minor update

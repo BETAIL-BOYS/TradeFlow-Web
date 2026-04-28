@@ -225,3 +225,5 @@ export function useWalletConnection() {
     setLoading: web3Store.setLoading,
   };
 }
+
+// Maintenance: minor update

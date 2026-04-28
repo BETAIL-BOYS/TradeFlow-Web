@@ -312,3 +312,5 @@ export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormP
   );
 }
 // Inconsequential change for repo health
+
+// Maintenance: minor update

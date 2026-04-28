@@ -35,3 +35,5 @@ export function useInvoice(invoiceId: string) {
 
   return { invoice, loading, error };
 }
+
+// Maintenance: minor update

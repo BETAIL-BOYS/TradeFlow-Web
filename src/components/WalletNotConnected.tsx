@@ -74,3 +74,5 @@ export default function WalletNotConnected({
   );
 }
 // Inconsequential change for repo health
+
+// Maintenance: minor update

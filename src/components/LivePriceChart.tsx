@@ -257,3 +257,5 @@ export default function LivePriceChart({ symbol, height = 400 }: LivePriceChartP
 }
 
 // Inconsequential change for repo health
+
+// Maintenance: minor update

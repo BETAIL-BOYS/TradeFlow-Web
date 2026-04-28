@@ -59,3 +59,5 @@ export function useWatchlist() {
     isInWatchlist,
   };
 }
+
+// Maintenance: minor update

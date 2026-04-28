@@ -113,3 +113,5 @@ export default function NetworkSelector({ onNetworkChange }: NetworkSelectorProp
 }
 
 // Inconsequential change for repo health
+
+// Maintenance: minor update

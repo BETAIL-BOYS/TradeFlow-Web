@@ -30,3 +30,5 @@ export function TransactionGuard({ children, fallback }: TransactionGuardProps) 
 }
 
 // Inconsequential change for repo health
+
+// Maintenance: minor update
