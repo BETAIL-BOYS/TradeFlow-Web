@@ -96,3 +96,5 @@ export default function FiatOnRampModal({ isOpen, onClose }: FiatOnRampModalProp
   );
 }
 // Inconsequential change for repo health
+
+// Maintenance: minor update

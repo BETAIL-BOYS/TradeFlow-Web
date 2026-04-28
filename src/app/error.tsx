@@ -87,3 +87,5 @@ export default function ErrorPage({ error, reset }: { error: Error; reset: () =>
 }
 
 // Inconsequential change for repo health
+
+// Maintenance: minor update

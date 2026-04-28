@@ -29,3 +29,5 @@ export function useSettings() {
   }
   return context;
 }
+
+// Maintenance: minor update

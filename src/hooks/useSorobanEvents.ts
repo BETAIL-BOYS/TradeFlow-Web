@@ -107,3 +107,5 @@ export function useSorobanEvents({
 
   return { events, error, clearEvents };
 }
+
+// Maintenance: minor update

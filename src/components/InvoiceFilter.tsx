@@ -113,3 +113,5 @@ const InvoiceFilter: React.FC<InvoiceFilterProps> = ({ filters, onFiltersChange 
 export default InvoiceFilter;
 
 // Inconsequential change for repo health
+
+// Maintenance: minor update

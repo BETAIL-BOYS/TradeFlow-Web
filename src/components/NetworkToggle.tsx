@@ -152,3 +152,5 @@ export function useEffectiveNetwork(defaultNetwork: NetworkType = 'Testnet'): Ne
 }
 
 // Inconsequential change for repo health
+
+// Maintenance: minor update

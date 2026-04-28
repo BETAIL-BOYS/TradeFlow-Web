@@ -23,3 +23,5 @@ export function useMintInvoice() {
 
   return { mint, loading, error, txStatus };
 }
+
+// Maintenance: minor update

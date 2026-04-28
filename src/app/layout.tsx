@@ -48,3 +48,5 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   );
 }
 // Inconsequential change for repo health
+
+// Maintenance: minor update

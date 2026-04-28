@@ -355,3 +355,5 @@ export default function Sidebar({ address, onConnect }: SidebarProps) {
 }
 
 // Inconsequential change for repo health
+
+// Maintenance: minor update
