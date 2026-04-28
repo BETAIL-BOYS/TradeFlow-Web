@@ -83,11 +83,18 @@ export interface GetRiskScoreParams {
   invoiceId: string;
 }
 
+export interface RiskFactor {
+  label: string;
+  type: "positive" | "negative" | "neutral";
+  description: string;
+}
+
 /**
  * GET /v1/risk response.
  *
  * - riskScore is expected to be a numeric score (typically 0-100).
  * - factors is an optional map of contributing factor names to weights/scores.
+ * - breakdown is an optional list of detailed risk factors.
  */
 export interface RiskScoreResponse {
   invoiceId: string;
@@ -98,6 +105,7 @@ export interface RiskScoreResponse {
   };
   grade?: string;
   factors?: Record<string, number>;
+  breakdown?: RiskFactor[];
   updatedAt?: string;
   [key: string]: unknown;
 }
@@ -110,6 +118,7 @@ export interface InvoiceSummary {
   riskScore: number;
   status: string;
   amount: number | string;
+  breakdown?: RiskFactor[];
   [key: string]: unknown;
 }
 

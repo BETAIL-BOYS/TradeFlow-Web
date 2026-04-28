@@ -125,7 +125,7 @@ export async function getRiskScore(
  */
 export async function getInvoices(options: RequestOptions = {}): Promise<ApiResult<InvoicesResponse>> {
   try {
-    const res = await httpClient.get("/invoices", { signal: options.signal });
+    const res = await httpClient.get("/api/invoices", { signal: options.signal });
     const data: unknown = res.data;
 
     if (!isInvoicesResponse(data)) {
@@ -133,7 +133,7 @@ export async function getInvoices(options: RequestOptions = {}): Promise<ApiResu
         ok: false,
         status: asStatusCode(res.status),
         headers: toHeadersRecord(res.headers),
-        error: { message: "Invalid /invoices response shape", details: data },
+        error: { message: "Invalid /api/invoices response shape", details: data },
       };
     }
 

@@ -18,6 +18,7 @@ import WatchlistTab from "../components/WatchlistTab";
 import TabNavigation from "../components/TabNavigation";
 import { useWatchlist } from "../hooks/useWatchlist";
 import StarIcon from "../components/StarIcon";
+import RiskScoreBadge from "../components/RiskScoreBadge";
 import { api } from "../lib/api";
 import type { InvoiceSummary } from "../../types/api";
 import { RiskSocketClient } from "../lib/riskSocket";
@@ -247,12 +248,11 @@ export default function Page() {
                             #{inv.id.slice(-6)}
                           </td>
                           <td className="p-4">
-                            <div className="w-full bg-tradeflow-muted h-2 rounded-full max-w-[100px]">
-                              <div
-                                className="bg-blue-500 h-2 rounded-full"
-                                style={{ width: `${inv.riskScore}%` }}
-                              ></div>
-                            </div>
+                            <RiskScoreBadge
+                              invoiceId={inv.id}
+                              riskScore={inv.riskScore}
+                              breakdown={inv.breakdown}
+                            />
                           </td>
                           <td className="p-4 text-sm font-medium">
                             <span

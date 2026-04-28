@@ -47,10 +47,43 @@ export async function GET(request: NextRequest) {
   if (!apiUrl) {
     const score =
       invoiceId.split("").reduce((sum, ch) => sum + ch.charCodeAt(0), 0) % 101;
+    
+    // Mock breakdown factors for demo
+    const breakdown = [
+      {
+        label: "Payment History",
+        type: score < 50 ? "positive" : "neutral",
+        description: score < 50 
+          ? "Debtor has 5 years clean payment history with no defaults."
+          : "Limited payment history available for this debtor."
+      },
+      {
+        label: "Sector Volatility",
+        type: score > 70 ? "negative" : "neutral",
+        description: score > 70
+          ? "High sector volatility detected in the debtor's industry."
+          : "Stable sector performance over the last 24 months."
+      },
+      {
+        label: "Invoice Verification",
+        type: "positive",
+        description: "Invoice has been cryptographically verified on-chain."
+      }
+    ];
+
+    if (score > 60) {
+      breakdown.push({
+        label: "Concentration Risk",
+        type: "negative",
+        description: "High concentration of invoices from this specific debtor."
+      });
+    }
+
     return NextResponse.json(
       {
         invoiceId,
         riskScore: score,
+        breakdown,
         updatedAt: new Date().toISOString(),
       },
       { status: 200, headers: corsHeaders },
