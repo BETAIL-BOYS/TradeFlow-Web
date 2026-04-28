@@ -11,6 +11,7 @@ import {
   ResponsiveContainer,
   TooltipProps
 } from "recharts";
+import SkeletonCard from "./ui/SkeletonCard";
 import { api } from "../lib/api";
 
 interface PnLData {
@@ -110,9 +111,7 @@ export default function PortfolioChart() {
 
   if (loading) {
     return (
-      <div className="h-64 flex items-center justify-center">
-        <div className="animate-pulse text-tradeflow-muted">Loading chart data...</div>
-      </div>
+      <SkeletonCard height="h-[320px]" className="p-6" />
     );
   }
 
