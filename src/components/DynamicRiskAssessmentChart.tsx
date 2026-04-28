@@ -2,10 +2,11 @@
 
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
+import SkeletonCard from "./ui/SkeletonCard";
 
 // Loading component
 const ChartLoadingSkeleton = () => (
-  <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-6">
+  <SkeletonCard height="h-[520px]" className="p-6">
     <div className="flex items-center justify-between mb-6">
       <div className="flex items-center gap-2">
         <div className="w-3 h-3 rounded-full bg-blue-400 animate-pulse"></div>
@@ -29,7 +30,7 @@ const ChartLoadingSkeleton = () => (
         </div>
       ))}
     </div>
-  </div>
+  </SkeletonCard>
 );
 
 // Dynamic import with SSR disabled
