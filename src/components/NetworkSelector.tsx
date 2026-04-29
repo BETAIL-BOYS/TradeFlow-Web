@@ -7,7 +7,12 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+<<<<<<< HEAD
 import { ChevronDown, AlertTriangle, Globe, FlaskConical } from "lucide-react";
+=======
+import { ChevronDown, AlertTriangle } from "lucide-react";
+import Icon from "./ui/Icon";
+>>>>>>> upstream/main
 
 /** Supported Stellar network types */
 export type Network = "mainnet" | "testnet";
@@ -99,19 +104,28 @@ export default function NetworkSelector({ onNetworkChange }: NetworkSelectorProp
             {selectedNetworkData?.name.replace("Stellar ", "")}
           </span>
         </div>
+<<<<<<< HEAD
         <ChevronDown 
           size={14} 
           className={`text-slate-500 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
         />
+=======
+        <Icon icon={ChevronDown} dense className={`text-slate-400 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+>>>>>>> upstream/main
       </button>
 
       {/* Testnet Warning Badge */}
       {selectedNetwork === "testnet" && (
+<<<<<<< HEAD
         <div 
           className="absolute -top-2.5 -right-2 bg-yellow-500 text-slate-900 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-tighter flex items-center gap-1 shadow-lg shadow-yellow-500/20"
           title="You are using the test network"
         >
           <AlertTriangle size={10} strokeWidth={3} />
+=======
+        <div className="absolute -top-2 -right-2 bg-yellow-500 text-slate-900 rounded-full px-2 py-1 text-xs font-bold flex items-center gap-1">
+          <Icon icon={AlertTriangle} dense />
+>>>>>>> upstream/main
           Testnet
         </div>
       )}
@@ -158,3 +172,9 @@ export default function NetworkSelector({ onNetworkChange }: NetworkSelectorProp
   );
 }
 
+<<<<<<< HEAD
+=======
+// Inconsequential change for repo health
+
+// Maintenance: minor update
+>>>>>>> upstream/main

@@ -1,6 +1,9 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { Home, Search } from "lucide-react";
+import Icon from "../components/ui/Icon";
 
 export default function NotFound() {
   return (
@@ -14,10 +17,10 @@ export default function NotFound() {
 
         {/* Error Message */}
         <div className="mb-12">
-          <h2 className="text-3xl font-semibold mb-4">This pool doesn't exist</h2>
+          <h2 className="text-3xl font-semibold mb-4">This pool doesn&apos;t exist</h2>
           <p className="text-slate-400 text-lg max-w-md mx-auto">
-            The trading pool or page you're looking for seems to have vanished into the void. 
-            Let's get you back to the dashboard where the action is.
+            The trading pool or page you&apos;re looking for seems to have vanished into the void. 
+            Let&apos;s get you back to the dashboard where the action is.
           </p>
         </div>
 
@@ -27,7 +30,7 @@ export default function NotFound() {
             href="/"
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-full transition-colors text-white font-medium"
           >
-            <Home size={20} />
+            <Icon icon={Home} />
             Back to Dashboard
           </Link>
           
@@ -35,7 +38,7 @@ export default function NotFound() {
             onClick={() => window.history.back()}
             className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 px-6 py-3 rounded-full transition-colors text-white font-medium"
           >
-            <Search size={20} />
+            <Icon icon={Search} />
             Go Back
           </button>
         </div>
@@ -59,3 +62,7 @@ export default function NotFound() {
     </div>
   );
 }
+
+// Inconsequential change for repo health
+
+// Maintenance: minor update

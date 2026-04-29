@@ -67,6 +67,7 @@ export function useRecentTokens() {
     });
   }, []);
 
+<<<<<<< HEAD
   /**
    * Resets the recent tokens history.
    */
@@ -84,3 +85,8 @@ export function useRecentTokens() {
     clearHistory
   };
 }
+=======
+  return { recentTokens, addRecentToken };
+}
+// Maintenance: minor update
+>>>>>>> upstream/main

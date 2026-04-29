@@ -9,18 +9,17 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        tradeflow: {
-          dark: "#0f172a", // slate-900 equivalent
-          accent: "#3b82f6", // blue-500 equivalent
-          secondary: "#1e293b", // slate-800 equivalent
-          muted: "#475569", // slate-600 equivalent
-          success: "#10b981", // emerald-500 equivalent
-          warning: "#f59e0b", // amber-500 equivalent
-        },
+        "tradeflow-dark": "#0a0a0f",
+        "tradeflow-secondary": "#12121a",
+        "tradeflow-muted": "#2a2a3a",
+        "tradeflow-accent": "#3b82f6",
+      },
+      fontFamily: {
+        sans: ["var(--font-inter)", "sans-serif"],
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar")],
 };
 
 export default config;
