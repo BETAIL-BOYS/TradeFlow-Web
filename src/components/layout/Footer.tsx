@@ -5,6 +5,9 @@ import { ExternalLink } from "lucide-react";
 import NetworkToggle from "../NetworkToggle";
 import Icon from "../ui/Icon";
 
+/**
+ * A consistent footer for all TradeFlow pages.
+ */
 export default function Footer() {
   const handleClearCache = () => {
     localStorage.clear();
@@ -13,7 +16,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-slate-800 border-t border-slate-700 py-8 px-8 mt-auto">
+    <footer className="bg-slate-900 border-t border-slate-800 py-12 px-8 mt-auto" role="contentinfo">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
 

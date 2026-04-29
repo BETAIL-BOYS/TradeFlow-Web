@@ -1,3 +1,9 @@
+/**
+ * Invoice Minting Form Component.
+ * Provides a guided interface for users to upload invoice PDFs and 
+ * define metadata for on-chain NFT minting.
+ */
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -23,6 +29,7 @@ const invoiceSchema = z.object({
     .number()
     .min(0.01, "Amount must be greater than 0")
     .max(1000000, "Amount cannot exceed $1,000,000"),
+  /** Expected payment date for the invoice */
   dueDate: z
     .string()
     .min(1, "Due date is required")
@@ -44,9 +51,14 @@ const invoiceSchema = z.object({
     .or(z.literal("")),
 });
 
+/** TypeScript type inferred from the validation schema */
 type InvoiceFormData = z.infer<typeof invoiceSchema>;
 
+/**
+ * Props for the InvoiceMintForm component.
+ */
 interface InvoiceMintFormProps {
+  /** Callback to trigger when the form is closed/cancelled */
   onClose: () => void;
   onSuccess?: (txStatus: string) => void;
 }
@@ -67,6 +79,7 @@ export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormP
   const { data: session } = useSession();
   const { mint, loading: minting, error: mintError, txStatus } = useMintInvoice();
 
+  // --- Form Initialization ---
   const {
     register,
     handleSubmit,
@@ -104,6 +117,11 @@ export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormP
     }
   }, [watchedAmount]);
 
+  /**
+   * Manually updates the file field in react-hook-form when a file is selected.
+   * 
+   * @param {React.ChangeEvent<HTMLInputElement>} event - The file input change event.
+   */
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -215,7 +233,7 @@ export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormP
             <input
               type="date"
               {...register("dueDate")}
-              className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3.5 bg-slate-900/50 border border-slate-700 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             />
             {errors.dueDate && <p className="mt-2 text-sm text-red-400">{errors.dueDate.message}</p>}
           </div>
@@ -233,10 +251,15 @@ export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormP
                 onChange={handleFileChange}
                 className="hidden"
                 id="invoice-file"
+                aria-describedby="file-error"
               />
               <label
                 htmlFor="invoice-file"
-                className="flex items-center justify-center w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg cursor-pointer hover:bg-slate-600 transition-colors"
+                className={`flex flex-col items-center justify-center w-full px-4 py-8 border-2 border-dashed rounded-3xl cursor-pointer transition-all ${
+                  filePreview 
+                  ? "bg-indigo-500/5 border-indigo-500/50" 
+                  : "bg-slate-900/50 border-slate-700 hover:border-slate-600 hover:bg-slate-900/80"
+                }`}
               >
                 <Icon icon={Upload} dense className="mr-2 text-slate-400" />
                 <span className="text-slate-300">{filePreview || "Choose PDF file"}</span>

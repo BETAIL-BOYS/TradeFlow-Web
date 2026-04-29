@@ -3,19 +3,32 @@
 import React from 'react';
 import { formatCurrency, formatDate } from '../lib/format';
 
-// --- Types & Interfaces ---
+/**
+ * Valid states for a loan within the protocol.
+ */
 type LoanStatus = 'Active' | 'Overdue' | 'Repaid';
 
+/**
+ * Data structure representing an on-chain loan.
+ */
 interface Loan {
+  /** Unique identifier for the loan record */
   id: string;
+  /** The ID of the invoice used as collateral */
   invoiceId: string;
+  /** Principal amount borrowed */
   amountBorrowed: number;
-  interestRate: number; // Annual rate in percentage (e.g., 5 for 5%)
-  startDate: string;    // ISO string date
+  /** Annual interest rate (e.g., 5 for 5%) */
+  interestRate: number;
+  /** ISO 8601 timestamp of when the loan was initiated */
+  startDate: string;
+  /** Current lifecycle status of the loan */
   status: LoanStatus;
 }
 
-// --- Mock Data ---
+/**
+ * Simulated on-chain loan data for development.
+ */
 const MOCK_LOANS: Loan[] = [
   { id: 'L-001', invoiceId: 'INV-8821', amountBorrowed: 5000, interestRate: 10, startDate: '2026-01-10T00:00:00Z', status: 'Active' },
   { id: 'L-002', invoiceId: 'INV-9942', amountBorrowed: 12000, interestRate: 12, startDate: '2025-11-01T00:00:00Z', status: 'Overdue' },
@@ -35,7 +48,9 @@ const calculateInterest = (amount: number, rate: number, startDateStr: string): 
   return interest;
 };
 
-// Returns the correct Tailwind classes based on the status
+/**
+ * Renders a stylized badge reflecting the loan status.
+ */
 const StatusBadge = ({ status }: { status: LoanStatus }) => {
   switch (status) {
     case 'Repaid':
@@ -48,8 +63,14 @@ const StatusBadge = ({ status }: { status: LoanStatus }) => {
   }
 };
 
-// --- Main Component ---
+/**
+ * A responsive table component for managing loans.
+ */
 export default function LoanTable() {
+  /**
+   * Handles the initiation of a loan repayment.
+   * @param {string} loanId - The ID of the loan to repay.
+   */
   const handleRepay = (loanId: string) => {
     console.log(`Initiating repayment for loan: ${loanId}`);
   };
@@ -94,9 +115,44 @@ export default function LoanTable() {
                 </button>
               </td>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-slate-800 bg-transparent">
+            {MOCK_LOANS.map((loan) => (
+              <tr key={loan.id} className="hover:bg-slate-800/30 transition-all duration-200 group">
+                <td className="px-6 py-4 font-mono text-blue-400 whitespace-nowrap">
+                  {loan.invoiceId}
+                </td>
+                <td className="px-6 py-4 font-medium text-slate-100">
+                  {formatCurrency(loan.amountBorrowed)}
+                </td>
+                <td className="px-6 py-4 text-emerald-400">
+                  {formatCurrency(calculateInterest(loan.amountBorrowed, loan.interestRate, loan.startDate))}
+                </td>
+                <td className="px-6 py-4">
+                  <StatusBadge status={loan.status} />
+                </td>
+                <td className="px-6 py-4 text-right">
+                  <button
+                    onClick={() => handleRepay(loan.id)}
+                    disabled={loan.status === 'Repaid'}
+                    className={`px-5 py-2 text-xs font-bold uppercase tracking-widest rounded-lg transition-all transform active:scale-95 ${loan.status === 'Repaid'
+                      ? 'bg-slate-700 text-slate-500 cursor-not-allowed opacity-50'
+                      : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-md hover:shadow-indigo-500/20 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900'
+                      }`}
+                  >
+                    Repay
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {MOCK_LOANS.length === 0 && (
+        <div className="p-12 text-center text-slate-500 italic">
+          No active loans found in your history.
+        </div>
+      )}
     </div>
   );
 }
