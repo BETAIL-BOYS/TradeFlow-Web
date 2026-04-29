@@ -18,7 +18,10 @@ import {
 // Re-export WalletType for backward compatibility
 export { WalletType };
 
-// Default to Testnet for development
+/**
+ * The RPC endpoint for the Stellar network.
+ * Currently defaults to the public Soroban Testnet.
+ */
 const RPC_URL = "https://soroban-testnet.stellar.org";
 
 /**
