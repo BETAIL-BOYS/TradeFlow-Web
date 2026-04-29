@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { formatCurrency, formatDate } from '../lib/format';
 
@@ -23,40 +25,39 @@ const MOCK_LOANS: Loan[] = [
 // --- Helper Functions ---
 
 // Calculates interest based on time elapsed: (Amount * Rate) * (DaysElapsed / 365)
-const calculateInterest = (amount: number, rate: number, startDateStr: string) => {
+const calculateInterest = (amount: number, rate: number, startDateStr: string): number => {
   const start = new Date(startDateStr);
   const now = new Date();
   const diffTime = Math.abs(now.getTime() - start.getTime());
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
   const interest = (amount * (rate / 100)) * (diffDays / 365);
-  return interest.toFixed(2);
+  return interest;
 };
 
 // Returns the correct Tailwind classes based on the status
 const StatusBadge = ({ status }: { status: LoanStatus }) => {
   switch (status) {
     case 'Repaid':
-      return <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">Repaid</span>;
+      return <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-green-500/20 text-green-400 border border-green-500/30">Repaid</span>;
     case 'Overdue':
-      return <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">Overdue</span>;
+      return <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-red-500/20 text-red-400 border border-red-500/30">Overdue</span>;
     case 'Active':
     default:
-      return <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">Active</span>;
+      return <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">Active</span>;
   }
 };
 
 // --- Main Component ---
 export default function LoanTable() {
   const handleRepay = (loanId: string) => {
-    // TODO: Wire this up to your API or a payment modal
     console.log(`Initiating repayment for loan: ${loanId}`);
   };
 
   return (
-    <div className="w-full overflow-x-auto shadow-sm ring-1 ring-black ring-opacity-5 rounded-lg">
-      <table className="min-w-full text-sm text-left text-gray-600">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+    <div className="w-full overflow-x-auto rounded-xl border border-slate-700/50 bg-slate-900/30 backdrop-blur-sm">
+      <table className="w-full text-sm text-left">
+        <thead className="text-xs text-slate-400 uppercase bg-slate-800/50 border-b border-slate-700/50">
           <tr>
             <th scope="col" className="px-6 py-4 font-semibold">Invoice ID</th>
             <th scope="col" className="px-6 py-4 font-semibold">Amount Borrowed</th>
@@ -65,17 +66,17 @@ export default function LoanTable() {
             <th scope="col" className="px-6 py-4 font-semibold text-right">Action</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200 bg-white">
+        <tbody className="divide-y divide-slate-700/30">
           {MOCK_LOANS.map((loan) => (
-            <tr key={loan.id} className="hover:bg-gray-50 transition-colors">
-              <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+            <tr key={loan.id} className="hover:bg-slate-800/30 transition-colors">
+              <td className="px-6 py-4 font-medium text-blue-300 font-mono">
                 {loan.invoiceId}
               </td>
-              <td className="px-6 py-4">
-                {formatCurrency(loan.amountBorrowed)}
+              <td className="px-6 py-4 text-slate-200">
+                {formatCurrency(loan.amountBorrowed, false)}
               </td>
-              <td className="px-6 py-4">
-                {formatCurrency(calculateInterest(loan.amountBorrowed, loan.interestRate, loan.startDate))}
+              <td className="px-6 py-4 text-slate-200">
+                {formatCurrency(calculateInterest(loan.amountBorrowed, loan.interestRate, loan.startDate), false)}
               </td>
               <td className="px-6 py-4">
                 <StatusBadge status={loan.status} />
@@ -84,9 +85,9 @@ export default function LoanTable() {
                 <button
                   onClick={() => handleRepay(loan.id)}
                   disabled={loan.status === 'Repaid'}
-                  className={`px-4 py-2 text-sm font-medium text-white rounded-md transition-colors ${loan.status === 'Repaid'
-                    ? 'bg-gray-300 cursor-not-allowed'
-                    : 'bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${loan.status === 'Repaid'
+                    ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
+                    : 'bg-tradeflow-accent hover:bg-blue-600 text-white shadow-lg shadow-blue-500/20'
                     }`}
                 >
                   Repay
@@ -99,3 +100,6 @@ export default function LoanTable() {
     </div>
   );
 }
+// Inconsequential change for repo health
+
+// Maintenance: minor update

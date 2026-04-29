@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 
 interface ToggleProps {
@@ -33,3 +35,6 @@ export default function Toggle({ isOn, onToggle, disabled }: ToggleProps) {
     </button>
   );
 }
+// Inconsequential change for repo health
+
+// Maintenance: minor update

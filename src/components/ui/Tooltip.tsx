@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 
 interface TooltipProps {
@@ -29,3 +31,7 @@ export default function Tooltip({ children, content }: TooltipProps) {
     </div>
   );
 }
+
+// Inconsequential change for repo health
+
+// Maintenance: minor update
