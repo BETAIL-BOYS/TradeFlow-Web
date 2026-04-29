@@ -1,26 +1,48 @@
+/**
+ * Main Navigation Bar Component.
+ * Provides access to primary application routes, wallet connectivity status, 
+ * network selection, and utility features like the fiat on-ramp.
+ */
+
 "use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Wallet, Copy, Check, CreditCard } from "lucide-react";
+import { Wallet, Copy, Check, CreditCard, Menu, X } from "lucide-react";
 import toast from "react-hot-toast";
 
-// Corrected imports based on your actual file structure
+// Core UI components and modals
 import NetworkSelector from "./NetworkSelector";
 import FiatOnRampModal from "./FiatOnRampModal";
 import NetworkFeeIndicator from "./ui/NetworkFeeIndicator";
 
+/**
+ * Props for the Navbar component.
+ */
 interface NavbarProps {
+  /** The public Stellar address of the connected user (optional) */
   address?: string;
+  /** Callback to trigger the wallet connection modal */
   onConnect?: () => void;
 }
 
+/**
+ * The top navigation component used across all pages.
+ */
 export default function Navbar({ address, onConnect }: NavbarProps) {
   const pathname = usePathname();
+  // --- UI State ---
+  /** Tracks whether the wallet address was recently copied to clipboard */
   const [copied, setCopied] = useState(false);
+  /** Controls visibility of the fiat purchase modal */
   const [isFiatModalOpen, setIsFiatModalOpen] = useState(false);
+  /** Controls mobile menu visibility */
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  /**
+   * Copies the connected wallet address to the system clipboard.
+   */
   const copyToClipboard = async () => {
     if (address) {
       try {
@@ -28,14 +50,22 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
 
-        toast.success("Address copied to clipboard!");
+        toast.success("Address copied to clipboard!", {
+          icon: '📋',
+          style: {
+            borderRadius: '12px',
+            background: '#1e293b',
+            color: '#fff',
+          },
+        });
       } catch (err) {
-        console.error('Failed to copy address:', err);
+        console.error('[Navbar] Failed to copy address:', err);
         toast.error("Failed to copy address");
       }
     }
   };
 
+  /** Primary navigation link configuration */
   const navLinks = [
     { name: "Dashboard", href: "/" },
     { name: "Swap", href: "/swap" },
@@ -45,23 +75,29 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
   ];
 
   return (
-    <div className="flex justify-between items-center mb-12 p-8">
-      <div className="flex items-center gap-12">
-        <h1 className="text-3xl font-bold tracking-tight">
-          TradeFlow <span className="text-blue-400">RWA</span>
-        </h1>
+    <header className="flex justify-between items-center mb-8 p-6 md:p-8 bg-slate-900/50 backdrop-blur-md sticky top-0 z-40 border-b border-slate-800">
+      {/* Brand & Desktop Nav */}
+      <div className="flex items-center gap-10">
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center group-hover:rotate-12 transition-transform shadow-lg shadow-blue-500/20">
+            <span className="text-white font-black text-xl">T</span>
+          </div>
+          <h1 className="text-2xl font-black tracking-tighter text-white">
+            TRADEFLOW <span className="text-blue-400 font-medium">RWA</span>
+          </h1>
+        </Link>
 
-        <nav className="hidden md:flex gap-8">
+        <nav className="hidden lg:flex gap-6">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-medium transition-colors ${
+                className={`text-sm font-bold tracking-wide uppercase transition-all ${
                   isActive
-                    ? "text-cyan-400"
-                    : "text-slate-400 hover:text-white"
+                    ? "text-blue-400 border-b-2 border-blue-400 pb-1"
+                    : "text-slate-400 hover:text-white pb-1"
                 }`}
               >
                 {link.name}
@@ -71,59 +107,64 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
         </nav>
       </div>
 
-      <div className="flex items-center gap-4">
-        <NetworkSelector />
+      {/* Action Area */}
+      <div className="flex items-center gap-3 md:gap-4">
+        <div className="hidden sm:flex items-center gap-3">
+          <NetworkSelector />
+          <NetworkFeeIndicator />
+        </div>
 
-        {/* Gas Tank / Network Fee Indicator */}
-        <NetworkFeeIndicator />
-
-        {/* Buy Crypto Button */}
+        {/* Buy Crypto Utility */}
         <button
           onClick={() => setIsFiatModalOpen(true)}
-          className="flex items-center gap-2 bg-green-600 hover:bg-green-700 px-6 py-2 rounded-full transition"
+          className="hidden md:flex items-center gap-2 bg-emerald-600/10 hover:bg-emerald-600 text-emerald-400 hover:text-white px-5 py-2.5 rounded-2xl transition-all font-bold text-sm border border-emerald-500/20"
+          aria-label="Open fiat on-ramp"
         >
           <CreditCard size={18} />
-          Buy Crypto
+          <span>Buy Crypto</span>
         </button>
 
+        {/* Wallet Connection / Account Display */}
         {address ? (
-          <div className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition">
-            <Wallet size={18} />
-            <span className="text-sm">
+          <div className="flex items-center gap-2 bg-slate-800 border border-slate-700 pl-4 pr-2 py-1.5 rounded-2xl group hover:border-blue-500/50 transition-all">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs font-mono text-slate-300 font-semibold tracking-tight">
               {`${address.slice(0, 6)}...${address.slice(-4)}`}
             </span>
             <button
               onClick={copyToClipboard}
-              className="ml-2 p-1 hover:bg-blue-500 rounded-full transition-colors"
-              title="Copy address"
+              className="p-2 text-slate-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-xl transition-all"
+              title="Copy Stellar address"
+              aria-label="Copy address"
             >
-              {copied ? (
-                <Check size={16} className="text-green-300" />
-              ) : (
-                <Copy size={16} className="text-white" />
-              )}
+              {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
             </button>
           </div>
         ) : (
-          /* * ISSUE #108: Added `animate-pulse` to draw attention to the primary CTA.
-           * Because this button is isolated within the `false` branch of the `address` check,
-           * the animation is naturally removed when the user connects their wallet.
-           */
           <button
             onClick={onConnect}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition animate-pulse"
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 px-6 py-2.5 rounded-2xl transition-all font-bold text-sm shadow-lg shadow-blue-500/20 active:scale-95"
           >
             <Wallet size={18} />
             Connect Wallet
           </button>
         )}
+
+        {/* Mobile Menu Toggle */}
+        <button 
+          className="lg:hidden p-2 text-slate-400 hover:text-white transition-colors"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+        >
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
 
-      {/* Fiat On-Ramp Modal */}
+      {/* Modals & Overlays */}
       <FiatOnRampModal
         isOpen={isFiatModalOpen}
         onClose={() => setIsFiatModalOpen(false)}
       />
-    </div>
+    </header>
   );
 }
