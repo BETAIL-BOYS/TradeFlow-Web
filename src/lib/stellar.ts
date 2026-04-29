@@ -18,8 +18,15 @@ import {
 // Re-export WalletType for backward compatibility
 export { WalletType };
 
-// Default to Testnet for development
+/**
+ * The RPC endpoint for the Stellar network.
+ * Currently defaults to the public Soroban Testnet.
+ */
 const RPC_URL = "https://soroban-testnet.stellar.org";
+
+/**
+ * Internal server instance for interacting with the Stellar network.
+ */
 const server = new Server(RPC_URL);
 const NETWORK_PASSPHRASE = Networks.TESTNET;
 
@@ -37,13 +44,16 @@ export async function connectWallet(walletType: WalletType = FREIGHTER_ID): Prom
     currentWalletConnector = connector;
     return walletInfo;
   } catch (error: any) {
+    // Log error for debugging but propagate to the caller
     console.error("Wallet connection error:", error);
     throw error;
   }
 }
 
 /**
- * Gets the current connected wallet info
+ * Retrieves information about the currently connected wallet if available.
+ * 
+ * @returns {Promise<WalletInfo | null>} The wallet info or null if disconnected.
  */
 export async function getConnectedWallet(): Promise<WalletInfo | null> {
   if (!currentWalletConnector) return null;
@@ -55,12 +65,15 @@ export async function getConnectedWallet(): Promise<WalletInfo | null> {
     const publicKey = await currentWalletConnector.getPublicKey();
     return { publicKey, walletType: currentWalletConnector.getWalletType() };
   } catch (error) {
+    // Silently return null on error as it usually means no wallet is active
     return null;
   }
 }
 
 /**
- * Disconnects the current wallet
+ * Terminates the current wallet session.
+ * 
+ * @returns {Promise<void>}
  */
 export async function disconnectWallet(): Promise<void> {
   if (!currentWalletConnector) return;
@@ -82,8 +95,8 @@ export async function disconnectWallet(): Promise<void> {
  * @returns Promise that resolves to "SUCCESS" if successful
  */
 export async function waitForTransaction(hash: string): Promise<string> {
-  const TIMEOUT_MS = 30000;
-  const POLLING_INTERVAL_MS = 2000;
+  const TIMEOUT_MS = 30000; // 30 seconds timeout
+  const POLLING_INTERVAL_MS = 2000; // Poll every 2 seconds
   const startTime = Date.now();
 
   console.log(
@@ -92,7 +105,7 @@ export async function waitForTransaction(hash: string): Promise<string> {
 
   while (Date.now() - startTime < TIMEOUT_MS) {
     try {
-      // Attempt to fetch transaction status
+      // Fetch transaction status from the Horizon server
       const tx = await server.getTransaction(hash);
 
       console.log(
@@ -117,21 +130,24 @@ export async function waitForTransaction(hash: string): Promise<string> {
       );
     }
 
-    // Wait before next poll
+    // Wait before next poll attempt
     await new Promise((resolve) => setTimeout(resolve, POLLING_INTERVAL_MS));
   }
 
-  // Timeout reached
+  // Timeout reached if we exit the loop
   const errorMsg = `Transaction monitoring timed out after ${TIMEOUT_MS / 1000}s for hash: ${hash}`;
   console.error(`[waitForTransaction] ${errorMsg}`);
   throw new Error(errorMsg);
 }
 
 /**
- * Adds a trustline for a Stellar asset (ChangeTrust operation).
- * @param assetCode - Code of the asset (e.g., "USDC")
- * @param assetIssuer - Issuer address of the asset
- * @param walletType - Optional wallet type override
+ * Establishes a trustline for a specific Stellar asset.
+ * This is required before an account can hold or receive a non-native asset.
+ * 
+ * @param {string} assetCode - The code of the asset (e.g., "USDC").
+ * @param {string} assetIssuer - The public G-address of the asset issuer.
+ * @param {WalletType} [walletType] - Optional wallet provider override.
+ * @returns {Promise<string>} The status of the transaction.
  */
 export async function addTrustline(assetCode: string, assetIssuer: string, walletType?: WalletType) {
   const connector = walletType ? createWalletConnector(walletType) : currentWalletConnector;
@@ -139,7 +155,7 @@ export async function addTrustline(assetCode: string, assetIssuer: string, walle
   
   const publicKey = await connector.getPublicKey();
   
-  // Fetch account details to get the current sequence number
+  // 1. Fetch current account state for sequence number
   const account = await server.getAccount(publicKey);
   const asset = new Asset(assetCode, assetIssuer);
 
@@ -148,7 +164,7 @@ export async function addTrustline(assetCode: string, assetIssuer: string, walle
     networkPassphrase: NETWORK_PASSPHRASE,
   })
     .addOperation(Operation.changeTrust({ asset }))
-    .setTimeout(60)
+    .setTimeout(60) // 60 seconds transaction validity
     .build();
 
   const xdr = transaction.toXDR();
@@ -159,6 +175,7 @@ export async function addTrustline(assetCode: string, assetIssuer: string, walle
   const response = await server.sendTransaction(transaction);
 
   if (response.hash) {
+    // 5. Wait for ledger confirmation
     return await waitForTransaction(response.hash);
   }
 
@@ -166,7 +183,11 @@ export async function addTrustline(assetCode: string, assetIssuer: string, walle
 }
 
 /**
- * Signs a transaction using the currently connected wallet
+ * Signs a raw XDR transaction using the active wallet.
+ * 
+ * @param {string} xdr - The base64 encoded transaction XDR.
+ * @param {any} [options] - Additional signing options.
+ * @returns {Promise<string>} The signed transaction XDR.
  */
 export async function signTransaction(
   xdr: string,

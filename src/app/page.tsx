@@ -1,3 +1,9 @@
+/**
+ * TradeFlow Main Dashboard Page.
+ * This is the primary entry point for the application, providing users with 
+ * a high-level overview of their assets, protocol status, and the RWA pipeline.
+ */
+
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -29,15 +35,24 @@ import { useWalletConnection } from "../stores/useWeb3Store";
 import { showError, showSuccess } from "../lib/toast";
 import Icon from "../components/ui/Icon";
 
+/**
+ * The root component for the TradeFlow dashboard.
+ * Manages high-level state for wallet connection, active tabs, and invoice data.
+ */
 export default function Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isConnected, walletAddress, isConnecting } = useWalletConnection();
   const [invoices, setInvoices] = useState<InvoiceSummary[]>([]);
   const [loading, setLoading] = useState(false);
+  /** Controls visibility of the Invoice Minting modal */
   const [showMintForm, setShowMintForm] = useState(false);
+  /** Controls visibility of the Wallet Selection modal */
   const [isModalOpen, setIsModalOpen] = useState(false);
+  /** Currently active navigation tab (dashboard or watchlist) */
   const [activeTab, setActiveTab] = useState("dashboard");
+  
+  /** Watchlist management hook */
   const { toggleWatchlist, isInWatchlist } = useWatchlist();
   const riskSocketRef = useRef<RiskSocketClient | null>(null);
 
@@ -76,6 +91,8 @@ export default function Page() {
       showError(error.message || "Failed to connect to wallet.");
     }
   };
+
+  // --- Lifecycle Hooks ---
 
   useEffect(() => {
     const controller = new AbortController();
@@ -147,13 +164,17 @@ export default function Page() {
   const handleInvoiceMint = (data: Record<string, unknown>) => {
     console.log("Invoice data received:", data);
     setShowMintForm(false);
-    // TODO: Chain integration will be handled separately
+    // TODO: Initiate Soroban contract call for minting the NFT
   };
 
+  // --- Configuration ---
+
+  /** Tab definitions for the main navigation */
   const tabs = [
     { id: "dashboard", label: "Dashboard" },
     { id: "watchlist", label: "Watchlist", icon: <Icon icon={Star} dense /> },
   ];
+
 
   return (
     <div className="min-h-screen bg-slate-900 text-white font-sans flex flex-col">

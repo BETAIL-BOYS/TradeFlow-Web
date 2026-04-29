@@ -7,14 +7,25 @@ import { dismissToast, showError, showLoading, showSuccess } from "../lib/toast"
 import { useSigningActions } from "../stores/signatureStore";
 import Icon from "./ui/Icon";
 
+/**
+ * Main component for the token swap functionality.
+ */
 export default function SwapInterface() {
+  // --- Token Selection State ---
+  /** The asset code of the token being sold */
   const [fromToken, setFromToken] = useState("XLM");
+  /** The asset code of the token being bought */
   const [toToken, setToToken] = useState("USDC");
+  
+  // --- UI Visibility State ---
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isProMode, setIsProMode] = useState(false);
 
   const { deadline } = useSettings();
 
+  /**
+   * Swaps the 'from' and 'to' tokens and their amounts.
+   */
   const handleSwap = () => {
     const temp = fromToken;
     setFromToken(toToken);
@@ -23,12 +34,18 @@ export default function SwapInterface() {
     setToAmount(fromAmount);
   };
 
+  /**
+   * Updates the source amount and recalculates the destination amount and price impact.
+   * 
+   * @param {string} value - The new input amount.
+   */
   const handleFromAmountChange = (value: string) => {
     setFromAmount(value);
     const impact = calculatePriceImpact(value);
     setPriceImpact(impact);
 
     if (value && parseFloat(value) > 0) {
+      // Mock exchange rate logic
       const mockRate = fromToken === "XLM" ? 0.15 : 6.67;
       setToAmount((parseFloat(value) * mockRate * (1 - impact / 100)).toFixed(6));
     } else {
@@ -36,6 +53,9 @@ export default function SwapInterface() {
     }
   };
 
+  /**
+   * Initiates the swap flow, validating inputs and checking for high slippage.
+   */
   const handleSwapClick = async () => {
     if (!fromAmount || parseFloat(fromAmount) <= 0) {
       showError("Please enter an amount to swap");
@@ -45,23 +65,21 @@ export default function SwapInterface() {
     const loadingToast = showLoading("Processing swap...");
 
     try {
+      // Threshold check for high slippage warning
       if (priceImpact > 5) {
         setIsHighSlippageWarningOpen(true);
         dismissToast(loadingToast);
         return;
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 1800));
+      // Simulate network delay
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       showSuccess(`Swapped ${fromAmount} ${fromToken} → ${toAmount} ${toToken}`, {
         id: loadingToast,
       });
 
-      if (priceImpact > 5) {
-        setIsHighSlippageWarningOpen(true);
-      } else {
-        setIsTradeReviewOpen(true);
-      }
+      setIsTradeReviewOpen(true);
     } catch (error) {
       showError("Failed to process swap", {
         id: loadingToast,
@@ -69,17 +87,21 @@ export default function SwapInterface() {
     }
   };
 
+  /**
+   * Confirms the trade and prepares the transaction for signing.
+   */
   const handleTradeConfirm = async () => {
     setIsTradeReviewOpen(false);
     setIsSubmitting(true);
     setSubmissionStartTime(Date.now());
 
     try {
+      // Simulate transaction building time
       await new Promise(resolve => setTimeout(resolve, 2000));
 
-      // Generate mock transaction XDR
+      // Mock transaction XDR for demonstration
       const mockTransactionXDR = "AAAAAK/eFzA7Jf5Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3XAAAABQAAAAAAAAAAA==";
-      console.log("Mock XDR generated:", mockTransactionXDR);
+      console.log("[SwapInterface] Mock XDR generated:", mockTransactionXDR);
 
       setIsTransactionSignatureOpen(true);
     } catch (error) {
@@ -89,6 +111,9 @@ export default function SwapInterface() {
     }
   };
 
+  /**
+   * Handles confirmation from the high slippage warning modal.
+   */
   const handleHighSlippageConfirm = async () => {
     const loadingToast = showLoading("Processing high slippage swap...");
 
@@ -105,9 +130,13 @@ export default function SwapInterface() {
     }
   };
 
-  /* ISSUE #87: Trigger the success modal when the transaction is signed */
+  /**
+   * Callback for when the user successfully signs the transaction.
+   * 
+   * @param {string} signedXDR - The base64 signed transaction XDR.
+   */
   const handleTransactionSuccess = (signedXDR: string) => {
-    console.log("Transaction signed:", signedXDR);
+    console.log("[SwapInterface] Transaction signed:", signedXDR);
 
     showSuccess("Transaction signed successfully!", {
       icon: "✅",
@@ -117,15 +146,17 @@ export default function SwapInterface() {
     setIsSubmitting(false);
     setSubmissionStartTime(null);
 
-    // Show the Growth/Share modal
+    // Show the post-trade share/growth modal
     setIsSuccessModalOpen(true);
 
+    // Reset form after a short delay
     setTimeout(() => {
       setFromAmount("");
       setToAmount("");
       setPriceImpact(0);
     }, 1500);
   };
+
 
   const isAnyModalOpen = isSettingsOpen || isHighSlippageWarningOpen || isTradeReviewOpen || isSuccessModalOpen;
   const isSwapValid = fromAmount && parseFloat(fromAmount) > 0 && !isSubmitting;

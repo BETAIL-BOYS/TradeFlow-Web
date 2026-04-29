@@ -1,14 +1,25 @@
+/**
+ * Web3 State Management Store.
+ * Centralizes wallet connection, network status, and account balances
+ * using Zustand for reactive state updates across the application.
+ */
+
 import { create } from 'zustand';
 import { Server, Asset } from 'soroban-client';
 import { FREIGHTER_ID, WalletType } from '../lib/stellar';
 import { createWalletConnector, getWalletDisplayName } from '../lib/walletConnector';
 import { getEffectiveNetwork, getNetworkConfig } from '../lib/networkConfig';
 
-// Network configuration
+/**
+ * Supported Stellar Networks.
+ */
 export const NETWORKS = {
+  /** Public Stellar Testnet (Used for development and QA) */
   TESTNET: 'Testnet',
+  /** Public Stellar Mainnet (Used for production assets) */
   MAINNET: 'Mainnet'
 } as const;
+
 
 export type NetworkType = typeof NETWORKS[keyof typeof NETWORKS];
 
@@ -18,40 +29,77 @@ const NETWORK_ENDPOINTS = {
   [NETWORKS.MAINNET]: 'https://horizon.stellar.org'
 };
 
+/**
+ * Internal state for the Web3 store.
+ */
 interface Web3State {
-  // Wallet connection state
+  /** The public address of the connected wallet, or null if disconnected */
   walletAddress: string | null;
+  /** The ID of the connected wallet provider (e.g., freighter) */
   walletType: WalletType | null;
+  /** True if a wallet is successfully connected and reachable */
   isConnected: boolean;
+  /** True during the asynchronous wallet connection process */
   isConnecting: boolean;
   
-  // Network state
+  /** The currently selected network (defaults to TESTNET) */
   network: NetworkType;
   
-  // Token balances
+  /** Dictionary of asset balances, keyed by asset code (e.g., { "XLM": 50.5 }) */
   balances: Record<string, number>;
   
-  // Loading and error states
+  /** Global loading state for network-bound operations */
   isLoading: boolean;
+  /** Stores the last encountered error message, if any */
   error: string | null;
 }
 
+
+/**
+ * Available actions for interacting with the Web3 store.
+ */
 interface Web3Actions {
-  // Wallet actions
+  /**
+   * Initiates a connection request to a Stellar wallet.
+   * @param {WalletType} [walletType] - The specific wallet provider to use.
+   */
   connectWallet: (walletType?: WalletType) => Promise<void>;
+  
+  /**
+   * Clears the current wallet session and resets relevant state.
+   */
   disconnectWallet: () => void;
   
-  // Network actions
+  /**
+   * Updates the store to point to a different Stellar network.
+   * @param {NetworkType} network - The target network to switch to.
+   */
   switchNetwork: (network: NetworkType) => Promise<void>;
   
-  // Balance actions
+  /**
+   * Fetches the latest balances for all assets held by the connected account.
+   */
   updateBalances: () => Promise<void>;
+  
+  /**
+   * Manually updates the balance for a specific token in the store.
+   * @param {string} tokenCode - The code of the asset.
+   * @param {number} balance - The new numeric balance.
+   */
   updateTokenBalance: (tokenCode: string, balance: number) => void;
   
-  // Utility actions
+  /**
+   * Resets the error state in the store.
+   */
   clearError: () => void;
+  
+  /**
+   * Manually toggles the global loading state.
+   * @param {boolean} loading - The new loading state.
+   */
   setLoading: (loading: boolean) => void;
 }
+
 
 type Web3Store = Web3State & Web3Actions;
 
