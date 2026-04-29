@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 /**
  * News Banner Component.
  * A dismissible top-level banner for announcing major protocol updates or news.
  * Persists visibility only within the current session.
  */
+=======
+"use client";
+
+import React, { useState } from 'react';
+import { X } from 'lucide-react';
+import Icon from './ui/Icon';
+>>>>>>> upstream/main
 
 import React, { useState } from 'react';
 import { X, Sparkles } from 'lucide-react';
@@ -44,9 +52,19 @@ export default function NewsBanner() {
         className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1.5 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-all active:scale-90"
         aria-label="Dismiss banner"
       >
+<<<<<<< HEAD
         <X size={14} />
+=======
+        <Icon icon={X} dense />
+>>>>>>> upstream/main
       </button>
     </div>
   );
 }
 
+<<<<<<< HEAD
+=======
+// Inconsequential change for repo health
+
+// Maintenance: minor update
+>>>>>>> upstream/main

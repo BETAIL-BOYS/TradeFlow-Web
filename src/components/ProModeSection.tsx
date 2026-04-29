@@ -11,7 +11,11 @@ import dynamic from "next/dynamic";
 import Toggle from "../app/Toggle";
 import { useTokenStore } from "../stores/tokenStore";
 import PremiumUnlockModal from "./PremiumUnlockModal";
+<<<<<<< HEAD
 import { Zap, Crown, Lock } from "lucide-react";
+=======
+import SkeletonCard from "./ui/SkeletonCard";
+>>>>>>> upstream/main
 
 /**
  * Dynamically import the heavy TradingView-style chart component.
@@ -20,12 +24,16 @@ import { Zap, Crown, Lock } from "lucide-react";
 const LivePriceChart = dynamic(() => import("../components/LivePriceChart"), {
   ssr: false,
   loading: () => (
+<<<<<<< HEAD
     <div className="w-full h-96 bg-slate-900/50 rounded-3xl border border-slate-700/30 flex items-center justify-center animate-pulse">
+=======
+    <SkeletonCard height="h-96" className="flex items-center justify-center">
+>>>>>>> upstream/main
       <div className="text-center">
         <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Hydrating Pro Engine...</p>
       </div>
-    </div>
+    </SkeletonCard>
   ),
 });
 
@@ -125,3 +133,9 @@ export default function ProModeSection() {
   );
 }
 
+<<<<<<< HEAD
+=======
+// Inconsequential change for repo health
+
+// Maintenance: minor update
+>>>>>>> upstream/main

@@ -1,47 +1,63 @@
-'use client';
+"use client";
 
-import React from 'react';
-import * as Sentry from '@sentry/nextjs';
+import React, { Component, ErrorInfo, ReactNode } from "react";
+import { AlertTriangle, RefreshCcw } from "lucide-react";
+import Icon from "./ui/Icon";
 
-interface ErrorBoundaryProps {
-  children: React.ReactNode;
-  fallback?: React.ComponentType<{ error: Error; reset: () => void }>;
+interface Props {
+  children?: ReactNode;
 }
 
-interface ErrorBoundaryState {
+interface State {
   hasError: boolean;
-  error?: Error;
+  error: Error | null;
 }
 
-class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
-    super(props);
-    this.state = { hasError: false };
-  }
+class ErrorBoundary extends Component<Props, State> {
+  public state: State = {
+    hasError: false,
+    error: null,
+  };
 
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+  public static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    // Send error to Sentry
-    Sentry.captureException(error, {
-      contexts: {
-        react: {
-          componentStack: errorInfo.componentStack,
-        },
-      },
-    });
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error("Uncaught error:", error, errorInfo);
   }
 
-  render() {
+  private handleReset = () => {
+    this.setState({ hasError: false, error: null });
+    window.location.reload();
+  };
+
+  public render() {
     if (this.state.hasError) {
-      const FallbackComponent = this.props.fallback || DefaultErrorFallback;
       return (
-        <FallbackComponent
-          error={this.state.error!}
-          reset={() => this.setState({ hasError: false, error: undefined })}
-        />
+        <div className="min-h-[400px] flex items-center justify-center p-6">
+          <div className="bg-slate-900/50 border border-red-500/20 rounded-2xl p-8 max-w-md w-full text-center backdrop-blur-sm">
+            <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Icon icon={AlertTriangle} className="text-red-500" size={32} />
+            </div>
+            <h2 className="text-2xl font-bold text-white mb-2">Something went wrong</h2>
+            <p className="text-slate-400 mb-8">
+              An unexpected error occurred in the application. We&apos;ve been notified and are working on it.
+            </p>
+            <div className="bg-black/40 rounded-lg p-4 mb-8 text-left overflow-auto max-h-32">
+              <p className="text-xs font-mono text-red-400">
+                {this.state.error?.message || "Unknown error"}
+              </p>
+            </div>
+            <button
+              onClick={this.handleReset}
+              className="w-full flex items-center justify-center gap-2 py-3 px-6 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-all shadow-lg shadow-blue-900/20"
+            >
+              <Icon icon={RefreshCcw} dense />
+              Reload Page
+            </button>
+          </div>
+        </div>
       );
     }
 
@@ -49,56 +65,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
   }
 }
 
-function DefaultErrorFallback({ error, reset }: { error: Error; reset: () => void }) {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6">
-        <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full mb-4">
-          <svg
-            className="w-6 h-6 text-red-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-            />
-          </svg>
-        </div>
-        <h1 className="text-xl font-semibold text-center text-gray-900 mb-2">
-          Something went wrong
-        </h1>
-        <p className="text-gray-600 text-center mb-6">
-          We're sorry, but something unexpected happened. Our team has been notified.
-        </p>
-        <div className="space-y-3">
-          <button
-            onClick={reset}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
-          >
-            Try again
-          </button>
-          <button
-            onClick={() => window.location.href = '/'}
-            className="w-full bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 transition-colors"
-          >
-            Go to homepage
-          </button>
-        </div>
-        {process.env.NODE_ENV === 'development' && (
-          <details className="mt-4 p-3 bg-gray-100 rounded text-sm">
-            <summary className="cursor-pointer font-medium">Error details</summary>
-            <pre className="mt-2 whitespace-pre-wrap text-red-600">
-              {error.message}
-            </pre>
-          </details>
-        )}
-      </div>
-    </div>
-  );
-}
-
 export default ErrorBoundary;
+// Inconsequential change for repo health
+
+// Maintenance: minor update

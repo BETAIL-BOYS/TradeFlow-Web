@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * Add Trustline Button Component.
  * Encapsulates the logic for establishing a Stellar trustline for a specific asset.
@@ -7,8 +8,16 @@
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { Plus, Check, Loader2, ShieldCheck, AlertCircle } from "lucide-react";
+=======
+"use client";
+
+import React, { useState } from "react";
+import { Plus, Check, Loader2 } from "lucide-react";
+>>>>>>> upstream/main
 import { addTrustline } from "../lib/stellar";
+import { dismissToast, showError, showLoading, showSuccess } from "../lib/toast";
 import Button from "./ui/Button";
+import Icon from "./ui/Icon";
 
 /**
  * Props for the AddTrustlineButton component.
@@ -36,24 +45,36 @@ export default function AddTrustlineButton({ assetCode, assetIssuer }: AddTrustl
     if (status === "loading" || status === "success") return;
 
     setStatus("loading");
+<<<<<<< HEAD
     const toastId = toast.loading(`Establishing ${assetCode} trustline...`);
+=======
+    const toastId = showLoading(`Requesting ${assetCode} trustline...`);
+>>>>>>> upstream/main
 
     try {
       // 1. Trigger the Stellar SDK / Wallet transaction
       await addTrustline(assetCode, assetIssuer);
-      
+
       setStatus("success");
+<<<<<<< HEAD
       toast.success(`${assetCode} Trustline Active`, { 
         id: toastId,
         icon: '🛡️'
       });
       
       // 2. Revert to idle after 5 seconds to reset UI
+=======
+      dismissToast(toastId);
+      showSuccess(`${assetCode} Trustline Established!`);
+
+      // Revert to idle after 5 seconds
+>>>>>>> upstream/main
       setTimeout(() => setStatus("idle"), 5000);
       console.log(`[AddTrustline] Successfully added ${assetCode} from ${assetIssuer}`);
     } catch (error: any) {
       console.error(`[AddTrustline] Failed to add ${assetCode}:`, error);
       setStatus("error");
+<<<<<<< HEAD
       
       // User-friendly error mapping
       const errorMsg = error.message?.toLowerCase().includes("denied") 
@@ -63,6 +84,18 @@ export default function AddTrustlineButton({ assetCode, assetIssuer }: AddTrustl
       toast.error(errorMsg, { id: toastId });
       
       // 3. Revert to idle after a short delay to allow retry
+=======
+
+      // Handle rejection vs generic error
+      const errorMsg = error.message?.includes("denied")
+        ? "Access Denied by User"
+        : `Failed to add ${assetCode}`;
+
+      dismissToast(toastId);
+      showError(errorMsg);
+
+      // Revert to idle after 3 seconds to allow retry
+>>>>>>> upstream/main
       setTimeout(() => setStatus("idle"), 3000);
     }
   };
@@ -72,15 +105,21 @@ export default function AddTrustlineButton({ assetCode, assetIssuer }: AddTrustl
       variant="secondary"
       onClick={handleAddTrustline}
       disabled={status === "loading" || status === "success"}
+<<<<<<< HEAD
       className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest py-2 px-4 h-auto transition-all duration-300 border ${
         status === "success" 
           ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30" 
           : "bg-slate-800/50 text-slate-400 border-slate-700 hover:border-slate-500 hover:text-white"
       }`}
       aria-label={`Add trustline for ${assetCode}`}
+=======
+      className={`flex items-center gap-2 text-xs py-1.5 px-3 h-auto transition-all duration-200 ${status === "success" ? "bg-green-600/20 text-green-400 border-green-600/50" : ""
+        }`}
+>>>>>>> upstream/main
     >
       {/* Dynamic Icon State */}
       {status === "loading" ? (
+<<<<<<< HEAD
         <Loader2 size={12} className="animate-spin text-blue-400" />
       ) : status === "success" ? (
         <ShieldCheck size={12} className="text-emerald-400" />
@@ -91,6 +130,15 @@ export default function AddTrustlineButton({ assetCode, assetIssuer }: AddTrustl
       )}
       
       {/* Dynamic Label State */}
+=======
+        <Icon icon={Loader2} dense className="animate-spin" />
+      ) : status === "success" ? (
+        <Icon icon={Check} dense />
+      ) : (
+        <Icon icon={Plus} dense />
+      )}
+
+>>>>>>> upstream/main
       <span>
         {status === "loading" 
           ? "Signing..." 
@@ -105,3 +153,9 @@ export default function AddTrustlineButton({ assetCode, assetIssuer }: AddTrustl
   );
 }
 
+<<<<<<< HEAD
+=======
+// Inconsequential change for repo health
+
+// Maintenance: minor update
+>>>>>>> upstream/main

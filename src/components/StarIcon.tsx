@@ -1,11 +1,16 @@
+<<<<<<< HEAD
 /**
  * Star Icon Component.
  * A reusable interactive toggle for marking assets as favorites or 
  * adding them to a watchlist.
  */
+=======
+"use client";
+>>>>>>> upstream/main
 
 import React from 'react';
 import { Star } from 'lucide-react';
+import Icon from './ui/Icon';
 
 /**
  * Props for the StarIcon component.
@@ -41,7 +46,8 @@ export default function StarIcon({
       aria-pressed={isStarred}
       title={isStarred ? 'Remove from watchlist' : 'Add to watchlist'}
     >
-      <Star
+      <Icon
+        icon={Star}
         size={size}
         className={`transition-all duration-300 transform ${
           isStarred
@@ -54,3 +60,9 @@ export default function StarIcon({
   );
 }
 
+<<<<<<< HEAD
+=======
+// Inconsequential change for repo health
+
+// Maintenance: minor update
+>>>>>>> upstream/main

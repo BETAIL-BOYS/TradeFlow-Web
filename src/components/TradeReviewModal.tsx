@@ -10,7 +10,12 @@ import React, { useState } from "react";
 import { X, ArrowDown, Info, ShieldCheck, Zap } from "lucide-react";
 import Card from "./Card";
 import Button from "./ui/Button";
+<<<<<<< HEAD
 import WhaleConfetti from "./ui/WhaleConfetti";
+=======
+import WhaleConfetti from "./ui/WhaleConfetti";   // ← New import for confetti
+import Icon from "./ui/Icon";
+>>>>>>> upstream/main
 
 /**
  * Props for the TradeReviewModal component.
@@ -133,7 +138,7 @@ export default function TradeReviewModal({
               className="p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-full transition-all"
               aria-label="Close review"
             >
-              <X size={20} />
+              <Icon icon={X} />
             </button>
           </div>
 
@@ -149,12 +154,18 @@ export default function TradeReviewModal({
                 </div>
               </div>
 
+<<<<<<< HEAD
               <div className="flex justify-center my-4 relative">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-slate-800" />
                 </div>
                 <div className="relative bg-slate-800 p-2 rounded-xl border border-slate-700 shadow-lg">
                   <ArrowDown size={14} className="text-blue-400" />
+=======
+              <div className="flex justify-center my-2">
+                <div className="bg-slate-700 p-1.5 rounded-full border border-slate-600">
+                  <Icon icon={ArrowDown} dense className="text-slate-300" />
+>>>>>>> upstream/main
                 </div>
               </div>
 
@@ -184,9 +195,16 @@ export default function TradeReviewModal({
                 <span className="text-slate-500">Protocol Fee (0.3%)</span>
                 <span className="text-slate-300 font-mono">{fee}</span>
               </div>
+<<<<<<< HEAD
               <div className="flex justify-between text-xs font-bold uppercase tracking-wider">
                 <span className="text-slate-500 flex items-center gap-1.5">
                   Network Cost <Info size={12} className="text-slate-600" />
+=======
+              <div className="flex justify-between text-sm">
+                <span className="text-slate-400">Network Cost</span>
+                <span className="text-slate-200 text-xs flex items-center gap-1">
+                  ~0.00001 XLM <Icon icon={Info} dense className="text-slate-500" />
+>>>>>>> upstream/main
                 </span>
                 <span className="text-slate-300 font-mono">~0.00001 XLM</span>
               </div>
@@ -220,3 +238,9 @@ export default function TradeReviewModal({
     </>
   );
 }
+<<<<<<< HEAD
+=======
+// Inconsequential change for repo health
+
+// Maintenance: minor update
+>>>>>>> upstream/main

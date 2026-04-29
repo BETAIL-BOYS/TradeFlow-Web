@@ -47,3 +47,7 @@ export async function GET() {
   return NextResponse.json(data);
 }
 
+<<<<<<< HEAD
+=======
+// Maintenance: minor update
+>>>>>>> upstream/main

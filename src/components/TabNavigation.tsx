@@ -1,8 +1,14 @@
+<<<<<<< HEAD
 /**
  * Tab Navigation Component.
  * A reusable horizontal navigation bar for switching between different 
  * content views within a page.
  */
+=======
+"use client";
+
+import React, { useState } from 'react';
+>>>>>>> upstream/main
 
 import React from 'react';
 
@@ -87,3 +93,9 @@ export default function TabNavigation({
   );
 }
 
+<<<<<<< HEAD
+=======
+// Inconsequential change for repo health
+
+// Maintenance: minor update
+>>>>>>> upstream/main

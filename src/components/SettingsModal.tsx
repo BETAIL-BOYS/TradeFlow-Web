@@ -6,12 +6,19 @@
 
 "use client";
 
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import { X, Settings, ShieldAlert, Zap, Clock } from 'lucide-react';
 import Card from './Card';
 import { useSlippage } from '../contexts/SlippageContext';
 import { useExpertMode } from '../contexts/ExpertModeContext';
 import ExpertModeModal from './ExpertModeModal';
+=======
+import React from "react";
+import { X, Info } from "lucide-react";
+import { useSettings } from "../lib/context/SettingsContext";
+import Icon from "./ui/Icon";
+>>>>>>> upstream/main
 
 /**
  * Props for the SettingsModal component.
@@ -27,6 +34,7 @@ interface SettingsModalProps {
  * A modal overlay for managing user preferences and trade constraints.
  */
 export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
+<<<<<<< HEAD
   // --- Context & Store Hooks ---
   const { 
     slippageTolerance, 
@@ -114,11 +122,15 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
     setExpertMode(true);
     setIsExpertModalOpen(false);
   };
+=======
+  const { slippage, setSlippage, deadline, setDeadline } = useSettings();
+>>>>>>> upstream/main
 
   // 1. Conditional Rendering for Visibility
   if (!isOpen) return null;
 
   return (
+<<<<<<< HEAD
     <>
       <div 
         className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-in fade-in duration-300"
@@ -185,57 +197,62 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 <div>
                   <span className="text-sm font-medium text-white">Auto Slippage</span>
                   <p className="text-xs text-slate-400">Use algorithmically safe default (0.5%)</p>
+=======
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-[60] flex items-center justify-center p-4">
+      <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+        <div className="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
+          <h2 className="text-xl font-bold text-white flex items-center gap-2">
+            Settings
+          </h2>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-slate-800 rounded-xl text-slate-400 hover:text-white transition-all"
+          >
+            <Icon icon={X} />
+          </button>
+        </div>
+
+        <div className="p-6 space-y-8">
+          {/* Slippage Tolerance */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium text-slate-300 flex items-center gap-2">
+                Slippage Tolerance
+                <div className="group relative">
+                  <Icon icon={Info} dense className="text-slate-500 cursor-help" />
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-slate-800 text-xs text-slate-300 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none border border-slate-700 shadow-xl">
+                    Your transaction will revert if the price changes unfavorably by more than this percentage.
+                  </div>
+>>>>>>> upstream/main
                 </div>
+              </label>
+              <span className="text-sm font-bold text-blue-400 bg-blue-400/10 px-2 py-1 rounded-md">
+                {slippage}%
+              </span>
+            </div>
+            <div className="flex gap-2">
+              {[0.1, 0.5, 1.0].map((val) => (
                 <button
-                  type="button"
-                  onClick={handleAutoToggle}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 ${isSlippageAuto ? "bg-blue-600" : "bg-slate-700"
-                    }`}
-                  role="switch"
-                  aria-checked={isSlippageAuto}
+                  key={val}
+                  onClick={() => setSlippage(val)}
+                  className={`flex-1 py-2 px-3 rounded-xl border text-sm font-medium transition-all ${
+                    slippage === val
+                      ? "bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-900/20"
+                      : "bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-500 hover:text-slate-200"
+                  }`}
                 >
-                  <span
-                    className={`${isSlippageAuto ? "translate-x-6" : "translate-x-1"
-                      } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
-                  />
+                  {val}%
                 </button>
-              </div>
-
-              {/* Preset Options - Disabled when Auto is on */}
-              <div className="grid grid-cols-5 gap-2 mb-4">
-                {presetOptions.map((option) => (
-                  <button
-                    key={option}
-                    onClick={() => handlePresetClick(option)}
-                    disabled={isSlippageAuto}
-                    className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${slippageTolerance === option && !isSlippageAuto
-                        ? 'bg-blue-600 text-white'
-                        : isSlippageAuto
-                          ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
-                          : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                      }`}
-                  >
-                    {option}%
-                  </button>
-                ))}
-              </div>
-
-              {/* Custom Input - Disabled when Auto is on */}
-              <div className="flex items-center gap-3">
+              ))}
+              <div className="relative flex-1">
                 <input
                   type="number"
-                  value={slippageTolerance}
-                  onChange={handleCustomChange}
-                  min="0"
-                  max="50"
-                  step="0.1"
-                  disabled={isSlippageAuto}
-                  className={`flex-1 rounded-lg px-4 py-2 text-white placeholder-slate-400 focus:outline-none transition-colors ${isSlippageAuto
-                      ? 'bg-slate-800 border border-slate-600 text-slate-500 cursor-not-allowed'
-                      : 'bg-slate-700 border border-slate-600 focus:border-blue-500'
-                    }`}
-                  placeholder={isSlippageAuto ? "Auto (0.5%)" : "Custom"}
+                  value={slippage}
+                  onChange={(e) => setSlippage(parseFloat(e.target.value) || 0)}
+                  className="w-full bg-slate-800 border border-slate-700 rounded-xl py-2 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 pr-8"
+                  placeholder="Custom"
                 />
+<<<<<<< HEAD
                 <span className="text-slate-400">%</span>
               </div>
 
@@ -291,13 +308,61 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
           </div>
         </Card>
       </div>
+=======
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs">%</span>
+              </div>
+            </div>
+          </div>
+>>>>>>> upstream/main
 
-      <ExpertModeModal
-        isOpen={isExpertModalOpen}
-        onClose={() => setIsExpertModalOpen(false)}
-        onConfirm={handleExpertModeConfirm}
-      />
-    </>
+          {/* Transaction Deadline */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium text-slate-300 flex items-center gap-2">
+                Transaction Deadline
+                <div className="group relative">
+                  <Icon icon={Info} dense className="text-slate-500 cursor-help" />
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-slate-800 text-xs text-slate-300 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none border border-slate-700 shadow-xl">
+                    Your transaction will revert if it remains pending for longer than this time.
+                  </div>
+                </div>
+              </label>
+              <span className="text-sm font-bold text-blue-400 bg-blue-400/10 px-2 py-1 rounded-md">
+                {deadline}m
+              </span>
+            </div>
+            <div className="relative">
+              <input
+                type="number"
+                value={deadline}
+                onChange={(e) => setDeadline(parseInt(e.target.value) || 0)}
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all pr-12"
+                placeholder="20"
+              />
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">minutes</span>
+            </div>
+            <p className="text-[11px] text-slate-500 italic">
+              * Default is 20 minutes. Lower values increase security but may fail during high congestion.
+            </p>
+          </div>
+        </div>
+
+        <div className="p-6 bg-slate-900/50 border-t border-slate-800">
+          <button
+            onClick={onClose}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-blue-900/20"
+          >
+            Save Settings
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
+<<<<<<< HEAD
+=======
+// Inconsequential change for repo health
+
+// Maintenance: minor update
+>>>>>>> upstream/main

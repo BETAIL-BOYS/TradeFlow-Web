@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * Wallet Modal Component.
  * Displays a selection of supported Stellar wallet providers (Freighter, xBull, Albedo).
@@ -7,6 +8,14 @@
 import React from "react";
 import { FREIGHTER_ID, XBULL_ID, ALBEDO_ID, WalletType } from "../lib/stellar";
 import { X, Info, Shield, Smartphone, Globe } from "lucide-react";
+=======
+"use client";
+
+import React from "react";
+import { FREIGHTER_ID, XBULL_ID, ALBEDO_ID, WalletType } from "../lib/stellar";
+import { getWalletDisplayName, getWalletDescription, getWalletIcon, getWalletBgColor } from "../lib/walletConnector";
+import { CloseIcon } from "./icons";
+>>>>>>> upstream/main
 
 /**
  * Props for the WalletModal component.
@@ -42,6 +51,7 @@ interface WalletOption {
 const walletOptions: WalletOption[] = [
   {
     id: FREIGHTER_ID,
+<<<<<<< HEAD
     name: "Freighter",
     description: "Secure browser extension wallet by Stellar Development Foundation.",
     icon: <Shield size={20} />,
@@ -60,6 +70,26 @@ const walletOptions: WalletOption[] = [
     description: "Convenient web-based wallet for seamless Stellar network access.",
     icon: <Globe size={20} />,
     bgColor: "bg-purple-500"
+=======
+    name: getWalletDisplayName(FREIGHTER_ID),
+    description: getWalletDescription(FREIGHTER_ID),
+    icon: getWalletIcon(FREIGHTER_ID),
+    bgColor: getWalletBgColor(FREIGHTER_ID)
+  },
+  {
+    id: XBULL_ID,
+    name: getWalletDisplayName(XBULL_ID),
+    description: getWalletDescription(XBULL_ID),
+    icon: getWalletIcon(XBULL_ID),
+    bgColor: getWalletBgColor(XBULL_ID)
+  },
+  {
+    id: ALBEDO_ID,
+    name: getWalletDisplayName(ALBEDO_ID),
+    description: getWalletDescription(ALBEDO_ID),
+    icon: getWalletIcon(ALBEDO_ID),
+    bgColor: getWalletBgColor(ALBEDO_ID)
+>>>>>>> upstream/main
   }
 ];
 
@@ -100,7 +130,11 @@ export default function WalletModal({ isOpen, onClose, onConnect }: WalletModalP
             className="p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-full transition-all"
             aria-label="Close modal"
           >
+<<<<<<< HEAD
             <X size={20} />
+=======
+            <CloseIcon />
+>>>>>>> upstream/main
           </button>
         </div>
 
@@ -136,3 +170,9 @@ export default function WalletModal({ isOpen, onClose, onConnect }: WalletModalP
   );
 }
 
+<<<<<<< HEAD
+=======
+// Inconsequential change for repo health
+
+// Maintenance: minor update
+>>>>>>> upstream/main

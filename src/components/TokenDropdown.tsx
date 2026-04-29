@@ -12,7 +12,9 @@ import { useDebounce } from "../hooks/useDebounce";
 import { useRecentTokens } from "../hooks/useRecentTokens";
 import { useWatchlist } from "../hooks/useWatchlist";
 import StarIcon from "./StarIcon";
+import { showError, showSuccess } from "../lib/toast";
 import toast from "react-hot-toast";
+import Icon from "./ui/Icon";
 
 /**
  * Props for the TokenDropdown component.
@@ -107,10 +109,19 @@ export default function TokenDropdown({ onTokenChange }: TokenDropdownProps) {
   const handleCopyAddress = (e: React.MouseEvent, token: string) => {
     e.stopPropagation(); // Prevent dropdown from closing
     const address = mockAddresses[token] || "Address not found";
-    
+
     navigator.clipboard.writeText(address)
+<<<<<<< HEAD
       .then(() => toast.success("Contract address copied!"))
       .catch(() => toast.error("Failed to copy address"));
+=======
+      .then(() => {
+        showSuccess("Token Address Copied!");
+      })
+      .catch(() => {
+        showError("Failed to copy address");
+      });
+>>>>>>> upstream/main
   };
 
   return (
@@ -122,15 +133,21 @@ export default function TokenDropdown({ onTokenChange }: TokenDropdownProps) {
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
+<<<<<<< HEAD
         <span className="font-bold text-white tracking-tight">{selectedToken}</span>
         <ChevronDown
           size={16}
           className={`text-slate-500 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
         />
+=======
+        <span className="font-medium text-white">{selectedToken}</span>
+        <Icon icon={ChevronDown} dense className={`text-slate-400 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+>>>>>>> upstream/main
       </button>
 
       {/* Dropdown Content */}
       {isOpen && (
+<<<<<<< HEAD
         <div className="absolute top-full left-0 right-0 mt-2 bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl z-50 overflow-hidden min-w-[240px] animate-in fade-in slide-in-from-top-2 duration-200">
           {/* Search Header */}
           <div className="border-b border-slate-700 p-3 bg-slate-900/50">
@@ -139,6 +156,13 @@ export default function TokenDropdown({ onTokenChange }: TokenDropdownProps) {
                 size={14}
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 pointer-events-none group-focus-within:text-blue-400 transition-colors"
               />
+=======
+        <div className="absolute top-full left-0 right-0 mt-1 bg-slate-800 border border-slate-600 rounded-lg shadow-lg z-50 overflow-hidden">
+          {/* Search Input */}
+          <div className="border-b border-slate-700 p-3 sticky top-0 bg-slate-800">
+            <div className="relative">
+              <Icon icon={Search} dense className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 pointer-events-none" />
+>>>>>>> upstream/main
               <input
                 ref={searchInputRef}
                 type="text"
@@ -153,12 +177,17 @@ export default function TokenDropdown({ onTokenChange }: TokenDropdownProps) {
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
                   aria-label="Clear search"
                 >
+<<<<<<< HEAD
                   <X size={14} />
+=======
+                  <Icon icon={X} dense />
+>>>>>>> upstream/main
                 </button>
               )}
             </div>
           </div>
 
+<<<<<<< HEAD
           {/* List Content */}
           <div className="max-h-64 overflow-y-auto custom-scrollbar">
             {filteredTokens.length > 0 ? (
@@ -192,6 +221,36 @@ export default function TokenDropdown({ onTokenChange }: TokenDropdownProps) {
                             toggleWatchlist(token);
                           }}
                           size={12}
+=======
+          {/* Token List */}
+          {filteredTokens.length > 0 ? (
+            <div className="max-h-48 overflow-y-auto">
+              {/* Recent Tokens Section */}
+              {searchInput === "" && recentTokens.length > 0 && (
+                <>
+                  <div className="px-4 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider bg-slate-800/95 sticky top-0 z-10 backdrop-blur-sm">
+                    Recent
+                  </div>
+                  {recentTokens.map((token) => (
+                    <button
+                      key={`recent-${token}`}
+                      onClick={() => handleTokenSelect(token)}
+                      className="w-full text-left px-4 py-2 transition-colors flex items-center justify-between hover:bg-slate-700 text-white group"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">{token}</span>
+                        {/* ISSUE #86: Copy Icon for Recent Tokens */}
+                        <div
+                          onClick={(e) => handleCopyAddress(e, token)}
+                          className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-blue-400 transition-all p-1"
+                          title="Copy Contract Address"
+                        >
+                        <Icon icon={Copy} dense />
+                        </div>
+                        <StarIcon
+                          isStarred={isInWatchlist(token)}
+                          onClick={() => toggleWatchlist(token)}
+>>>>>>> upstream/main
                         />
                       </button>
                     ))}
@@ -222,6 +281,7 @@ export default function TokenDropdown({ onTokenChange }: TokenDropdownProps) {
                       >
                         <Copy size={12} />
                       </div>
+<<<<<<< HEAD
                     </div>
                     <div className="flex items-center gap-3">
                       <StarIcon
@@ -238,6 +298,56 @@ export default function TokenDropdown({ onTokenChange }: TokenDropdownProps) {
                     </div>
                   </button>
                 ))}
+=======
+                      {token === selectedToken && (
+                        <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                      )}
+                    </button>
+                  ))}
+                  <div className="px-4 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider bg-slate-800/95 sticky top-0 z-10 backdrop-blur-sm border-t border-slate-700/50">
+                    All Tokens
+                  </div>
+                </>
+              )}
+              {filteredTokens.map((token) => (
+                <button
+                  key={token}
+                  onClick={() => handleTokenSelect(token)}
+                  className={`w-full text-left px-4 py-2 transition-colors flex items-center justify-between group ${token === selectedToken
+                      ? "bg-blue-600/20 text-blue-400"
+                      : "hover:bg-slate-700 text-white"
+                    }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">{token}</span>
+                    {/* ISSUE #86: Copy Icon for All Tokens */}
+                    <div
+                      onClick={(e) => handleCopyAddress(e, token)}
+                      className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-blue-400 transition-all p-1"
+                      title="Copy Contract Address"
+                    >
+                      <Icon icon={Copy} dense />
+                    </div>
+                    <StarIcon
+                      isStarred={isInWatchlist(token)}
+                      onClick={() => toggleWatchlist(token)}
+                    />
+                  </div>
+                  {token === selectedToken && (
+                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                  )}
+                </button>
+              ))}
+            </div>
+          ) : (
+            /**
+             * ISSUE #91: Enhanced "Token Not Found" Empty State.
+             * Includes visual cues and instructional secondary text.
+             */
+            <div className="px-6 py-10 text-center flex flex-col items-center justify-center">
+              <div className="bg-slate-700/50 p-3 rounded-full mb-4">
+                <Icon icon={Search} className="text-slate-500" />
+>>>>>>> upstream/main
               </div>
             ) : (
               <div className="px-6 py-10 text-center flex flex-col items-center justify-center">
@@ -256,3 +366,9 @@ export default function TokenDropdown({ onTokenChange }: TokenDropdownProps) {
     </div>
   );
 }
+<<<<<<< HEAD
+=======
+// Inconsequential change for repo health
+
+// Maintenance: minor update
+>>>>>>> upstream/main

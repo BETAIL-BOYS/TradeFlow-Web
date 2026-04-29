@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Home } from "lucide-react";
+import Icon from "../../components/ui/Icon";
 
 export default function FAQ() {
   return (
@@ -11,7 +12,7 @@ export default function FAQ() {
           href="/"
           className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-8"
         >
-          <Home size={20} />
+          <Icon icon={Home} />
           Back to Dashboard
         </Link>
         
@@ -71,8 +72,8 @@ export default function FAQ() {
           </h3>
           <p className="text-slate-300 leading-relaxed">
             Currently, TradeFlow supports Freighter wallet, the most popular wallet in the Stellar 
-            ecosystem. We're working on adding support for additional wallets including MetaMask and 
-            WalletConnect in future updates. All wallet connections are secured by Stellar's built-in 
+            ecosystem. We&apos;re working on adding support for additional wallets including MetaMask and 
+            WalletConnect in future updates. All wallet connections are secured by Stellar&apos;s built-in 
             encryption and multi-signature support.
           </p>
         </div>
@@ -113,3 +114,7 @@ export default function FAQ() {
     </div>
   );
 }
+
+// Inconsequential change for repo health
+
+// Maintenance: minor update
