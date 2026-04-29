@@ -5,17 +5,18 @@ import dynamic from "next/dynamic";
 import Toggle from "../app/Toggle";
 import { useTokenStore } from "../stores/tokenStore";
 import PremiumUnlockModal from "./PremiumUnlockModal";
+import SkeletonCard from "./ui/SkeletonCard";
 
 // Dynamically import the heavy chart component with loading fallback
 const LivePriceChart = dynamic(() => import("../components/LivePriceChart"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-96 bg-slate-800/50 rounded-xl border border-slate-700/50 flex items-center justify-center">
+    <SkeletonCard height="h-96" className="flex items-center justify-center">
       <div className="text-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-3"></div>
         <p className="text-slate-400 text-sm">Loading Pro Chart...</p>
       </div>
-    </div>
+    </SkeletonCard>
   ),
 });
 
@@ -79,3 +80,7 @@ export default function ProModeSection() {
     </>
   );
 }
+
+// Inconsequential change for repo health
+
+// Maintenance: minor update

@@ -8,6 +8,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Fuel } from 'lucide-react';
+import Icon from './Icon';
 
 /**
  * Data structure for the network fee API response.
@@ -89,11 +90,8 @@ export default function NetworkFeeIndicator() {
   // 1. Loading State UI
   if (loading && !feeData) {
     return (
-      <div 
-        className="flex items-center gap-1.5 text-xs text-slate-400"
-        aria-label="Loading network fee"
-      >
-        <Fuel size={16} />
+      <div className="flex items-center gap-1.5 text-xs text-slate-400">
+        <Icon icon={Fuel} dense />
         <span>Loading fee...</span>
       </div>
     );
@@ -102,11 +100,8 @@ export default function NetworkFeeIndicator() {
   // 2. Error/Fallback State UI
   if (error || !feeData) {
     return (
-      <div 
-        className="flex items-center gap-1.5 text-xs text-red-400/80"
-        role="alert"
-      >
-        <Fuel size={16} />
+      <div className="flex items-center gap-1.5 text-xs text-red-400">
+        <Icon icon={Fuel} dense />
         <span>Fee unavailable</span>
       </div>
     );
@@ -114,14 +109,11 @@ export default function NetworkFeeIndicator() {
 
   // 3. Main Data Display
   return (
-    <div 
-      className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-800/40 border border-slate-700 hover:border-slate-600 transition-all group cursor-default"
-      title={`Current network fee: ${feeData.baseFee} stroops`}
-    >
-      <Fuel 
-        size={16} 
-        className={`transition-colors duration-300 ${getFeeColor(feeData.baseFee)}`} 
-        aria-hidden="true"
+    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-800/50 border border-slate-700 hover:border-slate-600 transition-colors group">
+      <Icon 
+        icon={Fuel}
+        dense
+        className={`transition-colors ${getFeeColor(feeData.baseFee)}`} 
       />
       <div className="flex items-baseline gap-1">
         <span 
@@ -138,3 +130,6 @@ export default function NetworkFeeIndicator() {
     </div>
   );
 }
+// Inconsequential change for repo health
+
+// Maintenance: minor update

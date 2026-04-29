@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react';
 
 interface Tab {
@@ -37,3 +39,7 @@ export default function TabNavigation({ tabs, activeTab, onTabChange, className 
     </div>
   );
 }
+
+// Inconsequential change for repo health
+
+// Maintenance: minor update
