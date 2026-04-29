@@ -1,3 +1,9 @@
+/**
+ * TradeFlow Main Dashboard Page.
+ * This is the primary entry point for the application, providing users with 
+ * a high-level overview of their assets, protocol status, and the RWA pipeline.
+ */
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -19,62 +25,102 @@ import TabNavigation from "../components/TabNavigation";
 import { useWatchlist } from "../hooks/useWatchlist";
 import StarIcon from "../components/StarIcon";
 
+/**
+ * The root component for the TradeFlow dashboard.
+ * Manages high-level state for wallet connection, active tabs, and invoice data.
+ */
 export default function Page() {
+  // --- Component State ---
+  /** The public Stellar address of the connected user */
   const [address, setAddress] = useState("");
+  /** List of invoices fetched from the backend pipeline */
   const [invoices, setInvoices] = useState([]);
+  /** Loading state for initial data fetch */
   const [loading, setLoading] = useState(false);
+  /** Controls visibility of the Invoice Minting modal */
   const [showMintForm, setShowMintForm] = useState(false);
+  /** Controls visibility of the Wallet Selection modal */
   const [isModalOpen, setIsModalOpen] = useState(false);
+  /** Currently active navigation tab (dashboard or watchlist) */
   const [activeTab, setActiveTab] = useState("dashboard");
+  
+  /** Watchlist management hook */
   const { toggleWatchlist, isInWatchlist } = useWatchlist();
 
-  // 1. Connect Stellar Wallet (supports Freighter, Albedo, xBull)
+  // --- Handlers ---
+
+  /**
+   * Triggers the Stellar wallet connection flow.
+   * Supports multiple providers via the stellar-wallets-kit.
+   * 
+   * @param {WalletType} walletType - The ID of the wallet provider (e.g., Freighter).
+   */
   const handleConnectWallet = async (walletType: WalletType) => {
     try {
       const userInfo = await connectWallet(walletType);
       if (userInfo && userInfo.publicKey) {
         setAddress(userInfo.publicKey);
-        console.log("Wallet connected:", userInfo.publicKey, "Type:", userInfo.walletType);
+        console.log("[Dashboard] Wallet connected:", userInfo.publicKey, "Provider:", userInfo.walletType);
       }
     } catch (e: any) {
-      console.error("Connection failed:", e.message);
+      console.error("[Dashboard] Connection failed:", e.message);
+      // In production, this would be a user-friendly toast notification
       alert(e.message || "Failed to connect to wallet.");
     }
   };
 
-  // 2. Fetch Invoices from your Repo 2 API
+  /**
+   * Fetches the latest verified assets from the RWA pipeline.
+   * Currently points to a local mock API for development.
+   */
   const fetchInvoices = async () => {
     setLoading(true);
     try {
+      // TODO: Replace with environment-aware API base URL
       const res = await fetch("http://localhost:3000/invoices");
       const data = await res.json();
       setInvoices(data);
     } catch (e) {
-      console.error("API not running");
+      console.warn("[Dashboard] Asset pipeline API not reachable. Check if local server is running.");
     } finally {
       setLoading(false);
     }
   };
 
+  // --- Lifecycle Hooks ---
+
   useEffect(() => {
     fetchInvoices();
   }, []);
+
+  /**
+   * Debugging utility for testing transaction status notifications.
+   */
   const handleTestToast = () => {
-    useTransactionToast().loading();
-    useTransactionToast().success();
-    useTransactionToast().error();
+    const toast = useTransactionToast();
+    toast.loading();
+    setTimeout(() => toast.success(), 2000);
   };
 
+  /**
+   * Callback triggered when a new invoice is successfully submitted for minting.
+   * 
+   * @param {any} data - The validated invoice metadata.
+   */
   const handleInvoiceMint = (data: any) => {
-    console.log("Invoice data received:", data);
+    console.log("[Dashboard] Mint request received:", data);
     setShowMintForm(false);
-    // TODO: Chain integration will be handled separately
+    // TODO: Initiate Soroban contract call for minting the NFT
   };
 
+  // --- Configuration ---
+
+  /** Tab definitions for the main navigation */
   const tabs = [
     { id: "dashboard", label: "Dashboard" },
-    { id: "watchlist", label: "Watchlist", icon: <Star size={16} /> },
+    { id: "watchlist", label: "Watchlist", icon: <Star size={16} aria-hidden="true" /> },
   ];
+
 
   return (
     <div className="min-h-screen bg-tradeflow-dark text-white font-sans flex flex-col">

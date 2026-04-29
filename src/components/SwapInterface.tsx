@@ -1,3 +1,10 @@
+/**
+ * Swap Interface Component.
+ * Provides a decentralized exchange (DEX) style interface for swapping 
+ * Stellar assets. Includes slippage control, price impact estimation, 
+ * and transaction status monitoring.
+ */
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -17,27 +24,44 @@ import LivePriceChart from "./LivePriceChart";
 /* ISSUE #87: Import the new Success/Share modal */
 import TradeSuccessModal from "./TradeSuccessModal";
 
+/**
+ * Main component for the token swap functionality.
+ */
 export default function SwapInterface() {
+  // --- Token Selection State ---
+  /** The asset code of the token being sold */
   const [fromToken, setFromToken] = useState("XLM");
+  /** The asset code of the token being bought */
   const [toToken, setToToken] = useState("USDC");
+  
+  // --- UI Visibility State ---
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isHighSlippageWarningOpen, setIsHighSlippageWarningOpen] = useState(false);
-  const [fromAmount, setFromAmount] = useState("");
-  const [toAmount, setToAmount] = useState("");
-  const [priceImpact, setPriceImpact] = useState(0);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isTradeReviewOpen, setIsTradeReviewOpen] = useState(false);
   const [isTransactionSignatureOpen, setIsTransactionSignatureOpen] = useState(false);
-
-  /* ISSUE #87: State to manage the visibility of the growth/share modal */
+  /** Visibility for the post-trade growth/share modal */
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
+  // --- Trade Value State ---
+  const [fromAmount, setFromAmount] = useState("");
+  const [toAmount, setToAmount] = useState("");
+  /** Estimated price impact as a percentage */
+  const [priceImpact, setPriceImpact] = useState(0);
+  /** Mock balance for the selected source token */
+  const [fromBalance] = useState("1240.50");
+
+  // --- Submission & Timing State ---
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionStartTime, setSubmissionStartTime] = useState<number | null>(null);
   const [timeLeft, setTimeLeft] = useState<string>("");
-  const [fromBalance] = useState("1240.50");
+
+  // --- Context Hooks ---
   const { slippageTolerance, transactionDeadline } = useSlippage();
 
-  // Countdown timer effect
+  /**
+   * Countdown timer effect for transaction expiry.
+   * Runs when a transaction is pending submission.
+   */
   useEffect(() => {
     let interval: any;
     if (isSubmitting && submissionStartTime) {
@@ -64,7 +88,9 @@ export default function SwapInterface() {
     return () => clearInterval(interval);
   }, [isSubmitting, submissionStartTime, transactionDeadline]);
 
-  // Load saved token selections on mount
+  /**
+   * Persists token selections across page reloads.
+   */
   useEffect(() => {
     const savedFromToken = localStorage.getItem('tradeflow-fromToken');
     const savedToToken = localStorage.getItem('tradeflow-toToken');
@@ -73,7 +99,6 @@ export default function SwapInterface() {
     if (savedToToken) setToToken(savedToToken);
   }, []);
 
-  // Save token selections to localStorage
   useEffect(() => {
     localStorage.setItem('tradeflow-fromToken', fromToken);
   }, [fromToken]);
@@ -82,7 +107,13 @@ export default function SwapInterface() {
     localStorage.setItem('tradeflow-toToken', toToken);
   }, [toToken]);
 
-  // Calculate price impact
+  /**
+   * Estimates the price impact based on the input amount.
+   * This is a simplified mock for development purposes.
+   * 
+   * @param {string} amount - The numeric amount string.
+   * @returns {number} The calculated percentage impact.
+   */
   const calculatePriceImpact = (amount: string) => {
     if (!amount || parseFloat(amount) <= 0) return 0;
     const baseImpact = Math.min(parseFloat(amount) * 0.01, 15);
@@ -90,6 +121,9 @@ export default function SwapInterface() {
     return baseImpact * tokenMultiplier;
   };
 
+  /**
+   * Swaps the 'from' and 'to' tokens and their amounts.
+   */
   const handleSwap = () => {
     const temp = fromToken;
     setFromToken(toToken);
@@ -98,12 +132,18 @@ export default function SwapInterface() {
     setToAmount(fromAmount);
   };
 
+  /**
+   * Updates the source amount and recalculates the destination amount and price impact.
+   * 
+   * @param {string} value - The new input amount.
+   */
   const handleFromAmountChange = (value: string) => {
     setFromAmount(value);
     const impact = calculatePriceImpact(value);
     setPriceImpact(impact);
 
     if (value && parseFloat(value) > 0) {
+      // Mock exchange rate logic
       const mockRate = fromToken === "XLM" ? 0.15 : 6.67;
       setToAmount((parseFloat(value) * mockRate * (1 - impact / 100)).toFixed(6));
     } else {
@@ -111,59 +151,67 @@ export default function SwapInterface() {
     }
   };
 
+  /**
+   * Initiates the swap flow, validating inputs and checking for high slippage.
+   */
   const handleSwapClick = async () => {
     if (!fromAmount || parseFloat(fromAmount) <= 0) {
       toast.error("Please enter an amount to swap");
       return;
     }
 
-    const loadingToast = toast.loading("Processing swap...");
+    const loadingToast = toast.loading("Processing swap calculation...");
 
     try {
+      // Threshold check for high slippage warning
       if (priceImpact > 5) {
         setIsHighSlippageWarningOpen(true);
         toast.dismiss(loadingToast);
         return;
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 1800));
+      // Simulate network delay
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      toast.success(`Swapped ${fromAmount} ${fromToken} → ${toAmount} ${toToken}`, {
+      toast.success(`Trade calculated: ${fromAmount} ${fromToken} → ${toAmount} ${toToken}`, {
         id: loadingToast,
       });
 
-      if (priceImpact > 5) {
-        setIsHighSlippageWarningOpen(true);
-      } else {
-        setIsTradeReviewOpen(true);
-      }
+      setIsTradeReviewOpen(true);
     } catch (error) {
-      toast.error("Failed to process swap", {
+      toast.error("Failed to calculate trade parameters", {
         id: loadingToast,
       });
     }
   };
 
+  /**
+   * Confirms the trade and prepares the transaction for signing.
+   */
   const handleTradeConfirm = async () => {
     setIsTradeReviewOpen(false);
     setIsSubmitting(true);
     setSubmissionStartTime(Date.now());
 
     try {
+      // Simulate transaction building time
       await new Promise(resolve => setTimeout(resolve, 2000));
 
-      // Generate mock transaction XDR
+      // Mock transaction XDR for demonstration
       const mockTransactionXDR = "AAAAAK/eFzA7Jf5Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3Xf3XAAAABQAAAAAAAAAAA==";
-      console.log("Mock XDR generated:", mockTransactionXDR);
+      console.log("[SwapInterface] Mock XDR generated:", mockTransactionXDR);
 
       setIsTransactionSignatureOpen(true);
     } catch (error) {
-      toast.error("Failed to submit trade");
+      toast.error("Failed to prepare transaction");
       setIsSubmitting(false);
       setSubmissionStartTime(null);
     }
   };
 
+  /**
+   * Handles confirmation from the high slippage warning modal.
+   */
   const handleHighSlippageConfirm = async () => {
     const loadingToast = toast.loading("Processing high slippage swap...");
 
@@ -180,27 +228,33 @@ export default function SwapInterface() {
     }
   };
 
-  /* ISSUE #87: Trigger the success modal when the transaction is signed */
+  /**
+   * Callback for when the user successfully signs the transaction.
+   * 
+   * @param {string} signedXDR - The base64 signed transaction XDR.
+   */
   const handleTransactionSuccess = (signedXDR: string) => {
-    console.log("Transaction signed:", signedXDR);
+    console.log("[SwapInterface] Transaction signed:", signedXDR);
 
-    toast.success("Transaction signed successfully!", {
-      icon: "✅",
+    toast.success("Trade executed successfully!", {
+      icon: "🚀",
     });
 
     setIsTransactionSignatureOpen(false);
     setIsSubmitting(false);
     setSubmissionStartTime(null);
 
-    // Show the Growth/Share modal
+    // Show the post-trade share/growth modal
     setIsSuccessModalOpen(true);
 
+    // Reset form after a short delay
     setTimeout(() => {
       setFromAmount("");
       setToAmount("");
       setPriceImpact(0);
     }, 1500);
   };
+
 
   const isAnyModalOpen = isSettingsOpen || isHighSlippageWarningOpen || isTradeReviewOpen || isSuccessModalOpen;
   const isSwapValid = fromAmount && parseFloat(fromAmount) > 0 && !isSubmitting;

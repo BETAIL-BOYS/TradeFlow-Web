@@ -1,3 +1,8 @@
+/**
+ * Stellar integration utilities for TradeFlow.
+ * This module handles wallet connections, transaction building, and network interactions.
+ */
+
 import { 
   walletKit,
   FREIGHTER_ID,
@@ -13,44 +18,66 @@ import {
   Networks 
 } from "soroban-client";
 
-// Default to Testnet for development
+/**
+ * The RPC endpoint for the Stellar network.
+ * Currently defaults to the public Soroban Testnet.
+ */
 const RPC_URL = "https://soroban-testnet.stellar.org";
+
+/**
+ * Internal server instance for interacting with the Stellar network.
+ */
 const server = new Server(RPC_URL);
 
+/**
+ * The network passphrase used for transaction signing.
+ * Must match the network the transaction is being submitted to.
+ */
 const NETWORK_PASSPHRASE = Networks.TESTNET;
 
-// Initialize wallet kit
+/**
+ * Initialize the wallet kit with a default wallet (Freighter).
+ */
 walletKit.setWallet(FREIGHTER_ID);
 
+/**
+ * Represents the information returned after a successful wallet connection.
+ */
 export interface WalletInfo {
+  /** The public G-address of the connected Stellar account */
   publicKey: string;
+  /** The type of wallet used for connection (e.g., freighter, xbull) */
   walletType: WalletType;
 }
 
 /**
  * Connects to a Stellar wallet using the wallet kit.
- * Supports Freighter, Albedo, and xBull wallets.
+ * Supports multiple providers including Freighter, Albedo, and xBull.
+ * 
+ * @param {WalletType} walletType - The ID of the wallet provider to use.
+ * @returns {Promise<WalletInfo>} A promise that resolves to the wallet information.
+ * @throws {Error} If the wallet is not installed or the wrong network is selected.
  */
 export async function connectWallet(walletType: WalletType = FREIGHTER_ID): Promise<WalletInfo> {
   try {
-    // Set the wallet type
+    // 1. Configure the kit to use the requested wallet provider
     walletKit.setWallet(walletType);
     
-    // Check if wallet is available
+    // 2. Ensure the extension or provider is available in the browser
     const isWalletAvailable = await walletKit.isWalletAvailable();
     if (!isWalletAvailable) {
       const walletName = getWalletName(walletType);
       throw new Error(`${walletName} is not available. Please install it to continue.`);
     }
 
-    // Get public key
+    // 3. Request the public key from the user
     const publicKey = await walletKit.getPublicKey();
     
     if (!publicKey) {
       throw new Error("Unable to retrieve public key.");
     }
 
-    // Verify correct network (Testnet)
+    // 4. Validate that the user is on the expected network (Testnet)
     const network = await walletKit.getNetwork();
     if (network !== "TESTNET") {
       const walletName = getWalletName(walletType);
@@ -59,13 +86,16 @@ export async function connectWallet(walletType: WalletType = FREIGHTER_ID): Prom
 
     return { publicKey, walletType };
   } catch (error: any) {
+    // Log error for debugging but propagate to the caller
     console.error("Wallet connection error:", error);
     throw error;
   }
 }
 
 /**
- * Gets the current connected wallet info
+ * Retrieves information about the currently connected wallet if available.
+ * 
+ * @returns {Promise<WalletInfo | null>} The wallet info or null if disconnected.
  */
 export async function getConnectedWallet(): Promise<WalletInfo | null> {
   try {
@@ -75,12 +105,15 @@ export async function getConnectedWallet(): Promise<WalletInfo | null> {
     const currentWallet = walletKit.getWallet();
     return { publicKey, walletType: currentWallet };
   } catch (error) {
+    // Silently return null on error as it usually means no wallet is active
     return null;
   }
 }
 
 /**
- * Disconnects the current wallet
+ * Terminates the current wallet session.
+ * 
+ * @returns {Promise<void>}
  */
 export async function disconnectWallet(): Promise<void> {
   try {
@@ -91,7 +124,10 @@ export async function disconnectWallet(): Promise<void> {
 }
 
 /**
- * Gets the display name for a wallet type
+ * Maps internal wallet IDs to human-readable display names.
+ * 
+ * @param {WalletType} walletType - The internal ID of the wallet.
+ * @returns {string} The display name (e.g., "Freighter").
  */
 function getWalletName(walletType: WalletType): string {
   switch (walletType) {
@@ -108,21 +144,22 @@ function getWalletName(walletType: WalletType): string {
 
 /**
  * Monitors the status of a Stellar transaction until it succeeds, fails, or times out.
- * Polls the network every 2 seconds.
+ * This function uses a polling mechanism to check the Horizon server.
  * 
- * @param hash - The transaction hash to monitor
- * @returns Promise that resolves to "SUCCESS" if successful
+ * @param {string} hash - The transaction hash to monitor.
+ * @returns {Promise<string>} Promise that resolves to "SUCCESS" if successful.
+ * @throws {Error} If the transaction fails or the polling times out.
  */
 export async function waitForTransaction(hash: string): Promise<string> {
-  const TIMEOUT_MS = 30000;
-  const POLLING_INTERVAL_MS = 2000;
+  const TIMEOUT_MS = 30000; // 30 seconds timeout
+  const POLLING_INTERVAL_MS = 2000; // Poll every 2 seconds
   const startTime = Date.now();
 
   console.log(`[waitForTransaction] Starting monitoring for transaction: ${hash}`);
 
   while (Date.now() - startTime < TIMEOUT_MS) {
     try {
-      // Attempt to fetch transaction status
+      // Fetch transaction status from the Horizon server
       const tx = await server.getTransaction(hash);
       
       console.log(`[waitForTransaction] Polling ${hash}: Status = ${tx.status}`);
@@ -137,57 +174,61 @@ export async function waitForTransaction(hash: string): Promise<string> {
       
       // If status is NOT_FOUND or other pending states, continue polling
     } catch (error: any) {
-      // Log error but continue polling (common for 404 Not Found initially)
+      // Log warning but continue polling (common for 404 Not Found initially)
       console.warn(`[waitForTransaction] Polling attempt failed (retrying): ${error.message}`);
     }
 
-    // Wait before next poll
+    // Wait before next poll attempt
     await new Promise((resolve) => setTimeout(resolve, POLLING_INTERVAL_MS));
   }
 
-  // Timeout reached
+  // Timeout reached if we exit the loop
   const errorMsg = `Transaction monitoring timed out after ${TIMEOUT_MS / 1000}s for hash: ${hash}`;
   console.error(`[waitForTransaction] ${errorMsg}`);
   throw new Error(errorMsg);
 }
 
 /**
- * Adds a trustline for a Stellar asset (ChangeTrust operation).
- * @param assetCode - Code of the asset (e.g., "USDC")
- * @param assetIssuer - Issuer address of the asset
- * @param walletType - Optional wallet type override
+ * Establishes a trustline for a specific Stellar asset.
+ * This is required before an account can hold or receive a non-native asset.
+ * 
+ * @param {string} assetCode - The code of the asset (e.g., "USDC").
+ * @param {string} assetIssuer - The public G-address of the asset issuer.
+ * @param {WalletType} [walletType] - Optional wallet provider override.
+ * @returns {Promise<string>} The status of the transaction.
  */
 export async function addTrustline(assetCode: string, assetIssuer: string, walletType?: WalletType) {
-  // If walletType is provided, set it temporarily
+  // Update wallet provider if specified
   if (walletType) {
     walletKit.setWallet(walletType);
   }
   
   const publicKey = await walletKit.getPublicKey();
   
-  // Fetch account details to get the current sequence number
+  // 1. Fetch current account state for sequence number
   const account = await server.getAccount(publicKey);
   const asset = new Asset(assetCode, assetIssuer);
   
-  // Construct the transaction
+  // 2. Build the ChangeTrust transaction
   const transaction = new TransactionBuilder(account, {
-    fee: "1000", // Standard fee in stroops
+    fee: "1000", // Fixed fee of 1000 stroops for demo
     networkPassphrase: NETWORK_PASSPHRASE,
   })
     .addOperation(Operation.changeTrust({ asset }))
-    .setTimeout(60)
+    .setTimeout(60) // 60 seconds transaction validity
     .build();
 
-  // Request signature from the current wallet
+  // 3. Request user signature via the selected wallet
   const xdr = transaction.toXDR();
   const signedXdr = await walletKit.signTransaction(xdr, {
     network: "TESTNET",
   });
 
-  // Submit to the network
+  // 4. Submit the signed transaction to the network
   const response = await server.sendTransaction(transaction);
   
   if (response.hash) {
+    // 5. Wait for ledger confirmation
     return await waitForTransaction(response.hash);
   }
   
@@ -195,7 +236,11 @@ export async function addTrustline(assetCode: string, assetIssuer: string, walle
 }
 
 /**
- * Signs a transaction using the currently connected wallet
+ * Signs a raw XDR transaction using the active wallet.
+ * 
+ * @param {string} xdr - The base64 encoded transaction XDR.
+ * @param {any} [options] - Additional signing options.
+ * @returns {Promise<string>} The signed transaction XDR.
  */
 export async function signTransaction(xdr: string, options?: any): Promise<string> {
   return await walletKit.signTransaction(xdr, {
@@ -205,14 +250,18 @@ export async function signTransaction(xdr: string, options?: any): Promise<strin
 }
 
 /**
- * Gets the current network from the connected wallet
+ * Queries the active network configuration from the connected wallet.
+ * 
+ * @returns {Promise<string>} The network identifier (e.g., "TESTNET").
  */
 export async function getNetwork(): Promise<string> {
   return await walletKit.getNetwork();
 }
 
 /**
- * Checks if a wallet is connected
+ * Quick check to see if a wallet is currently active and reachable.
+ * 
+ * @returns {Promise<boolean>} True if a public key can be retrieved.
  */
 export async function isWalletConnected(): Promise<boolean> {
   try {
@@ -223,7 +272,20 @@ export async function isWalletConnected(): Promise<boolean> {
   }
 }
 
-// Export wallet types and kit for use in other modules
+/**
+ * Utility to shorten a Stellar address for UI display.
+ * 
+ * @param {string} address - The full Stellar address.
+ * @param {number} [chars=4] - Number of characters to show at start and end.
+ * @returns {string} The shortened address (e.g., GABC...XYZ).
+ */
+export function shortenAddress(address: string, chars = 4): string {
+  if (!address) return "";
+  if (address.length <= chars * 2) return address;
+  return `${address.substring(0, chars)}...${address.substring(address.length - chars)}`;
+}
+
+// Re-export constants and types for downstream usage
 export { 
   walletKit,
   FREIGHTER_ID, 
@@ -231,3 +293,4 @@ export {
   ALBEDO_ID, 
   WalletType 
 };
+
