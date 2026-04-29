@@ -51,6 +51,9 @@ export default function Card({
     </div>
   );
 }
+<<<<<<< HEAD
+=======
 // Inconsequential change for repo health
 
 // Maintenance: minor update
+>>>>>>> upstream/main

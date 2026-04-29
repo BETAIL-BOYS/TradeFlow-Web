@@ -1,3 +1,15 @@
+<<<<<<< HEAD
+/**
+ * Swap Interface Component.
+ * Provides a decentralized exchange (DEX) style interface for swapping 
+ * Stellar assets. Includes slippage control, price impact estimation, 
+ * and transaction status monitoring.
+ */
+
+"use client";
+
+=======
+>>>>>>> upstream/main
 import React, { useState, useEffect } from "react";
 import { ArrowUpDown, Settings, BarChart3, LineChart, TrendingUp } from "lucide-react";
 import TokenDropdown from "./TokenDropdown";
@@ -19,9 +31,96 @@ export default function SwapInterface() {
   
   // --- UI Visibility State ---
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+<<<<<<< HEAD
+  const [isHighSlippageWarningOpen, setIsHighSlippageWarningOpen] = useState(false);
+  const [isTradeReviewOpen, setIsTradeReviewOpen] = useState(false);
+  const [isTransactionSignatureOpen, setIsTransactionSignatureOpen] = useState(false);
+  /** Visibility for the post-trade growth/share modal */
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
+  // --- Trade Value State ---
+  const [fromAmount, setFromAmount] = useState("");
+  const [toAmount, setToAmount] = useState("");
+  /** Estimated price impact as a percentage */
+  const [priceImpact, setPriceImpact] = useState(0);
+  /** Mock balance for the selected source token */
+  const [fromBalance] = useState("1240.50");
+
+  // --- Submission & Timing State ---
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionStartTime, setSubmissionStartTime] = useState<number | null>(null);
+  const [timeLeft, setTimeLeft] = useState<string>("");
+
+  // --- Context Hooks ---
+  const { slippageTolerance, transactionDeadline } = useSlippage();
+
+  /**
+   * Countdown timer effect for transaction expiry.
+   * Runs when a transaction is pending submission.
+   */
+  useEffect(() => {
+    let interval: any;
+    if (isSubmitting && submissionStartTime) {
+      interval = setInterval(() => {
+        const now = Date.now();
+        const elapsed = Math.floor((now - submissionStartTime) / 1000);
+        const totalSeconds = transactionDeadline * 60;
+        const remaining = totalSeconds - elapsed;
+
+        if (remaining <= 0) {
+          clearInterval(interval);
+          setIsSubmitting(false);
+          setIsTransactionSignatureOpen(false);
+          setIsTradeReviewOpen(false);
+          setSubmissionStartTime(null);
+          toast.error("Transaction Expired", { duration: 5000 });
+        } else {
+          const minutes = Math.floor(remaining / 60);
+          const seconds = remaining % 60;
+          setTimeLeft(`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+        }
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isSubmitting, submissionStartTime, transactionDeadline]);
+
+  /**
+   * Persists token selections across page reloads.
+   */
+  useEffect(() => {
+    const savedFromToken = localStorage.getItem('tradeflow-fromToken');
+    const savedToToken = localStorage.getItem('tradeflow-toToken');
+
+    if (savedFromToken) setFromToken(savedFromToken);
+    if (savedToToken) setToToken(savedToToken);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('tradeflow-fromToken', fromToken);
+  }, [fromToken]);
+
+  useEffect(() => {
+    localStorage.setItem('tradeflow-toToken', toToken);
+  }, [toToken]);
+
+  /**
+   * Estimates the price impact based on the input amount.
+   * This is a simplified mock for development purposes.
+   * 
+   * @param {string} amount - The numeric amount string.
+   * @returns {number} The calculated percentage impact.
+   */
+  const calculatePriceImpact = (amount: string) => {
+    if (!amount || parseFloat(amount) <= 0) return 0;
+    const baseImpact = Math.min(parseFloat(amount) * 0.01, 15);
+    const tokenMultiplier = fromToken === "XLM" ? 1.2 : 1.0;
+    return baseImpact * tokenMultiplier;
+  };
+=======
   const [isProMode, setIsProMode] = useState(false);
 
   const { deadline } = useSettings();
+>>>>>>> upstream/main
 
   /**
    * Swaps the 'from' and 'to' tokens and their amounts.
@@ -62,7 +161,11 @@ export default function SwapInterface() {
       return;
     }
 
+<<<<<<< HEAD
+    const loadingToast = toast.loading("Processing swap calculation...");
+=======
     const loadingToast = showLoading("Processing swap...");
+>>>>>>> upstream/main
 
     try {
       // Threshold check for high slippage warning
@@ -75,13 +178,21 @@ export default function SwapInterface() {
       // Simulate network delay
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
+<<<<<<< HEAD
+      toast.success(`Trade calculated: ${fromAmount} ${fromToken} → ${toAmount} ${toToken}`, {
+=======
       showSuccess(`Swapped ${fromAmount} ${fromToken} → ${toAmount} ${toToken}`, {
+>>>>>>> upstream/main
         id: loadingToast,
       });
 
       setIsTradeReviewOpen(true);
     } catch (error) {
+<<<<<<< HEAD
+      toast.error("Failed to calculate trade parameters", {
+=======
       showError("Failed to process swap", {
+>>>>>>> upstream/main
         id: loadingToast,
       });
     }
@@ -105,7 +216,11 @@ export default function SwapInterface() {
 
       setIsTransactionSignatureOpen(true);
     } catch (error) {
+<<<<<<< HEAD
+      toast.error("Failed to prepare transaction");
+=======
       showError("Failed to submit trade");
+>>>>>>> upstream/main
       setIsSubmitting(false);
       setSubmissionStartTime(null);
     }
@@ -138,8 +253,13 @@ export default function SwapInterface() {
   const handleTransactionSuccess = (signedXDR: string) => {
     console.log("[SwapInterface] Transaction signed:", signedXDR);
 
+<<<<<<< HEAD
+    toast.success("Trade executed successfully!", {
+      icon: "🚀",
+=======
     showSuccess("Transaction signed successfully!", {
       icon: "✅",
+>>>>>>> upstream/main
     });
 
     setIsTransactionSignatureOpen(false);

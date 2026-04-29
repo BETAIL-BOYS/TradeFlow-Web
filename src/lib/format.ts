@@ -1,19 +1,41 @@
 /**
+<<<<<<< HEAD
+ * Data formatting utilities for the TradeFlow application.
+ * Provides consistent formatting for currency, dates, addresses, and percentages.
+ */
+
+/**
+ * Formats raw blockchain currency values into a human-readable USD string.
+ * Specifically handles Stellar/Soroban assets with 7 decimal places (standard for USDC).
+ * 
+ * @param {number | string} amount - The raw amount from the blockchain (e.g., 10,000,000 for 1.00 USDC).
+ * @returns {string} A localized currency string (e.g., "$1.00").
+ */
+export const formatCurrency = (amount: number | string): string => {
+  // 1. Convert string input to number if necessary
+=======
  * Format currency values
  * @param amount - Amount to format
  * @param isRaw - If true, divides by 10^7 (standard for USDC on Stellar)
  * @returns Formatted USD string
  */
 export const formatCurrency = (amount: number | string, isRaw: boolean = true): string => {
+>>>>>>> upstream/main
   const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
   
   if (isNaN(numAmount)) {
     return '$0.00';
   }
   
+<<<<<<< HEAD
+  // 2. Stellar assets like USDC typically use 7 decimal places
+  // We divide by 10^7 to get the actual unit value
+  const usdcAmount = numAmount / 10000000;
+=======
   // If raw from blockchain (USDC has 7 decimals), divide by 10^7
   // Otherwise, use the number as is (pre-calculated USD)
   const usdcAmount = isRaw ? numAmount / 10000000 : numAmount;
+>>>>>>> upstream/main
   
   // 3. Format using standard US locale settings
   return new Intl.NumberFormat('en-US', {
