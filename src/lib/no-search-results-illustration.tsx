@@ -1,4 +1,4 @@
-port React from 'react';
+import React from 'react';
 
 /**
  * SVG Illustration for when a search yields no results.

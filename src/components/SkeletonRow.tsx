@@ -46,9 +46,6 @@ const SkeletonRow = () => {
 
 export default SkeletonRow;
 
-<<<<<<< HEAD
-=======
 // Inconsequential change for repo health
 
 // Maintenance: minor update
->>>>>>> upstream/main

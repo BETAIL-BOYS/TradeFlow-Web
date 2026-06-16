@@ -32,16 +32,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={inter.variable}>
       <body className="font-sans antialiased">
         <ErrorBoundary>
-          <NetworkCongestionProvider>
-            <SlippageProvider>
-              <ToasterProvider />
-              <NetworkCongestionBanner />
-              <PageTransition>
-                {children}
-              </PageTransition>
-              <Footer />
-            </SlippageProvider>
-          </NetworkCongestionProvider>
+          <SettingsProvider>
+            <QueryProvider>
+              <BackendHealthProvider>
+                <NetworkGuard>
+                  <NetworkCongestionProvider>
+                    <SlippageProvider>
+                      <ToasterProvider />
+                      <NetworkCongestionBanner />
+                      <DegradedPerformanceBanner />
+                      <NetworkMismatchWarning />
+                      <PageTransition>
+                        {children}
+                      </PageTransition>
+                      <SignatureOverlay />
+                      <Footer />
+                    </SlippageProvider>
+                  </NetworkCongestionProvider>
+                </NetworkGuard>
+              </BackendHealthProvider>
+            </QueryProvider>
+          </SettingsProvider>
         </ErrorBoundary>
       </body>
     </html>

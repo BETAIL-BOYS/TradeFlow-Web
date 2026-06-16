@@ -115,7 +115,17 @@ export interface InvoiceSummary {
   [key: string]: unknown;
 }
 
-export type InvoicesResponse = InvoiceSummary[];
+export interface InvoicesResponse {
+  data: InvoiceSummary[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalItems: number;
+    itemsPerPage: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+}
 
 /**
  * A single PnL chart point.
@@ -165,8 +175,10 @@ export function isRiskScoreResponse(value: unknown): value is RiskScoreResponse 
  * Runtime validator for InvoicesResponse.
  */
 export function isInvoicesResponse(value: unknown): value is InvoicesResponse {
-  if (!Array.isArray(value)) return false;
-  return value.every((item) => {
+  if (!isRecord(value)) return false;
+  if (!Array.isArray(value.data)) return false;
+  if (!isRecord(value.pagination)) return false;
+  return value.data.every((item) => {
     if (!isRecord(item)) return false;
     return (
       typeof item.id === "string" &&

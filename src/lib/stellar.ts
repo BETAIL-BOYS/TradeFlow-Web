@@ -16,7 +16,7 @@ import {
 } from "./walletConnector";
 
 // Re-export WalletType for backward compatibility
-export { WalletType };
+export type { WalletType };
 
 /**
  * The RPC endpoint for the Stellar network.

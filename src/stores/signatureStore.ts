@@ -55,9 +55,16 @@ export const useSignatureStore = create<SignatureState>((set) => ({
 export const useIsSigning = () => useSignatureStore((state) => state.isSigning);
 export const useSigningMessage = () => useSignatureStore((state) => state.signingMessage);
 export const useTransactionDetails = () => useSignatureStore((state) => state.transactionDetails);
-export const useSigningActions = () => useSignatureStore((state) => ({
-  startSigning: state.startSigning,
-  stopSigning: state.stopSigning,
-  updateMessage: state.updateMessage,
-  setTransactionDetails: state.setTransactionDetails,
-}));
+export const useSigningActions = () => {
+  const startSigning = useSignatureStore((state) => state.startSigning);
+  const stopSigning = useSignatureStore((state) => state.stopSigning);
+  const updateMessage = useSignatureStore((state) => state.updateMessage);
+  const setTransactionDetails = useSignatureStore((state) => state.setTransactionDetails);
+
+  return {
+    startSigning,
+    stopSigning,
+    updateMessage,
+    setTransactionDetails,
+  };
+};

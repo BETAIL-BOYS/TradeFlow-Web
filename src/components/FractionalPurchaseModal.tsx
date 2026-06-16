@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import BigNumber from "bignumber.js";
 import { X, Wallet, TrendingUp, Zap } from "lucide-react";
 import Button from "./ui/Button";
+import Icon from "./ui/Icon";
 import { useTxWithToast } from "../hooks/useTxWithToast";
 
 BigNumber.config({ EXPONENTIAL_AT: 1e9, DECIMAL_PLACES: 7 });

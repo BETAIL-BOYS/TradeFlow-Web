@@ -1,8 +1,8 @@
 "use client";
 
 import React from 'react';
-import { Slider } from './ui/Slider';
-import { Checkbox } from './ui/Checkbox';
+import Slider from './ui/Slider';
+import Checkbox from './ui/Checkbox';
 
 export interface InvoiceFilters {
   minApy: number;

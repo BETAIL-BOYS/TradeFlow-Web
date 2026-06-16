@@ -7,36 +7,20 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-<<<<<<< HEAD
 import { ChevronDown, AlertTriangle, Globe, FlaskConical } from "lucide-react";
-=======
-import { ChevronDown, AlertTriangle } from "lucide-react";
 import Icon from "./ui/Icon";
->>>>>>> upstream/main
 
-/** Supported Stellar network types */
 export type Network = "mainnet" | "testnet";
 
-/**
- * Props for the NetworkSelector component.
- */
 interface NetworkSelectorProps {
-  /** Optional callback triggered when the network is changed */
   onNetworkChange?: (network: Network) => void;
 }
 
-/**
- * A dropdown component for selecting the active Stellar network.
- */
 export default function NetworkSelector({ onNetworkChange }: NetworkSelectorProps) {
-  // --- Component State ---
   const [selectedNetwork, setSelectedNetwork] = useState<Network>("mainnet");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  /**
-   * Available network configurations.
-   */
   const networks = [
     {
       id: "mainnet" as Network,
@@ -52,11 +36,6 @@ export default function NetworkSelector({ onNetworkChange }: NetworkSelectorProp
     }
   ];
 
-  // --- Handlers ---
-
-  /**
-   * Effect: Closes the dropdown when clicking outside the component.
-   */
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -70,11 +49,6 @@ export default function NetworkSelector({ onNetworkChange }: NetworkSelectorProp
     };
   }, []);
 
-  /**
-   * Updates the selected network and propagates the change.
-   * 
-   * @param {Network} network - The new network ID.
-   */
   const handleNetworkSelect = (network: Network) => {
     setSelectedNetwork(network);
     setIsOpen(false);
@@ -87,7 +61,6 @@ export default function NetworkSelector({ onNetworkChange }: NetworkSelectorProp
 
   return (
     <div className="relative" ref={dropdownRef}>
-      {/* Trigger Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 rounded-xl px-4 py-2 transition-all min-w-[160px] justify-between shadow-sm active:scale-[0.98]"
@@ -96,7 +69,6 @@ export default function NetworkSelector({ onNetworkChange }: NetworkSelectorProp
         aria-label="Select Stellar Network"
       >
         <div className="flex items-center gap-2">
-          {/* Network-specific Icon */}
           <div className="flex items-center justify-center w-6 h-6 rounded-lg bg-slate-900/50">
             {selectedNetworkData?.icon}
           </div>
@@ -104,33 +76,16 @@ export default function NetworkSelector({ onNetworkChange }: NetworkSelectorProp
             {selectedNetworkData?.name.replace("Stellar ", "")}
           </span>
         </div>
-<<<<<<< HEAD
-        <ChevronDown 
-          size={14} 
-          className={`text-slate-500 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
-        />
-=======
         <Icon icon={ChevronDown} dense className={`text-slate-400 transition-transform ${isOpen ? "rotate-180" : ""}`} />
->>>>>>> upstream/main
       </button>
 
-      {/* Testnet Warning Badge */}
       {selectedNetwork === "testnet" && (
-<<<<<<< HEAD
-        <div 
-          className="absolute -top-2.5 -right-2 bg-yellow-500 text-slate-900 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-tighter flex items-center gap-1 shadow-lg shadow-yellow-500/20"
-          title="You are using the test network"
-        >
-          <AlertTriangle size={10} strokeWidth={3} />
-=======
         <div className="absolute -top-2 -right-2 bg-yellow-500 text-slate-900 rounded-full px-2 py-1 text-xs font-bold flex items-center gap-1">
           <Icon icon={AlertTriangle} dense />
->>>>>>> upstream/main
           Testnet
         </div>
       )}
 
-      {/* Dropdown List */}
       {isOpen && (
         <div 
           className="absolute top-full right-0 mt-2 bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl z-50 overflow-hidden min-w-[220px] animate-in fade-in slide-in-from-top-2 duration-200"
@@ -171,10 +126,3 @@ export default function NetworkSelector({ onNetworkChange }: NetworkSelectorProp
     </div>
   );
 }
-
-<<<<<<< HEAD
-=======
-// Inconsequential change for repo health
-
-// Maintenance: minor update
->>>>>>> upstream/main

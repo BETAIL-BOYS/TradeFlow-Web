@@ -85,7 +85,7 @@ export const useTokenStore = create<TokenStore>((set, get) => ({
       
       try {
         // 1. Retrieve the account details
-        const account = await server.getAccount(publicKey);
+        const account: any = await server.getAccount(publicKey);
         const tfAsset = new Asset(TF_TOKEN_CODE, TF_TOKEN_ISSUER);
         
         // 2. Locate the TF token in the account's balances array

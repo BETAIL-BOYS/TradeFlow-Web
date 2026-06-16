@@ -11,24 +11,13 @@ import dynamic from "next/dynamic";
 import Toggle from "../app/Toggle";
 import { useTokenStore } from "../stores/tokenStore";
 import PremiumUnlockModal from "./PremiumUnlockModal";
-<<<<<<< HEAD
 import { Zap, Crown, Lock } from "lucide-react";
-=======
 import SkeletonCard from "./ui/SkeletonCard";
->>>>>>> upstream/main
 
-/**
- * Dynamically import the heavy TradingView-style chart component.
- * Uses a skeleton fallback to prevent layout shifts during hydration.
- */
 const LivePriceChart = dynamic(() => import("../components/LivePriceChart"), {
   ssr: false,
   loading: () => (
-<<<<<<< HEAD
-    <div className="w-full h-96 bg-slate-900/50 rounded-3xl border border-slate-700/30 flex items-center justify-center animate-pulse">
-=======
     <SkeletonCard height="h-96" className="flex items-center justify-center">
->>>>>>> upstream/main
       <div className="text-center">
         <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Hydrating Pro Engine...</p>
@@ -37,40 +26,25 @@ const LivePriceChart = dynamic(() => import("../components/LivePriceChart"), {
   ),
 });
 
-/**
- * A section that manages the state and access control for "Pro Mode".
- */
 export default function ProModeSection() {
-  // --- Component State ---
-  /** Local toggle state for the current session */
   const [isProMode, setIsProMode] = useState(false);
-  /** Controls visibility of the TF token paywall modal */
   const [showPaywall, setShowPaywall] = useState(false);
   
-  /** Access logic from the token store */
   const { tfTokenBalance, isConnected, hasProModeAccess } = useTokenStore();
 
-  /**
-   * Handles user interaction with the Pro Mode toggle.
-   * Validates wallet connection and token requirements before enabling.
-   */
   const handleProModeToggle = () => {
-    // 1. Logic for enabling Pro Mode
     if (!isProMode) {
       if (!isConnected) {
-        // TODO: Replace with a non-blocking toast notification
         alert('Please connect your Stellar wallet to access Pro Mode features.');
         return;
       }
       
       if (!hasProModeAccess()) {
-        // User is connected but lacks sufficient TF token balance
         setShowPaywall(true);
         return;
       }
     }
     
-    // 2. Commit the toggle state change
     setIsProMode(!isProMode);
   };
 
@@ -115,15 +89,13 @@ export default function ProModeSection() {
           </div>
         </div>
 
-        {/* Conditional Rendering of Pro Content */}
         {isProMode && (
           <div className="mt-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <LivePriceChart />
+            <LivePriceChart symbol="TF" />
           </div>
         )}
       </section>
 
-      {/* Paywall Modal Overlay */}
       <PremiumUnlockModal
         isOpen={showPaywall}
         onClose={() => setShowPaywall(false)}
@@ -132,10 +104,3 @@ export default function ProModeSection() {
     </>
   );
 }
-
-<<<<<<< HEAD
-=======
-// Inconsequential change for repo health
-
-// Maintenance: minor update
->>>>>>> upstream/main

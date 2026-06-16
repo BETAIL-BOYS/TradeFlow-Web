@@ -28,7 +28,7 @@ export default function LivePriceChart({ symbol, height = 400 }: LivePriceChartP
     if (!chartContainerRef.current) return;
 
     // Initialize chart with candlestick configuration
-    const chart = createChart(chartContainerRef.current, {
+    const chart: any = createChart(chartContainerRef.current, {
       width: chartContainerRef.current.clientWidth,
       height: height,
       layout: {
@@ -59,7 +59,6 @@ export default function LivePriceChart({ symbol, height = 400 }: LivePriceChartP
       },
       timeScale: {
         borderColor: "#1e293b",
-        textColor: "#94a3b8",
         timeVisible: true,
         secondsVisible: true,
       },

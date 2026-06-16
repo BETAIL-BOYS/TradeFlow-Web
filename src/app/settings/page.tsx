@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Settings as SettingsIcon, Shield, Bell, User, Globe, HelpCircle } from 'lucide-react';
-import Icon from '../components/ui/Icon';
+import Icon from '../../components/ui/Icon';
 
 export default function SettingsPage() {
   return (

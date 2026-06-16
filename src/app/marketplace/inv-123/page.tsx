@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Server } from "soroban-client";
 import StickyHeader from "../../../components/StickyHeader";
 import FractionalPurchaseModal, {
   type Invoice,
@@ -10,6 +9,7 @@ import DynamicRiskAssessmentChart from "../../../components/DynamicRiskAssessmen
 import RepayInvoiceButton from "../../../components/RepayInvoiceButton";
 import { useTokenStore } from "../../../stores/tokenStore";
 import { useTxWithToast } from "../../../hooks/useTxWithToast";
+import { useInvoice } from "../../../hooks/useInvoice";
 import { ArrowLeft, ExternalLink, Shield, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import Icon from "../../../components/ui/Icon";
@@ -17,10 +17,6 @@ import Icon from "../../../components/ui/Icon";
 // Stellar testnet USDC issuer
 const USDC_CODE = "USDC";
 const USDC_ISSUER = "GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5";
-
-const server = new Server("https://soroban-testnet.stellar.org", {
-  allowHttp: true,
-});
 
 // Static fallback data used while on-chain data loads or if the contract is
 // not yet deployed on testnet.
@@ -47,6 +43,9 @@ export default function InvoiceDetailPage() {
   const [usdcBalance, setUsdcBalance] = useState("0");
 
   const { executeTx } = useTxWithToast();
+  const { invoice, loading, error } = useInvoice("INV-00123");
+  const isIssuer = publicKey === invoice?.issuer;
+  const totalDue = invoice ? Number(invoice.amount) / 10_000_000 : 50000;
 
   // Fetch live USDC balance from Stellar network whenever wallet connects
   useEffect(() => {
@@ -57,10 +56,9 @@ export default function InvoiceDetailPage() {
 
     const fetchBalance = async () => {
       try {
-        const accountResponse = await server
-          .accounts()
-          .accountId(publicKey)
-          .call();
+        const res = await fetch(`https://horizon-testnet.stellar.org/accounts/${publicKey}`);
+        if (!res.ok) throw new Error();
+        const accountResponse = await res.json();
         const usdcEntry = accountResponse.balances.find(
           (b: { asset_code?: string; asset_issuer?: string }) =>
             b.asset_code === USDC_CODE && b.asset_issuer === USDC_ISSUER

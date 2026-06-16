@@ -16,6 +16,7 @@ import Navbar from "../components/Navbar";
 import StickyHeader from "../components/StickyHeader";
 import Card from "../components/Card";
 import FreighterConnectModal from "../components/FreighterConnectModal";
+import WalletModal from "../components/WalletModal";
 import InvoiceMintForm from "../components/InvoiceMintForm";
 import InvoiceTable from "../components/InvoiceTable";
 import InvoiceFilter, { InvoiceFilters } from "../components/InvoiceFilter";
@@ -39,20 +40,11 @@ import Icon from "../components/ui/Icon";
  * The root component for the TradeFlow dashboard.
  * Manages high-level state for wallet connection, active tabs, and invoice data.
  */
-export default function Page() {
-<<<<<<< HEAD
-  // --- Component State ---
-  /** The public Stellar address of the connected user */
-  const [address, setAddress] = useState("");
-  /** List of invoices fetched from the backend pipeline */
-  const [invoices, setInvoices] = useState([]);
-  /** Loading state for initial data fetch */
-=======
+function DashboardContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isConnected, walletAddress, isConnecting } = useWalletConnection();
   const [invoices, setInvoices] = useState<InvoiceSummary[]>([]);
->>>>>>> upstream/main
   const [loading, setLoading] = useState(false);
   /** Controls visibility of the Invoice Minting modal */
   const [showMintForm, setShowMintForm] = useState(false);
@@ -65,16 +57,6 @@ export default function Page() {
   const { toggleWatchlist, isInWatchlist } = useWatchlist();
   const riskSocketRef = useRef<RiskSocketClient | null>(null);
 
-<<<<<<< HEAD
-  // --- Handlers ---
-
-  /**
-   * Triggers the Stellar wallet connection flow.
-   * Supports multiple providers via the stellar-wallets-kit.
-   * 
-   * @param {WalletType} walletType - The ID of the wallet provider (e.g., Freighter).
-   */
-=======
   // Initialize filters from URL params
   const [filters, setFilters] = useState<InvoiceFilters>(() => ({
     minApy: parseFloat(searchParams.get('minApy') || '0'),
@@ -96,38 +78,11 @@ export default function Page() {
 
   
   // 1. Connect Stellar Wallet (supports Freighter, Albedo, xBull)
->>>>>>> upstream/main
   const handleConnectWallet = async (walletType: WalletType) => {
     try {
       const userInfo = await connectWallet(walletType);
       if (userInfo && userInfo.publicKey) {
-        setAddress(userInfo.publicKey);
-<<<<<<< HEAD
-        console.log("[Dashboard] Wallet connected:", userInfo.publicKey, "Provider:", userInfo.walletType);
-      }
-    } catch (e: any) {
-      console.error("[Dashboard] Connection failed:", e.message);
-      // In production, this would be a user-friendly toast notification
-      alert(e.message || "Failed to connect to wallet.");
-    }
-  };
 
-  /**
-   * Fetches the latest verified assets from the RWA pipeline.
-   * Currently points to a local mock API for development.
-   */
-  const fetchInvoices = async () => {
-    setLoading(true);
-    try {
-      // TODO: Replace with environment-aware API base URL
-      const res = await fetch("http://localhost:3000/invoices");
-      const data = await res.json();
-      setInvoices(data);
-    } catch (e) {
-      console.warn("[Dashboard] Asset pipeline API not reachable. Check if local server is running.");
-    } finally {
-      setLoading(false);
-=======
         console.log("Wallet connected:", userInfo.publicKey, "Type:", userInfo.walletType);
         showSuccess("Wallet connected");
       }
@@ -135,7 +90,6 @@ export default function Page() {
       const error = e as Error;
       console.error("Connection failed:", error.message);
       showError(error.message || "Failed to connect to wallet.");
->>>>>>> upstream/main
     }
   };
 
@@ -149,7 +103,7 @@ export default function Page() {
       try {
         const res = await api.getInvoices({ signal: controller.signal });
         if (res.ok) {
-          setInvoices(res.data);
+          setInvoices(res.data.data);
         } else {
           console.error("Failed to fetch invoices:", res.error.message);
         }
@@ -165,24 +119,6 @@ export default function Page() {
     };
   }, []);
 
-<<<<<<< HEAD
-  /**
-   * Debugging utility for testing transaction status notifications.
-   */
-  const handleTestToast = () => {
-    const toast = useTransactionToast();
-    toast.loading();
-    setTimeout(() => toast.success(), 2000);
-  };
-
-  /**
-   * Callback triggered when a new invoice is successfully submitted for minting.
-   * 
-   * @param {any} data - The validated invoice metadata.
-   */
-  const handleInvoiceMint = (data: any) => {
-    console.log("[Dashboard] Mint request received:", data);
-=======
   useEffect(() => {
     if (!walletAddress) {
       riskSocketRef.current?.disconnect();
@@ -226,11 +162,9 @@ export default function Page() {
     toast.error();
   };
 
-  const handleInvoiceMint = (data: Record<string, unknown>) => {
-    console.log("Invoice data received:", data);
->>>>>>> upstream/main
+  const handleInvoiceMint = (txStatus: string) => {
+    console.log("Invoice minted, tx status:", txStatus);
     setShowMintForm(false);
-    // TODO: Initiate Soroban contract call for minting the NFT
   };
 
   // --- Configuration ---
@@ -238,11 +172,7 @@ export default function Page() {
   /** Tab definitions for the main navigation */
   const tabs = [
     { id: "dashboard", label: "Dashboard" },
-<<<<<<< HEAD
-    { id: "watchlist", label: "Watchlist", icon: <Star size={16} aria-hidden="true" /> },
-=======
     { id: "watchlist", label: "Watchlist", icon: <Icon icon={Star} dense /> },
->>>>>>> upstream/main
   ];
 
 
@@ -266,7 +196,7 @@ export default function Page() {
             disabled={isConnecting}
             className={`flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:opacity-50 px-6 py-2 rounded-full transition shadow-lg shadow-blue-900/20 ${!walletAddress && !isConnecting ? 'animate-pulse' : ''}`}
           >
-            <Wallet size={18} />
+            <Icon icon={Wallet} dense />
             {isConnecting ? (
               "Connecting..."
             ) : walletAddress ? (
@@ -274,10 +204,6 @@ export default function Page() {
             ) : (
               "Connect Wallet"
             )}
-            <Icon icon={Wallet} dense />
-            {address
-              ? `${address.slice(0, 6)}...${address.slice(-4)}`
-              : "Connect Wallet"}
           </button>
         </div>
       </div>
@@ -406,6 +332,7 @@ export default function Page() {
                     )}
                   </tbody>
                 </table>
+              </div>
               {/* Invoice Table with Filters */}
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-12">
                 {/* Filter Sidebar */}
@@ -447,11 +374,22 @@ export default function Page() {
         {showMintForm && (
           <InvoiceMintForm
             onClose={() => setShowMintForm(false)}
-            onSubmit={handleInvoiceMint}
+            onSuccess={handleInvoiceMint}
           />
         )}
       </div>
-    </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <React.Suspense fallback={
+      <div className="min-h-screen bg-tradeflow-dark text-white flex items-center justify-center font-sans">
+        <div className="text-blue-400 text-lg animate-pulse">Loading dashboard...</div>
+      </div>
+    }>
+      <DashboardContent />
+    </React.Suspense>
   );
 }
 

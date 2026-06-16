@@ -1,12 +1,4 @@
-<<<<<<< HEAD
-/**
- * Star Icon Component.
- * A reusable interactive toggle for marking assets as favorites or 
- * adding them to a watchlist.
- */
-=======
 "use client";
->>>>>>> upstream/main
 
 import React from 'react';
 import { Star } from 'lucide-react';
@@ -60,9 +52,6 @@ export default function StarIcon({
   );
 }
 
-<<<<<<< HEAD
-=======
 // Inconsequential change for repo health
 
 // Maintenance: minor update
->>>>>>> upstream/main

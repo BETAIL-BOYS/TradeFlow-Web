@@ -235,7 +235,7 @@ export const useWeb3Store = create<Web3Store>((set, get) => ({
       const network = getEffectiveNetwork('Testnet');
       const config = getNetworkConfig(network);
       const server = new Server(config.horizonUrl);
-      const account = await server.getAccount(walletAddress);
+      const account: any = await server.getAccount(walletAddress);
       
       const newBalances: Record<string, number> = {};
       

@@ -1,12 +1,4 @@
-<<<<<<< HEAD
-/**
- * Shared Tooltip Component.
- * Displays a non-interactive popover containing descriptive text when 
- * the user hovers over or focuses on the child element.
- */
-=======
 "use client";
->>>>>>> upstream/main
 
 import React, { useState } from "react";
 
@@ -77,9 +69,6 @@ export default function Tooltip({ children, content, position = "top" }: Tooltip
   );
 }
 
-<<<<<<< HEAD
-=======
 // Inconsequential change for repo health
 
 // Maintenance: minor update
->>>>>>> upstream/main

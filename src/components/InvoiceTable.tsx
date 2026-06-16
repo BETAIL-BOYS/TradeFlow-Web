@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import PaginationControls from './PaginationControls';
 import SkeletonRow from './SkeletonRow';
 import DataUnavailable from './DataUnavailable';
@@ -58,7 +58,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ filters }) => {
     isLoading,
     isFetching,
     error,
-  } = useQuery<InvoicesResponse>({
+  } = useQuery<any>({
     queryKey: ['invoices', currentPage, itemsPerPage, filters],
     queryFn: async () => {
       try {
@@ -77,7 +77,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ filters }) => {
         throw error;
       }
     },
-    keepPreviousData: true, // Prevents UI from flashing empty while fetching next page
+    placeholderData: keepPreviousData, // Prevents UI from flashing empty while fetching next page
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
@@ -121,7 +121,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ filters }) => {
                 <SkeletonRow key={`skeleton-${index}`} />
               ))
             ) : (
-              invoicesData?.data.map((invoice) => (
+              invoicesData?.data.map((invoice: Invoice) => (
                 <tr
                   key={invoice.id}
                   className={`border-b border-tradeflow-muted/50 hover:bg-tradeflow-muted/20 transition ${isFetching ? 'opacity-60' : ''
