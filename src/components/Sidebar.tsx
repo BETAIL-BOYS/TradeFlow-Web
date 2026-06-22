@@ -301,12 +301,7 @@ export default function Sidebar({ address, onConnect }: SidebarProps) {
               )}
 
               {address ? (
-                <div className={`flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-lg transition ${isCollapsed ? "justify-center" : ""
-                  }`}>
-                  <Wallet size={18} />
-                <div className={`flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-lg transition ${
-                  isCollapsed ? "justify-center" : ""
-                }`}>
+                <div className={`flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-lg transition ${isCollapsed ? "justify-center" : ""}`}>
                   <Icon icon={Wallet} />
                   {!isCollapsed && (
                     <>

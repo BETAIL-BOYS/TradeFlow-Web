@@ -63,24 +63,11 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ filters }) => {
     queryFn: async () => {
       const response = await fetch(`/api/invoices?${queryString}`);
       if (!response.ok) {
-        throw new Error('Failed to fetch invoices');
-      try {
-        const response = await fetch(
-          `/api/invoices?page=${currentPage}&limit=${itemsPerPage}`
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        const data = await response.json();
-        reportSuccess('/api/invoices');
-        return data;
-      } catch (err) {
-        const error = err as Error;
-        if (isBackendHealthError(error)) {
-          reportError(error, '/api/invoices');
-        }
-        throw error;
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
+      const data = await response.json();
+      reportSuccess('/api/invoices');
+      return data;
     },
     keepPreviousData: true, // Prevents UI from flashing empty while fetching next page
     staleTime: 1000 * 60 * 5, // 5 minutes

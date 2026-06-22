@@ -35,7 +35,7 @@ export default function NotFound() {
           </Link>
           
           <button
-            onClick={() => window.history.back()}
+            onClick={() => { window.history.back(); }}
             className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 px-6 py-3 rounded-full transition-colors text-white font-medium"
           >
             <Icon icon={Search} />

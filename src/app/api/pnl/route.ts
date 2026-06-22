@@ -5,7 +5,7 @@ interface PnLData {
   value: number;
 }
 
-export async function GET() {
+export function GET() {
   // Generate dummy PnL data for the last 30 days
   const data: PnLData[] = [];
   const today = new Date();

@@ -7,10 +7,10 @@
 
 import * as Sentry from "@sentry/nextjs";
 
-const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN;
+const SENTRY_DSN: string | undefined = process.env.NEXT_PUBLIC_SENTRY_DSN;
 
 Sentry.init({
-  dsn: SENTRY_DSN,
+  dsn: SENTRY_DSN ?? undefined,
   // Adjust this value in production, or use tracesSampler for greater control
   tracesSampleRate: 1,
   // Setting this option to true will print diagnostic information to the console

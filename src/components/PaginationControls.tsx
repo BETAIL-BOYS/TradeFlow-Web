@@ -75,7 +75,7 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-slate-800/30 border-t border-slate-700/50">
       <div className="text-sm text-slate-400">
-        Showing {startItem} to {endItem} of {totalItems} results
+        Showing {String(startItem)} to {String(endItem)} of {String(totalItems)} results
       </div>
       
       <div className="flex items-center gap-2">

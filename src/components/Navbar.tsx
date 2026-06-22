@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { Wallet, Copy, Check, CreditCard } from "lucide-react";
 import { showError, showSuccess } from "../lib/toast";
 
-// Corrected imports based on your actual file structure
 import NetworkSelector from "./NetworkSelector";
 import FiatOnRampModal from "./FiatOnRampModal";
 import NetworkFeeIndicator from "./ui/NetworkFeeIndicator";
@@ -76,10 +75,8 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
       <div className="flex items-center gap-4">
         <NetworkSelector />
 
-        {/* Gas Tank / Network Fee Indicator */}
         <NetworkFeeIndicator />
 
-        {/* Buy Crypto Button */}
         <button
           onClick={() => setIsFiatModalOpen(true)}
           className="flex items-center gap-2 bg-green-600 hover:bg-green-700 px-6 py-2 rounded-full transition"
@@ -90,11 +87,6 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
 
         {address ? (
           <div className="relative">
-          <div className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition">
-            <Icon icon={Wallet} />
-            <span className="text-sm">
-              {`${address.slice(0, 6)}...${address.slice(-4)}`}
-            </span>
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition"
@@ -106,7 +98,7 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  copyToClipboard();
+                  void copyToClipboard();
                 }}
                 className="ml-2 p-1 hover:bg-blue-500 rounded-full transition-colors"
                 title="Copy address"
@@ -117,14 +109,8 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
                   <Copy size={16} className="text-white" />
                 )}
               </button>
-              {copied ? (
-                <Icon icon={Check} dense className="text-green-300" />
-              ) : (
-                <Icon icon={Copy} dense className="text-white" />
-              )}
             </button>
-            
-            {/* Wallet Dropdown */}
+
             <WalletDropdown
               address={address}
               isOpen={isDropdownOpen}
@@ -132,10 +118,6 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
             />
           </div>
         ) : (
-          /* * ISSUE #108: Added `animate-pulse` to draw attention to the primary CTA.
-           * Because this button is isolated within the `false` branch of the `address` check,
-           * the animation is naturally removed when the user connects their wallet.
-           */
           <button
             onClick={onConnect}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full transition animate-pulse"
@@ -146,7 +128,6 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
         )}
       </div>
 
-      {/* Fiat On-Ramp Modal */}
       <FiatOnRampModal
         isOpen={isFiatModalOpen}
         onClose={() => setIsFiatModalOpen(false)}

@@ -23,6 +23,7 @@ export default function TokenDropdown({ onTokenChange }: TokenDropdownProps) {
   const { recentTokens, addRecentToken } = useRecentTokens();
   const { toggleWatchlist, isInWatchlist } = useWatchlist();
 
+
   // Debounce the search input with 300ms delay
   const debouncedSearch = useDebounce(searchInput, 300);
 

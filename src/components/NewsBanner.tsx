@@ -21,7 +21,7 @@ export default function NewsBanner() {
       </div>
       
       <button
-        onClick={() => setIsVisible(false)}
+        onClick={() => { setIsVisible(false); }}
         className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/80 hover:text-white transition-colors"
         aria-label="Close banner"
       >

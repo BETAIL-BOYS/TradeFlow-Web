@@ -46,6 +46,8 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
 
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   if (!shouldAnimate) {

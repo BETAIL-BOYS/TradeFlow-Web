@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 const MOCK_BASELINE_FEE = 100; // stroops
 const MOCK_CURRENT_FEE = 350; // stroops (3.5x baseline = congested)
 
-export async function GET(request: NextRequest) {
+export function GET(request: NextRequest) {
   // Simulate occasional high congestion for demo purposes
   // You can adjust this value to test the banner
   const shouldSimulateCongestion = request.nextUrl.searchParams.get('congested') === 'true';

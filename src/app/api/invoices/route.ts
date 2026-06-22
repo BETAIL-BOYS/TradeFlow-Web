@@ -28,7 +28,7 @@ const generateMockInvoices = (count: number) => {
 // Generate 10,000 mock invoices
 const ALL_INVOICES = generateMockInvoices(10000);
 
-export async function GET(request: NextRequest) {
+export function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   
   // Parse pagination parameters

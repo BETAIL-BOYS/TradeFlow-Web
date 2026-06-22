@@ -39,6 +39,8 @@ export default function NetworkSelector({ onNetworkChange }: NetworkSelectorProp
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   const handleNetworkSelect = (network: Network) => {
