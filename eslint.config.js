@@ -1,24 +1,25 @@
-const { FlatCompat } = require("@eslint/eslintrc");
+const tseslint = require('typescript-eslint');
+const nextConfig = require('eslint-config-next/core-web-vitals');
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-module.exports = [
-  ...compat.config({
-    extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
-    plugins: ["@typescript-eslint"],
+module.exports = tseslint.config(
+  ...nextConfig,
+  {
+    files: ['**/*.ts', '**/*.tsx'],
     rules: {
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-unused-vars": [
-        "warn",
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
         {
-          argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_",
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
         },
       ],
-      "react/no-unescaped-entities": "warn",
-      "react-hooks/exhaustive-deps": "warn",
     },
-  }),
-];
+  },
+  {
+    rules: {
+      'react/no-unescaped-entities': 'warn',
+      'react-hooks/exhaustive-deps': 'warn',
+    },
+  }
+);
