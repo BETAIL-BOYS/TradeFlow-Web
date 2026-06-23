@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { getInvoice, type Invoice } from "@/soroban";
+import { useState, useEffect } from 'react';
+import { getInvoice, type Invoice } from '@/soroban';
 
 /**
  * Fetches a single invoice from the Soroban contract and exposes loading/error state.

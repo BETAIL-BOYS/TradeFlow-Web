@@ -1,10 +1,10 @@
 /**
  * Slippage and Transaction Context.
- * Manages global trade constraints including slippage tolerance and 
+ * Manages global trade constraints including slippage tolerance and
  * transaction expiration deadlines.
  */
 
-"use client";
+'use client';
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
@@ -47,7 +47,7 @@ export function SlippageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const savedSlippage = localStorage.getItem('tradeflow_slippage');
     const savedDeadline = localStorage.getItem('tradeflow_deadline');
-    
+
     if (savedSlippage) setSlippageTolerance(parseFloat(savedSlippage));
     if (savedDeadline) setTransactionDeadline(parseInt(savedDeadline));
   }, []);
@@ -61,14 +61,16 @@ export function SlippageProvider({ children }: { children: ReactNode }) {
   }, [slippageTolerance, transactionDeadline]);
 
   return (
-    <SlippageContext.Provider value={{
-      slippageTolerance,
-      setSlippageTolerance,
-      isSlippageAuto,
-      setIsSlippageAuto,
-      transactionDeadline,
-      setTransactionDeadline
-    }}>
+    <SlippageContext.Provider
+      value={{
+        slippageTolerance,
+        setSlippageTolerance,
+        isSlippageAuto,
+        setIsSlippageAuto,
+        transactionDeadline,
+        setTransactionDeadline,
+      }}
+    >
       {children}
     </SlippageContext.Provider>
   );
@@ -76,7 +78,7 @@ export function SlippageProvider({ children }: { children: ReactNode }) {
 
 /**
  * Custom hook for accessing the slippage context.
- * 
+ *
  * @returns {SlippageContextType} The current context value.
  * @throws {Error} If used outside of a SlippageProvider.
  */

@@ -1,11 +1,13 @@
 # Invoice Submission Form - Implementation Demo
 
 ## Overview
+
 The enhanced `InvoiceMintForm` component now provides a comprehensive invoice submission interface for NFT minting with the following improvements:
 
 ## ✅ Implemented Features
 
 ### 1. **Enhanced Form Fields**
+
 - **Debtor Name**: Required field with validation (2-100 characters)
 - **Invoice Amount**: Number input with strict validation ($0.01 - $1,000,000)
 - **Due Date**: Date picker with future date validation
@@ -13,6 +15,7 @@ The enhanced `InvoiceMintForm` component now provides a comprehensive invoice su
 - **Supporting Document URI**: Optional URL field for additional documentation
 
 ### 2. **Advanced Validation & Sanitization**
+
 ```typescript
 // Input sanitization removes dangerous characters
 const sanitizeString = (str: string) => str.trim().replace(/[<>"'&]/g, '');
@@ -21,17 +24,19 @@ const sanitizeString = (str: string) => str.trim().replace(/[<>"'&]/g, '');
 const invoiceSchema = z.object({
   debtorName: z.string().min(2).max(100).transform(sanitizeString),
   amount: z.number().min(0.01).max(1000000),
-  dueDate: z.string().refine(date => new Date(date) > today),
+  dueDate: z.string().refine((date) => new Date(date) > today),
   // ... additional validations
 });
 ```
 
 ### 3. **Real-time Fee Calculation**
+
 - **Network Fee**: ~$0.001 (0.01 XLM at $0.10/XLM)
 - **Protocol Fee**: 0.5% of invoice amount
 - **Total Fee**: Dynamically calculated and displayed
 
 ### 4. **Enhanced Soroban Integration**
+
 ```typescript
 export interface InvoiceMetadata {
   debtorName: string;
@@ -50,6 +55,7 @@ export interface MintInvoiceParams {
 ```
 
 ### 5. **Improved User Experience**
+
 - Better visual hierarchy and spacing
 - Clear field indicators (required vs optional)
 - Real-time validation feedback
@@ -59,6 +65,7 @@ export interface MintInvoiceParams {
 ## 🔧 Technical Implementation
 
 ### Form State Management
+
 ```typescript
 const {
   register,
@@ -73,30 +80,32 @@ const {
 ```
 
 ### Fee Calculation Logic
+
 ```typescript
 useEffect(() => {
   if (watchedAmount && watchedAmount > 0) {
     const networkFeeXLM = 0.01;
-    const xlmPrice = 0.10;
+    const xlmPrice = 0.1;
     const networkFeeUSD = networkFeeXLM * xlmPrice;
     const protocolFee = watchedAmount * 0.005; // 0.5%
-    
+
     setFeeEstimate({
       networkFee: networkFeeUSD,
       protocolFee: protocolFee,
-      totalFee: networkFeeUSD + protocolFee
+      totalFee: networkFeeUSD + protocolFee,
     });
   }
 }, [watchedAmount]);
 ```
 
 ### Contract Payload Formatting
+
 ```typescript
 const formatContractPayload = (data: InvoiceFormData) => {
   const publicKey = (session?.user as any)?.publicKey;
   const amountInStroops = BigInt(Math.round(data.amount * 10_000_000));
   const invoiceId = `INV-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  
+
   return {
     invoiceId,
     amount: amountInStroops,
@@ -106,21 +115,21 @@ const formatContractPayload = (data: InvoiceFormData) => {
       debtorName: data.debtorName,
       dueDate: data.dueDate,
       supportingDocumentUri: data.supportingDocumentUri || null,
-      timestamp: Date.now()
-    }
+      timestamp: Date.now(),
+    },
   };
 };
 ```
 
 ## 📋 Validation Rules
 
-| Field | Validation | Error Message |
-|-------|------------|---------------|
-| Debtor Name | 2-100 chars, sanitized | "Debtor name must be at least 2 characters" |
-| Amount | 0.01-1,000,000 USD | "Amount must be greater than 0" |
-| Due Date | Future dates only | "Due date must be in the future" |
-| Invoice File | PDF, max 5MB | "Only PDF files are allowed" |
-| Supporting URI | Valid URL format | "Must be a valid URL" |
+| Field          | Validation             | Error Message                               |
+| -------------- | ---------------------- | ------------------------------------------- |
+| Debtor Name    | 2-100 chars, sanitized | "Debtor name must be at least 2 characters" |
+| Amount         | 0.01-1,000,000 USD     | "Amount must be greater than 0"             |
+| Due Date       | Future dates only      | "Due date must be in the future"            |
+| Invoice File   | PDF, max 5MB           | "Only PDF files are allowed"                |
+| Supporting URI | Valid URL format       | "Must be a valid URL"                       |
 
 ## 🎯 Acceptance Criteria Met
 
@@ -129,7 +138,7 @@ const formatContractPayload = (data: InvoiceFormData) => {
 ✅ **Fee calculation and display** - Real-time network + protocol fees  
 ✅ **Soroban payload formatting** - Perfect contract integration  
 ✅ **react-hook-form + zod** - Form state and validation schema  
-✅ **Input sanitization** - Security-focused data cleaning  
+✅ **Input sanitization** - Security-focused data cleaning
 
 ## 🚀 Usage Example
 
@@ -141,12 +150,7 @@ function InvoiceSubmission() {
     console.log('Transaction successful:', txStatus);
   };
 
-  return (
-    <InvoiceMintForm
-      onClose={() => console.log('Form closed')}
-      onSuccess={handleSuccess}
-    />
-  );
+  return <InvoiceMintForm onClose={() => console.log('Form closed')} onSuccess={handleSuccess} />;
 }
 ```
 

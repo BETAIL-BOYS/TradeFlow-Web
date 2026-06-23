@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { connectWallet, WalletType } from "@/lib/stellar";
-import  Navbar from "@/components/Navbar";
-import WalletModal from "@/components/WalletModal";
-import { SwapCard } from "@/components/SwapCard";
-import WalletNotConnected from "@/components/WalletNotConnected";
+import React, { useState } from 'react';
+import { connectWallet, WalletType } from '@/lib/stellar';
+import Navbar from '@/components/Navbar';
+import WalletModal from '@/components/WalletModal';
+import { SwapCard } from '@/components/SwapCard';
+import WalletNotConnected from '@/components/WalletNotConnected';
 
 export default function SwapPage() {
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleConnectWallet = async (walletType: WalletType) => {
@@ -18,8 +18,8 @@ export default function SwapPage() {
         setAddress(userInfo.publicKey);
       }
     } catch (e: any) {
-      console.error("Connection failed:", e.message);
-      alert(e.message || "Failed to connect to wallet.");
+      console.error('Connection failed:', e.message);
+      alert(e.message || 'Failed to connect to wallet.');
     }
   };
 

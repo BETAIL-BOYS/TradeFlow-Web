@@ -6,14 +6,14 @@ import type {
   InvoicesResponse,
   PnlResponse,
   RiskScoreResponse,
-} from "../../types/api";
+} from '../../types/api';
 import {
   isHealthResponse,
   isInvoicesResponse,
   isPnlResponse,
   isRiskScoreResponse,
-} from "../../types/api";
-import { httpClient, normalizeHttpError } from "./httpClient";
+} from '../../types/api';
+import { httpClient, normalizeHttpError } from './httpClient';
 
 /**
  * Converts Axios headers object to a plain Record<string, string>.
@@ -23,10 +23,10 @@ function toHeadersRecord(headers: any): Record<string, string> {
   const out: Record<string, string> = {};
   if (!headers) return out;
   for (const [key, value] of Object.entries(headers)) {
-    if (Array.isArray(value)) out[key] = value.join(", ");
-    else if (typeof value === "string") out[key] = value;
-    else if (typeof value === "number") out[key] = String(value);
-    else if (typeof value === "boolean") out[key] = value ? "true" : "false";
+    if (Array.isArray(value)) out[key] = value.join(', ');
+    else if (typeof value === 'string') out[key] = value;
+    else if (typeof value === 'number') out[key] = String(value);
+    else if (typeof value === 'boolean') out[key] = value ? 'true' : 'false';
   }
   return out;
 }
@@ -70,7 +70,7 @@ export interface RequestOptions {
  */
 export async function getHealth(options: RequestOptions = {}): Promise<ApiResult<HealthResponse>> {
   try {
-    const res = await httpClient.get("/health", { signal: options.signal });
+    const res = await httpClient.get('/health', { signal: options.signal });
     const data: unknown = res.data;
 
     if (!isHealthResponse(data)) {
@@ -78,7 +78,7 @@ export async function getHealth(options: RequestOptions = {}): Promise<ApiResult
         ok: false,
         status: asStatusCode(res.status),
         headers: toHeadersRecord(res.headers),
-        error: { message: "Invalid /health response shape", details: data },
+        error: { message: 'Invalid /health response shape', details: data },
       };
     }
 
@@ -101,15 +101,15 @@ export async function getHealth(options: RequestOptions = {}): Promise<ApiResult
  * @returns ApiResult<RiskScoreResponse> with standardized success/error formatting.
  */
 export async function getRiskScore(
-  invoiceId: GetRiskScoreParams["invoiceId"],
-  options: RequestOptions = {},
+  invoiceId: GetRiskScoreParams['invoiceId'],
+  options: RequestOptions = {}
 ): Promise<ApiResult<RiskScoreResponse>> {
   if (!isSafeInvoiceId(invoiceId)) {
-    return badRequest("Invalid invoiceId. Expected 1-128 chars: letters, numbers, . _ : -");
+    return badRequest('Invalid invoiceId. Expected 1-128 chars: letters, numbers, . _ : -');
   }
 
   try {
-    const res = await httpClient.get("/v1/risk", {
+    const res = await httpClient.get('/v1/risk', {
       signal: options.signal,
       params: { invoiceId },
     });
@@ -120,7 +120,7 @@ export async function getRiskScore(
         ok: false,
         status: asStatusCode(res.status),
         headers: toHeadersRecord(res.headers),
-        error: { message: "Invalid /v1/risk response shape", details: data },
+        error: { message: 'Invalid /v1/risk response shape', details: data },
       };
     }
 
@@ -141,9 +141,11 @@ export async function getRiskScore(
  *
  * @returns ApiResult<InvoicesResponse> with standardized success/error formatting.
  */
-export async function getInvoices(options: RequestOptions = {}): Promise<ApiResult<InvoicesResponse>> {
+export async function getInvoices(
+  options: RequestOptions = {}
+): Promise<ApiResult<InvoicesResponse>> {
   try {
-    const res = await httpClient.get("/api/invoices", { signal: options.signal });
+    const res = await httpClient.get('/api/invoices', { signal: options.signal });
     const data: unknown = res.data;
 
     if (!isInvoicesResponse(data)) {
@@ -151,7 +153,7 @@ export async function getInvoices(options: RequestOptions = {}): Promise<ApiResu
         ok: false,
         status: asStatusCode(res.status),
         headers: toHeadersRecord(res.headers),
-        error: { message: "Invalid /invoices response shape", details: data },
+        error: { message: 'Invalid /invoices response shape', details: data },
       };
     }
 
@@ -174,7 +176,7 @@ export async function getInvoices(options: RequestOptions = {}): Promise<ApiResu
  */
 export async function getPnl(options: RequestOptions = {}): Promise<ApiResult<PnlResponse>> {
   try {
-    const res = await httpClient.get("/api/pnl", { signal: options.signal });
+    const res = await httpClient.get('/api/pnl', { signal: options.signal });
     const data: unknown = res.data;
 
     if (!isPnlResponse(data)) {
@@ -182,7 +184,7 @@ export async function getPnl(options: RequestOptions = {}): Promise<ApiResult<Pn
         ok: false,
         status: asStatusCode(res.status),
         headers: toHeadersRecord(res.headers),
-        error: { message: "Invalid /api/pnl response shape", details: data },
+        error: { message: 'Invalid /api/pnl response shape', details: data },
       };
     }
 

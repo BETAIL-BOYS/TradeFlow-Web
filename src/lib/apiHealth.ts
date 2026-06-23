@@ -103,7 +103,7 @@ export function isBackendHealthError(error: Error): boolean {
     'service unavailable',
   ];
 
-  return networkErrors.some(networkError => message.includes(networkError));
+  return networkErrors.some((networkError) => message.includes(networkError));
 }
 
 /**
@@ -113,7 +113,7 @@ export function isBackendHealthError(error: Error): boolean {
  */
 export function createQueryErrorHandler(reportError: (error: Error, endpoint?: string) => void) {
   return (error: Error, query: any) => {
-    const endpoint = query.queryKey?.[0] as string || 'unknown';
+    const endpoint = (query.queryKey?.[0] as string) || 'unknown';
 
     if (isBackendHealthError(error)) {
       reportError(error, endpoint);

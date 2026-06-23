@@ -55,7 +55,7 @@ export function getCachedWalletConnection(): WalletConnectionState {
     }
 
     const cache: WalletConnectionCache = JSON.parse(cached);
-    
+
     // Check version compatibility
     if (cache.version !== CACHE_VERSION) {
       clearWalletCache();

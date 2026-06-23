@@ -1,4 +1,4 @@
-import { NetworkType } from "../stores/useWeb3Store";
+import { NetworkType } from '../stores/useWeb3Store';
 
 export interface NetworkConfig {
   name: string;
@@ -57,10 +57,10 @@ const NETWORK_OVERRIDE_KEY = 'tradeflow_network_override';
  */
 export function getNetworkOverride(): NetworkType | null {
   if (typeof window === 'undefined' || !isDevelopment()) return null;
-  
+
   try {
     const override = localStorage.getItem(NETWORK_OVERRIDE_KEY);
-    return override as NetworkType || null;
+    return (override as NetworkType) || null;
   } catch (error) {
     console.warn('Failed to read network override:', error);
     return null;
@@ -73,7 +73,7 @@ export function getNetworkOverride(): NetworkType | null {
  */
 export function setNetworkOverride(network: NetworkType): void {
   if (typeof window === 'undefined' || !isDevelopment()) return;
-  
+
   try {
     localStorage.setItem(NETWORK_OVERRIDE_KEY, network);
   } catch (error) {
@@ -86,7 +86,7 @@ export function setNetworkOverride(network: NetworkType): void {
  */
 export function clearNetworkOverride(): void {
   if (typeof window === 'undefined' || !isDevelopment()) return;
-  
+
   try {
     localStorage.removeItem(NETWORK_OVERRIDE_KEY);
   } catch (error) {

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react';
 import { useWatchlist } from '../hooks/useWatchlist';
@@ -13,7 +13,7 @@ interface WatchlistTabProps {
 export default function WatchlistTab({ className = '' }: WatchlistTabProps) {
   const { watchlist, removeFromWatchlist, isInWatchlist } = useWatchlist();
 
-  const watchlistTokens = allTokens.filter(token => isInWatchlist(token));
+  const watchlistTokens = allTokens.filter((token) => isInWatchlist(token));
 
   if (watchlistTokens.length === 0) {
     return (
@@ -66,17 +66,23 @@ export default function WatchlistTab({ className = '' }: WatchlistTabProps) {
                   <p className="text-tradeflow-muted text-xs">Stellar Asset</p>
                 </div>
               </div>
-              <StarIcon
-                isStarred={true}
-                onClick={() => removeFromWatchlist(token)}
-              />
+              <StarIcon isStarred={true} onClick={() => removeFromWatchlist(token)} />
             </div>
 
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <span className="text-tradeflow-muted text-sm">Price</span>
                 <span className="text-white font-medium">
-                  ${token === 'XLM' ? '0.12' : token === 'USDC' ? '1.00' : token === 'yXLM' ? '0.13' : token === 'ETH' ? '2,234' : '1.08'}
+                  $
+                  {token === 'XLM'
+                    ? '0.12'
+                    : token === 'USDC'
+                      ? '1.00'
+                      : token === 'yXLM'
+                        ? '0.13'
+                        : token === 'ETH'
+                          ? '2,234'
+                          : '1.08'}
                 </span>
               </div>
               <div className="flex justify-between items-center">
@@ -86,7 +92,16 @@ export default function WatchlistTab({ className = '' }: WatchlistTabProps) {
               <div className="flex justify-between items-center">
                 <span className="text-tradeflow-muted text-sm">Volume</span>
                 <span className="text-white text-sm">
-                  ${token === 'XLM' ? '1.2M' : token === 'USDC' ? '45.6M' : token === 'yXLM' ? '890K' : token === 'ETH' ? '123M' : '2.1M'}
+                  $
+                  {token === 'XLM'
+                    ? '1.2M'
+                    : token === 'USDC'
+                      ? '45.6M'
+                      : token === 'yXLM'
+                        ? '890K'
+                        : token === 'ETH'
+                          ? '123M'
+                          : '2.1M'}
                 </span>
               </div>
             </div>

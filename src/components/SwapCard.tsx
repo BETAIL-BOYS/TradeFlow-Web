@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import { ArrowDown, RefreshCw } from 'lucide-react';
@@ -26,28 +26,29 @@ export const SwapCard = () => {
         aria-label="Refresh data"
         disabled={isRefreshing}
       >
-        <Icon 
-          icon={RefreshCw}
-          className={isRefreshing ? "animate-spin text-blue-600" : ""} 
-        />
+        <Icon icon={RefreshCw} className={isRefreshing ? 'animate-spin text-blue-600' : ''} />
       </button>
 
       <div className="flex flex-col gap-1 mt-6">
         <TokenInput label="From" value="" tokenSymbol="XLM" onSelectClick={() => {}} />
-...
+        ...
         <div className="relative h-2 flex items-center justify-center z-10">
           {/* Swap Arrow Button - Increased padding to p-3 for mobile tap targets (#103) */}
-          <button 
+          <button
             className="rounded-xl border-4 border-white bg-gray-50 p-3 text-blue-600 hover:bg-blue-50 transition-all active:scale-90 shadow-sm"
             aria-label="Swap directions"
           >
             <Icon icon={ArrowDown} />
           </button>
         </div>
-
-        <TokenInput label="To (estimated)" value="" tokenSymbol="Select token" onSelectClick={() => {}} />
+        <TokenInput
+          label="To (estimated)"
+          value=""
+          tokenSymbol="Select token"
+          onSelectClick={() => {}}
+        />
       </div>
-      
+
       <button className="mt-4 w-full rounded-2xl bg-blue-600 py-4 text-lg font-bold text-white hover:bg-blue-700 transition-colors">
         Connect Wallet
       </button>

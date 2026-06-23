@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import React from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface PaginationProps {
   currentPage: number;
@@ -39,12 +39,15 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
       <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
         <div>
           <p className="text-sm text-slate-400">
-            Showing page <span className="font-medium text-white">{currentPage}</span> of{" "}
+            Showing page <span className="font-medium text-white">{currentPage}</span> of{' '}
             <span className="font-medium text-white">{totalPages}</span>
           </p>
         </div>
         <div>
-          <nav className="relative z-0 inline-flex rounded-xl shadow-sm -space-x-px" aria-label="Pagination">
+          <nav
+            className="relative z-0 inline-flex rounded-xl shadow-sm -space-x-px"
+            aria-label="Pagination"
+          >
             <button
               onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
               disabled={currentPage === 1}
@@ -53,16 +56,16 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
               <span className="sr-only">Previous</span>
               <ChevronLeft className="h-5 w-5" aria-hidden="true" />
             </button>
-            
+
             {getPageNumbers().map((page) => (
               <button
                 key={page}
                 onClick={() => onPageChange(page)}
-                aria-current={currentPage === page ? "page" : undefined}
+                aria-current={currentPage === page ? 'page' : undefined}
                 className={`relative inline-flex items-center px-4 py-2 border border-slate-700 text-sm font-medium transition-all ${
                   currentPage === page
-                    ? "z-10 bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-900/20"
-                    : "bg-slate-800 text-slate-400 hover:bg-slate-700"
+                    ? 'z-10 bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-900/20'
+                    : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                 }`}
               >
                 {page}

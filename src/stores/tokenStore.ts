@@ -1,6 +1,6 @@
 /**
  * Token Management Store.
- * Handles tracking of the native TradeFlow (TF) utility token, 
+ * Handles tracking of the native TradeFlow (TF) utility token,
  * including balances, pro-mode access levels, and connection status.
  */
 
@@ -41,20 +41,20 @@ interface TokenStore {
   isLoading: boolean;
   /** Error message if a balance fetch fails */
   error: string | null;
-  
+
   /**
    * Fetches the TF token balance for a specific public key from the network.
    * @param {string} publicKey - The Stellar address to query.
    */
   fetchTokenBalance: (publicKey: string) => Promise<void>;
-  
+
   /**
    * Updates the connection status and triggers a balance refresh if connecting.
    * @param {boolean} connected - The new connection state.
    * @param {string} [publicKey] - The address of the connecting wallet.
    */
   setConnected: (connected: boolean, publicKey?: string) => void;
-  
+
   /**
    * Evaluates if the current user has enough TF tokens to access Pro Mode.
    * @returns {boolean} True if the threshold is met.
@@ -78,43 +78,43 @@ export const useTokenStore = create<TokenStore>((set, get) => ({
    */
   fetchTokenBalance: async (publicKey: string) => {
     set({ isLoading: true, error: null });
-    
+
     try {
       // Connect to the Soroban Testnet Horizon server
       const server = new Server('https://soroban-testnet.stellar.org');
-      
+
       try {
         // 1. Retrieve the account details
         const account: any = await server.getAccount(publicKey);
         const tfAsset = new Asset(TF_TOKEN_CODE, TF_TOKEN_ISSUER);
-        
+
         // 2. Locate the TF token in the account's balances array
-        const tfBalance = account.balances.find((balance: any) => 
-          balance.asset_code === TF_TOKEN_CODE && 
-          balance.asset_issuer === TF_TOKEN_ISSUER
+        const tfBalance = account.balances.find(
+          (balance: any) =>
+            balance.asset_code === TF_TOKEN_CODE && balance.asset_issuer === TF_TOKEN_ISSUER
         );
-        
+
         // 3. Parse and update the balance state
         const balance = tfBalance ? parseFloat(tfBalance.balance) : 0;
-        
-        set({ 
+
+        set({
           tfTokenBalance: balance,
-          isLoading: false 
+          isLoading: false,
         });
       } catch (error) {
         // Fallback: If account is not found or has no trustline, balance is 0
-        set({ 
+        set({
           tfTokenBalance: 0,
           isLoading: false,
-          error: 'Unable to fetch token balance'
+          error: 'Unable to fetch token balance',
         });
       }
     } catch (error) {
       console.error('[TokenStore] Critical error fetching balance:', error);
-      set({ 
+      set({
         tfTokenBalance: 0,
         isLoading: false,
-        error: 'Failed to connect to network'
+        error: 'Failed to connect to network',
       });
     }
   },
@@ -123,12 +123,12 @@ export const useTokenStore = create<TokenStore>((set, get) => ({
    * Updates the global connection state and manages balance refresh.
    */
   setConnected: (connected: boolean, publicKey?: string) => {
-    set({ 
+    set({
       isConnected: connected,
       publicKey: publicKey || null,
-      error: null
+      error: null,
     });
-    
+
     // Auto-fetch balance on successful connection
     if (connected && publicKey) {
       get().fetchTokenBalance(publicKey);
@@ -144,7 +144,7 @@ export const useTokenStore = create<TokenStore>((set, get) => ({
   hasProModeAccess: () => {
     const { tfTokenBalance, isConnected } = get();
     return isConnected && tfTokenBalance >= PRO_MODE_THRESHOLD;
-  }
+  },
 }));
 
 /**
@@ -156,6 +156,5 @@ export const TF_TOKEN_INFO = {
   issuer: TF_TOKEN_ISSUER,
   name: 'TradeFlow Token',
   description: 'Utility token for the TradeFlow ecosystem.',
-  symbol: 'TF'
+  symbol: 'TF',
 };
-

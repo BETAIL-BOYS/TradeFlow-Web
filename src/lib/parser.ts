@@ -1,10 +1,10 @@
 /**
  * XDR Parsing and Serialization Utilities.
- * Handles conversion between Stellar's External Data Representation (XDR) 
+ * Handles conversion between Stellar's External Data Representation (XDR)
  * and native JavaScript objects for the TradeFlow smart contracts.
  */
 
-import { xdr, scValToNative } from "soroban-client";
+import { xdr, scValToNative } from 'soroban-client';
 
 /**
  * Structured data representation of a TradeFlow Invoice.
@@ -19,7 +19,7 @@ export interface Invoice {
 }
 
 /**
- * Parses a Base64-encoded XDR string returned by a Soroban smart contract call 
+ * Parses a Base64-encoded XDR string returned by a Soroban smart contract call
  * (specifically the 'get_invoice' method) and converts it into a structured Invoice object.
  *
  * @param {string} xdrBase64 - The Base64-encoded ScVal XDR string from the network.
@@ -29,7 +29,7 @@ export interface Invoice {
 export function parseInvoiceFromXdr(xdrBase64: string): Invoice {
   // 1. Basic validation of input string
   if (!xdrBase64 || typeof xdrBase64 !== 'string') {
-    throw new Error("Invalid input: xdrBase64 must be a non-empty string.");
+    throw new Error('Invalid input: xdrBase64 must be a non-empty string.');
   }
 
   try {
@@ -49,18 +49,18 @@ export function parseInvoiceFromXdr(xdrBase64: string): Invoice {
 
     // In some SDK versions, ScMap/Struct returns a native Map
     if (nativeValue instanceof Map) {
-         nativeValue.forEach((val: any, key: any) => {
-             invoiceData[String(key)] = val;
-         });
+      nativeValue.forEach((val: any, key: any) => {
+        invoiceData[String(key)] = val;
+      });
     } else {
-         invoiceData = nativeValue as Record<string, any>;
+      invoiceData = nativeValue as Record<string, any>;
     }
 
     // 5. Transform and strictly validate fields
     const result: Invoice = {
       id: 0,
       owner: '',
-      amount: 0
+      amount: 0,
     };
 
     /**
@@ -73,32 +73,36 @@ export function parseInvoiceFromXdr(xdrBase64: string): Invoice {
       if (typeof val === 'bigint') {
         // Log warning if bigint exceeds JavaScript's safe integer range
         if (val > BigInt(Number.MAX_SAFE_INTEGER) || val < BigInt(Number.MIN_SAFE_INTEGER)) {
-           console.warn(`[TradeFlow] Precision warning: Value for '${fieldName}' (${val}) exceeds Number.MAX_SAFE_INTEGER.`);
+          console.warn(
+            `[TradeFlow] Precision warning: Value for '${fieldName}' (${val}) exceeds Number.MAX_SAFE_INTEGER.`
+          );
         }
         return Number(val);
       }
       if (typeof val === 'string') {
         const num = Number(val);
         if (isNaN(num)) {
-             throw new Error(`Invalid number format for field '${fieldName}': ${val}`);
+          throw new Error(`Invalid number format for field '${fieldName}': ${val}`);
         }
         return num;
       }
-      throw new Error(`Invalid type for field '${fieldName}': expected number or bigint, got ${typeof val}`);
+      throw new Error(
+        `Invalid type for field '${fieldName}': expected number or bigint, got ${typeof val}`
+      );
     };
 
     /**
      * Ensures a value is treated as a string, handling Address objects if necessary.
      */
     const safelyConvertToString = (val: any, fieldName: string): string => {
-        if (typeof val === 'string') {
-            return val;
-        }
-        // Soroban Address types might return an object with a toString() method
-        if (val && typeof val.toString === 'function') {
-            return val.toString();
-        }
-        throw new Error(`Invalid type for field '${fieldName}': expected string, got ${typeof val}`);
+      if (typeof val === 'string') {
+        return val;
+      }
+      // Soroban Address types might return an object with a toString() method
+      if (val && typeof val.toString === 'function') {
+        return val.toString();
+      }
+      throw new Error(`Invalid type for field '${fieldName}': expected string, got ${typeof val}`);
     };
 
     // Verify presence of all required struct fields
@@ -112,13 +116,15 @@ export function parseInvoiceFromXdr(xdrBase64: string): Invoice {
     result.amount = safelyConvertToNumber(invoiceData.amount, 'amount');
 
     return result;
-
   } catch (error: any) {
     // Propagate validation errors directly, wrap others with context
-    if (error.message && (error.message.startsWith('Invalid input') || error.message.startsWith('Missing required'))) {
+    if (
+      error.message &&
+      (error.message.startsWith('Invalid input') || error.message.startsWith('Missing required'))
+    ) {
       throw error;
     }
-    
+
     throw new Error(`Failed to parse Invoice from XDR: ${error.message}`);
   }
 }
@@ -126,15 +132,12 @@ export function parseInvoiceFromXdr(xdrBase64: string): Invoice {
 /**
  * A safe alternative to JSON.stringify that handles BigInt values.
  * BigInt is commonly used in Stellar SDKs for large numeric values.
- * 
+ *
  * @param {any} obj - The object to stringify.
  * @returns {string} The JSON string representation.
  */
 export function safeJsonStringify(obj: any): string {
   return JSON.stringify(obj, (key, value) =>
-    typeof value === 'bigint'
-      ? value.toString()
-      : value
+    typeof value === 'bigint' ? value.toString() : value
   );
 }
-

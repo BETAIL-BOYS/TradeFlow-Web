@@ -11,7 +11,7 @@ export interface SignatureState {
     fromToken?: string;
     toToken?: string;
   } | null;
-  
+
   // Actions
   startSigning: (message?: string, details?: SignatureState['transactionDetails']) => void;
   stopSigning: () => void;

@@ -33,6 +33,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={inter.variable}>
       <body className="font-sans antialiased">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-background focus:text-primary"
+        >
+          Skip to Content
+        </a>
         <ErrorBoundary>
           <ThemeProvider>
             <SettingsProvider>
@@ -48,6 +54,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         <PageTransition>{children}</PageTransition>
                         <SignatureOverlay />
                         <SessionTimeoutProvider />
+                        <main id="main-content">
+                          <PageTransition>{children}</PageTransition>
+                        </main>
+                        <SignatureOverlay />
                         <Footer />
                       </SlippageProvider>
                     </NetworkCongestionProvider>

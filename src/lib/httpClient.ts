@@ -5,63 +5,9 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
   InternalAxiosRequestConfig,
-} from "axios";
-import { getApiBaseUrl } from "./env";
-import type { ApiErrorDetails, ApiStatusCode } from "../../types/api";
-
-const AUTH_TOKEN_STORAGE_KEY = "tradeflow_auth_token";
-
-let inMemoryAuthToken: string | null = null;
-
-export interface SetAuthTokenOptions {
-  persist?: "memory" | "session";
-}
-
-/**
- * Stores the auth token in memory and optionally in sessionStorage.
- * @param token - The token to store, or null to clear.
- * @param options - Persistence strategy (memory or session).
- */
-export function setAuthToken(token: string | null, options: SetAuthTokenOptions = {}): void {
-  const { persist = "session" } = options;
-  inMemoryAuthToken = token;
-
-  if (typeof window === "undefined") return;
-
-  try {
-    if (persist === "session") {
-      if (token) window.sessionStorage.setItem(AUTH_TOKEN_STORAGE_KEY, token);
-      else window.sessionStorage.removeItem(AUTH_TOKEN_STORAGE_KEY);
-    } else {
-      if (!token) window.sessionStorage.removeItem(AUTH_TOKEN_STORAGE_KEY);
-    }
-  } catch {
-    return;
-  }
-}
-
-/**
- * Retrieves the stored auth token from memory or sessionStorage.
- * @returns The auth token string, or null.
- */
-export function getAuthToken(): string | null {
-  if (inMemoryAuthToken) return inMemoryAuthToken;
-  if (typeof window === "undefined") return null;
-
-  try {
-    const token = window.sessionStorage.getItem(AUTH_TOKEN_STORAGE_KEY);
-    return token || null;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Clears the stored auth token from memory and sessionStorage.
- */
-export function clearAuthToken(): void {
-  setAuthToken(null);
-}
+} from 'axios';
+import { getApiBaseUrl } from './env';
+import type { ApiErrorDetails, ApiStatusCode } from '../../types/api';
 
 export interface HttpClientOptions {
   baseURL?: string;
@@ -72,8 +18,8 @@ export interface HttpClientOptions {
 type RetryableConfig = AxiosRequestConfig & { __retryCount?: number };
 
 function isIdempotentMethod(method?: string): boolean {
-  const m = (method || "GET").toUpperCase();
-  return m === "GET" || m === "HEAD" || m === "OPTIONS";
+  const m = (method || 'GET').toUpperCase();
+  return m === 'GET' || m === 'HEAD' || m === 'OPTIONS';
 }
 
 function shouldRetry(error: AxiosError, config: RetryableConfig, maxRetries: number): boolean {
@@ -98,7 +44,7 @@ function getBackoffDelayMs(retryCount: number): number {
 function sleep(ms: number, signal?: AbortSignal): Promise<void> {
   return new Promise((resolve, reject) => {
     if (signal?.aborted) {
-      reject(new DOMException("Request aborted", "AbortError"));
+      reject(new DOMException('Request aborted', 'AbortError'));
       return;
     }
 
@@ -109,26 +55,26 @@ function sleep(ms: number, signal?: AbortSignal): Promise<void> {
 
     const onAbort = () => {
       cleanup();
-      reject(new DOMException("Request aborted", "AbortError"));
+      reject(new DOMException('Request aborted', 'AbortError'));
     };
 
     const cleanup = () => {
       clearTimeout(timer);
-      signal?.removeEventListener("abort", onAbort);
+      signal?.removeEventListener('abort', onAbort);
     };
 
-    signal?.addEventListener("abort", onAbort);
+    signal?.addEventListener('abort', onAbort);
   });
 }
 
-function toPlainHeaders(headers: AxiosResponse["headers"]): Record<string, string> {
+function toPlainHeaders(headers: AxiosResponse['headers']): Record<string, string> {
   const out: Record<string, string> = {};
   if (!headers) return out;
   for (const [key, value] of Object.entries(headers)) {
-    if (Array.isArray(value)) out[key] = value.join(", ");
-    else if (typeof value === "string") out[key] = value;
-    else if (typeof value === "number") out[key] = String(value);
-    else if (typeof value === "boolean") out[key] = value ? "true" : "false";
+    if (Array.isArray(value)) out[key] = value.join(', ');
+    else if (typeof value === 'string') out[key] = value;
+    else if (typeof value === 'number') out[key] = String(value);
+    else if (typeof value === 'boolean') out[key] = value ? 'true' : 'false';
   }
   return out;
 }
@@ -145,7 +91,7 @@ export function normalizeHttpError(error: unknown): {
   headers?: Record<string, string>;
 } {
   if (!axios.isAxiosError(error)) {
-    return { error: { message: error instanceof Error ? error.message : "Unknown error" } };
+    return { error: { message: error instanceof Error ? error.message : 'Unknown error' } };
   }
 
   const axiosError = error as AxiosError;
@@ -153,12 +99,12 @@ export function normalizeHttpError(error: unknown): {
   const headers = axiosError.response ? toPlainHeaders(axiosError.response.headers) : undefined;
 
   const message =
-    (typeof axiosError.response?.data === "object" &&
+    (typeof axiosError.response?.data === 'object' &&
       axiosError.response?.data &&
-      "error" in (axiosError.response.data as any) &&
+      'error' in (axiosError.response.data as any) &&
       (axiosError.response.data as any).error?.message) ||
     axiosError.message ||
-    "Request failed";
+    'Request failed';
 
   return {
     status,
@@ -171,8 +117,9 @@ export function normalizeHttpError(error: unknown): {
 }
 
 /**
- * Creates a configured Axios instance with auth interceptors, retry logic,
- * and JSON response transformation.
+ * Creates a configured Axios instance with cookie-based auth, retry logic,
+ * and JSON response transformation. withCredentials ensures the browser
+ * automatically attaches the HttpOnly auth cookie on every request.
  * @param options - Optional overrides for base URL, timeout, and retries.
  * @returns A configured AxiosInstance.
  */
@@ -184,14 +131,15 @@ export function createHttpClient(options: HttpClientOptions = {}): AxiosInstance
   const instance = axios.create({
     baseURL,
     timeout,
+    withCredentials: true,
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
     transformResponse: [
       ...(axios.defaults.transformResponse as any),
       (data: any) => {
-        if (typeof data !== "string") return data;
+        if (typeof data !== 'string') return data;
         const trimmed = data.trim();
         if (!trimmed) return data;
         try {
@@ -204,19 +152,10 @@ export function createHttpClient(options: HttpClientOptions = {}): AxiosInstance
   });
 
   instance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-    const token = getAuthToken();
-    if (token) {
-      if (!config.headers) {
-        config.headers = new AxiosHeaders();
-      }
-      config.headers.set("Authorization", `Bearer ${token}`);
-    }
-
     if (!config.headers) {
       config.headers = new AxiosHeaders();
     }
-    config.headers.set("X-Requested-With", "XMLHttpRequest");
-
+    config.headers.set('X-Requested-With', 'XMLHttpRequest');
     return config;
   });
 
@@ -226,13 +165,13 @@ export function createHttpClient(options: HttpClientOptions = {}): AxiosInstance
       const config = (error.config || {}) as RetryableConfig;
 
       // Show user-friendly error toast when retries are exhausted for 429
-      if (error.response?.status === 429 &&
-        (config.__retryCount ?? 0) >= maxRetries) {
+      if (error.response?.status === 429 && (config.__retryCount ?? 0) >= maxRetries) {
         // Dynamic import to avoid server-side rendering issues
         if (typeof window !== 'undefined') {
           import('sonner').then(({ toast }) => {
             toast.error('Server is busy, please try again later', {
-              description: 'The server is experiencing high traffic. Please wait a moment and retry.',
+              description:
+                'The server is experiencing high traffic. Please wait a moment and retry.',
               duration: 5000,
             });
           });
@@ -246,7 +185,7 @@ export function createHttpClient(options: HttpClientOptions = {}): AxiosInstance
       config.__retryCount = (config.__retryCount ?? 0) + 1;
       await sleep(getBackoffDelayMs(config.__retryCount), config.signal as AbortSignal);
       return instance.request(config);
-    },
+    }
   );
 
   return instance;

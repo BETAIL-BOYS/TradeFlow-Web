@@ -1,6 +1,6 @@
 /**
  * Watchlist Management Hook.
- * Handles the persistence and state of a user's token watchlist 
+ * Handles the persistence and state of a user's token watchlist
  * using browser localStorage.
  */
 
@@ -11,7 +11,7 @@ const WATCHLIST_STORAGE_KEY = 'tradeflow-watchlist';
 
 /**
  * Custom hook for interacting with the token watchlist.
- * 
+ *
  * @returns {object} An object containing the watchlist state and management functions.
  */
 export function useWatchlist() {
@@ -56,7 +56,7 @@ export function useWatchlist() {
    * @param {string} tokenSymbol - The symbol of the token (e.g., "XLM").
    */
   const addToWatchlist = (tokenSymbol: string) => {
-    setWatchlist(prev => {
+    setWatchlist((prev) => {
       if (prev.includes(tokenSymbol)) {
         return prev; // No-op if already present
       }
@@ -69,7 +69,7 @@ export function useWatchlist() {
    * @param {string} tokenSymbol - The symbol of the token to remove.
    */
   const removeFromWatchlist = (tokenSymbol: string) => {
-    setWatchlist(prev => prev.filter(token => token !== tokenSymbol));
+    setWatchlist((prev) => prev.filter((token) => token !== tokenSymbol));
   };
 
   /**

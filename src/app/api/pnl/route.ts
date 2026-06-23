@@ -24,22 +24,22 @@ export async function GET() {
   // Generate mock PnL data for the last 30 days
   const data: PnLData[] = [];
   const today = new Date();
-  
+
   // Starting seed value for the simulation
-  let currentValue = 10000; 
-  
+  let currentValue = 10000;
+
   for (let i = 29; i >= 0; i--) {
     const date = new Date(today);
     date.setDate(date.getDate() - i);
-    
+
     // Simulate a random walk with a slight positive bias (0.45 instead of 0.50)
     // and a volatility factor of 200
     const change = (Math.random() - 0.45) * 200;
     currentValue += change;
-    
+
     data.push({
       date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-      value: Math.round(currentValue * 100) / 100
+      value: Math.round(currentValue * 100) / 100,
     });
   }
 

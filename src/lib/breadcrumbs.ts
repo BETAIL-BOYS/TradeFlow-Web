@@ -16,15 +16,15 @@ export function formatPathSegment(segment: string): string {
 
   // Special cases for common path segments
   const specialCases: Record<string, string> = {
-    'rwa': 'RWA',
-    'nft': 'NFT',
-    'id': 'ID',
-    'faq': 'FAQ',
-    'usdc': 'USDC',
-    'yxml': 'yXLM',
-    'api': 'API',
-    'ui': 'UI',
-    'ux': 'UX',
+    rwa: 'RWA',
+    nft: 'NFT',
+    id: 'ID',
+    faq: 'FAQ',
+    usdc: 'USDC',
+    yxml: 'yXLM',
+    api: 'API',
+    ui: 'UI',
+    ux: 'UX',
   };
 
   // Check if segment matches a special case (case insensitive)
@@ -64,19 +64,24 @@ export function formatPathSegment(segment: string): string {
  */
 export function generateBreadcrumbs(pathname: string): BreadcrumbItem[] {
   // Remove leading/trailing slashes and split by slash
-  const segments = pathname.replace(/^\/|\/$/g, '').split('/').filter(Boolean);
-  
+  const segments = pathname
+    .replace(/^\/|\/$/g, '')
+    .split('/')
+    .filter(Boolean);
+
   // If we're at the root, return home breadcrumb
   if (segments.length === 0) {
-    return [{
-      label: 'Marketplace',
-      href: '/',
-      isActive: true,
-    }];
+    return [
+      {
+        label: 'Marketplace',
+        href: '/',
+        isActive: true,
+      },
+    ];
   }
 
   const breadcrumbs: BreadcrumbItem[] = [];
-  
+
   // Add home as first breadcrumb
   breadcrumbs.push({
     label: 'Marketplace',
@@ -86,11 +91,11 @@ export function generateBreadcrumbs(pathname: string): BreadcrumbItem[] {
 
   // Build up the path incrementally
   let currentPath = '';
-  
+
   segments.forEach((segment, index) => {
     currentPath += `/${segment}`;
     const isLast = index === segments.length - 1;
-    
+
     breadcrumbs.push({
       label: formatPathSegment(segment),
       href: currentPath,
@@ -108,7 +113,7 @@ export function generateBreadcrumbs(pathname: string): BreadcrumbItem[] {
  */
 export function getPageTitle(breadcrumbs: BreadcrumbItem[]): string {
   if (breadcrumbs.length === 0) return 'TradeFlow';
-  
-  const activeBreadcrumb = breadcrumbs.find(b => b.isActive);
+
+  const activeBreadcrumb = breadcrumbs.find((b) => b.isActive);
   return activeBreadcrumb?.label || 'TradeFlow';
 }

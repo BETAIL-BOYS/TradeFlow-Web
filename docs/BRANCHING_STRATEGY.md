@@ -15,7 +15,7 @@
 
 ## Environments
 
-| Branch    | Environment | URL                        | Network          |
-|-----------|-------------|-----------------------------|-------------------|
-| `main`    | Production  | tradeflow.app               | Stellar Mainnet  |
-| `develop` | Staging     | staging.tradeflow.app       | Stellar Testnet  |
+| Branch    | Environment | URL                   | Network         |
+| --------- | ----------- | --------------------- | --------------- |
+| `main`    | Production  | tradeflow.app         | Stellar Mainnet |
+| `develop` | Staging     | staging.tradeflow.app | Stellar Testnet |

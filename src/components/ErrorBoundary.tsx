@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { Component, ErrorInfo, ReactNode } from "react";
-import { AlertTriangle, RefreshCcw } from "lucide-react";
-import Icon from "./ui/Icon";
+import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { AlertTriangle, RefreshCcw } from 'lucide-react';
+import Icon from './ui/Icon';
 
 interface Props {
   children?: ReactNode;
@@ -24,7 +24,7 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Uncaught error:", error, errorInfo);
+    console.error('Uncaught error:', error, errorInfo);
   }
 
   private handleReset = () => {
@@ -42,11 +42,12 @@ class ErrorBoundary extends Component<Props, State> {
             </div>
             <h2 className="text-2xl font-bold text-white mb-2">Something went wrong</h2>
             <p className="text-slate-400 mb-8">
-              An unexpected error occurred in the application. We&apos;ve been notified and are working on it.
+              An unexpected error occurred in the application. We&apos;ve been notified and are
+              working on it.
             </p>
             <div className="bg-black/40 rounded-lg p-4 mb-8 text-left overflow-auto max-h-32">
               <p className="text-xs font-mono text-red-400">
-                {this.state.error?.message || "Unknown error"}
+                {this.state.error?.message || 'Unknown error'}
               </p>
             </div>
             <button

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Droplets, TrendingUp, TrendingDown } from "lucide-react";
+import React from 'react';
+import { Droplets, TrendingUp, TrendingDown } from 'lucide-react';
 
 interface LiquidityPosition {
   poolName: string;
@@ -21,41 +21,41 @@ interface LiquidityPosition {
 
 const dummyLiquidityPositions: LiquidityPosition[] = [
   {
-    poolName: "USDC/ETH",
-    token1: { symbol: "USDC", icon: "💵" },
-    token2: { symbol: "ETH", icon: "🔷" },
-    share: "15.2%",
-    value: "$8,450.00",
+    poolName: 'USDC/ETH',
+    token1: { symbol: 'USDC', icon: '💵' },
+    token2: { symbol: 'ETH', icon: '🔷' },
+    share: '15.2%',
+    value: '$8,450.00',
     apr: 12.5,
-    fees24h: "$12.50"
+    fees24h: '$12.50',
   },
   {
-    poolName: "SOL/USDC",
-    token1: { symbol: "SOL", icon: "🟣" },
-    token2: { symbol: "USDC", icon: "💵" },
-    share: "8.7%",
-    value: "$6,200.00",
+    poolName: 'SOL/USDC',
+    token1: { symbol: 'SOL', icon: '🟣' },
+    token2: { symbol: 'USDC', icon: '💵' },
+    share: '8.7%',
+    value: '$6,200.00',
     apr: 18.3,
-    fees24h: "$8.75"
+    fees24h: '$8.75',
   },
   {
-    poolName: "BTC/ETH",
-    token1: { symbol: "BTC", icon: "🟠" },
-    token2: { symbol: "ETH", icon: "🔷" },
-    share: "3.4%",
-    value: "$4,125.00",
+    poolName: 'BTC/ETH',
+    token1: { symbol: 'BTC', icon: '🟠' },
+    token2: { symbol: 'ETH', icon: '🔷' },
+    share: '3.4%',
+    value: '$4,125.00',
     apr: 8.9,
-    fees24h: "$5.20"
+    fees24h: '$5.20',
   },
   {
-    poolName: "XLM/USDC",
-    token1: { symbol: "XLM", icon: "⭐" },
-    token2: { symbol: "USDC", icon: "💵" },
-    share: "22.1%",
-    value: "$2,850.00",
+    poolName: 'XLM/USDC',
+    token1: { symbol: 'XLM', icon: '⭐' },
+    token2: { symbol: 'USDC', icon: '💵' },
+    share: '22.1%',
+    value: '$2,850.00',
     apr: 15.7,
-    fees24h: "$3.15"
-  }
+    fees24h: '$3.15',
+  },
 ];
 
 export default function LiquidityList() {
@@ -68,7 +68,7 @@ export default function LiquidityList() {
         </h2>
         <span className="text-sm text-tradeflow-muted">4 positions</span>
       </div>
-      
+
       <div className="space-y-4">
         {dummyLiquidityPositions.map((position, index) => (
           <div
@@ -86,7 +86,7 @@ export default function LiquidityList() {
                 <div className="text-sm text-tradeflow-muted">{position.share} share</div>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-tradeflow-muted">APR</span>
@@ -100,7 +100,7 @@ export default function LiquidityList() {
           </div>
         ))}
       </div>
-      
+
       <div className="mt-6 pt-4 border-t border-tradeflow-muted">
         <div className="flex items-center justify-between mb-2">
           <span className="text-tradeflow-muted">Total Liquidity Value</span>

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react';
 import { Star } from 'lucide-react';
@@ -21,12 +21,7 @@ interface StarIconProps {
 /**
  * A stylized star toggle button with smooth transitions and accessibility.
  */
-export default function StarIcon({ 
-  isStarred, 
-  onClick, 
-  size = 16, 
-  className = '' 
-}: StarIconProps) {
+export default function StarIcon({ isStarred, onClick, size = 16, className = '' }: StarIconProps) {
   return (
     <button
       onClick={(e) => {

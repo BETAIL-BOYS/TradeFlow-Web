@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect, useRef } from "react";
-import { ChevronDown, Wallet, TrendingUp, RefreshCw, ExternalLink } from "lucide-react";
-import { useWeb3Store } from "../stores/useWeb3Store";
-import { useTokenStore, TF_TOKEN_INFO } from "../stores/tokenStore";
+import React, { useState, useEffect, useRef } from 'react';
+import { ChevronDown, Wallet, TrendingUp, RefreshCw, ExternalLink } from 'lucide-react';
+import { useWeb3Store } from '../stores/useWeb3Store';
+import { useTokenStore, TF_TOKEN_INFO } from '../stores/tokenStore';
 
 interface TokenBalance {
   code: string;
@@ -85,7 +85,7 @@ export default function WalletDropdown({ address, isOpen, onToggle }: WalletDrop
         code: 'XLM',
         balance: balances.XLM,
         name: 'Stellar Lumens',
-        isNative: true
+        isNative: true,
       });
     }
 
@@ -95,7 +95,7 @@ export default function WalletDropdown({ address, isOpen, onToggle }: WalletDrop
         code: 'TF',
         balance: tfTokenBalance,
         issuer: TF_TOKEN_INFO.issuer,
-        name: TF_TOKEN_INFO.name
+        name: TF_TOKEN_INFO.name,
       });
     }
 
@@ -105,7 +105,7 @@ export default function WalletDropdown({ address, isOpen, onToggle }: WalletDrop
         tokenBalances.push({
           code,
           balance,
-          name: getTokenInfo(code).name
+          name: getTokenInfo(code).name,
         });
       }
     });
@@ -120,7 +120,7 @@ export default function WalletDropdown({ address, isOpen, onToggle }: WalletDrop
   if (!isOpen) return null;
 
   return (
-    <div 
+    <div
       ref={dropdownRef}
       className="absolute right-0 top-full mt-2 w-80 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl z-50"
     >
@@ -137,12 +137,12 @@ export default function WalletDropdown({ address, isOpen, onToggle }: WalletDrop
             className="p-1 hover:bg-slate-700 rounded-full transition-colors disabled:opacity-50"
             title="Refresh balances"
           >
-            <RefreshCw 
-              className={`w-4 h-4 text-slate-400 ${isRefreshing || isLoading ? 'animate-spin' : ''}`} 
+            <RefreshCw
+              className={`w-4 h-4 text-slate-400 ${isRefreshing || isLoading ? 'animate-spin' : ''}`}
             />
           </button>
         </div>
-        
+
         {/* Wallet Address */}
         <div className="flex items-center justify-between">
           <div className="text-xs text-slate-500">
@@ -179,27 +179,21 @@ export default function WalletDropdown({ address, isOpen, onToggle }: WalletDrop
                   className="flex items-center justify-between p-3 hover:bg-slate-700/50 rounded-lg transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center ${token.isNative ? 'ring-2 ring-blue-400/50' : ''}`}>
-                      <span className="text-xs font-bold text-white">
-                        {token.code.slice(0, 2)}
-                      </span>
+                    <div
+                      className={`w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center ${token.isNative ? 'ring-2 ring-blue-400/50' : ''}`}
+                    >
+                      <span className="text-xs font-bold text-white">{token.code.slice(0, 2)}</span>
                     </div>
                     <div>
-                      <div className={`font-medium text-sm ${tokenInfo.color}`}>
-                        {token.code}
-                      </div>
-                      <div className="text-xs text-slate-500">
-                        {token.name}
-                      </div>
+                      <div className={`font-medium text-sm ${tokenInfo.color}`}>{token.code}</div>
+                      <div className="text-xs text-slate-500">{token.name}</div>
                     </div>
                   </div>
                   <div className="text-right">
                     <div className="font-medium text-sm text-white">
                       {formatBalance(token.balance)}
                     </div>
-                    {token.isNative && (
-                      <div className="text-xs text-slate-500">Native</div>
-                    )}
+                    {token.isNative && <div className="text-xs text-slate-500">Native</div>}
                   </div>
                 </div>
               );
@@ -216,9 +210,7 @@ export default function WalletDropdown({ address, isOpen, onToggle }: WalletDrop
               <TrendingUp className="w-4 h-4 text-green-400" />
               <span className="text-sm text-slate-400">Total Assets</span>
             </div>
-            <div className="font-medium text-white">
-              {formatBalance(totalValue)}
-            </div>
+            <div className="font-medium text-white">{formatBalance(totalValue)}</div>
           </div>
         </div>
       )}

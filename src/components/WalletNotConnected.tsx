@@ -1,15 +1,13 @@
-"use client";
+'use client';
 
-import React from "react";
-import { WalletIcon } from "./icons";
+import React from 'react';
+import { WalletIcon } from './icons';
 
 interface WalletNotConnectedProps {
   onConnect?: () => void;
 }
 
-export default function WalletNotConnected({
-  onConnect,
-}: WalletNotConnectedProps) {
+export default function WalletNotConnected({ onConnect }: WalletNotConnectedProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 text-center">
       {/* Wallet SVG Icon with glow */}
@@ -32,8 +30,7 @@ export default function WalletNotConnected({
 
       {/* Subtitle */}
       <p className="text-sm text-white/50 max-w-xs mb-8 leading-relaxed">
-        Your portfolio and swap data will appear here once your wallet is
-        connected.
+        Your portfolio and swap data will appear here once your wallet is connected.
       </p>
 
       {/* Primary Connect Button */}

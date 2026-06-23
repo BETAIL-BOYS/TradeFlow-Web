@@ -1,7 +1,19 @@
-"use client";
+'use client';
 
 import React, { useState, useMemo } from 'react';
-import { ArrowUpDown, ArrowUp, ArrowDown, FileText, Building, DollarSign, Percent, Calendar, CheckCircle, Clock, Wallet } from 'lucide-react';
+import {
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
+  FileText,
+  Building,
+  DollarSign,
+  Percent,
+  Calendar,
+  CheckCircle,
+  Clock,
+  Wallet,
+} from 'lucide-react';
 
 // --- Types & Interfaces ---
 type LoanStatus = 'Funding' | 'Active' | 'Repaid';
@@ -30,7 +42,7 @@ const MOCK_RWA_LOANS: RWALoan[] = [
     amount: 50000,
     apy: 8.5,
     maturityDate: '2026-06-15T00:00:00Z',
-    status: 'Active'
+    status: 'Active',
   },
   {
     id: 'RWA-002',
@@ -39,7 +51,7 @@ const MOCK_RWA_LOANS: RWALoan[] = [
     amount: 120000,
     apy: 10.2,
     maturityDate: '2026-04-20T00:00:00Z',
-    status: 'Funding'
+    status: 'Funding',
   },
   {
     id: 'RWA-003',
@@ -48,7 +60,7 @@ const MOCK_RWA_LOANS: RWALoan[] = [
     amount: 35000,
     apy: 7.8,
     maturityDate: '2026-03-10T00:00:00Z',
-    status: 'Repaid'
+    status: 'Repaid',
   },
   {
     id: 'RWA-004',
@@ -57,7 +69,7 @@ const MOCK_RWA_LOANS: RWALoan[] = [
     amount: 85000,
     apy: 9.3,
     maturityDate: '2026-08-30T00:00:00Z',
-    status: 'Active'
+    status: 'Active',
   },
   {
     id: 'RWA-005',
@@ -66,7 +78,7 @@ const MOCK_RWA_LOANS: RWALoan[] = [
     amount: 65000,
     apy: 11.5,
     maturityDate: '2026-05-25T00:00:00Z',
-    status: 'Funding'
+    status: 'Funding',
   },
 ];
 
@@ -158,9 +170,11 @@ export default function RWALoansDashboard() {
     if (sortConfig.key !== columnKey) {
       return <ArrowUpDown size={14} className="text-slate-500" />;
     }
-    return sortConfig.direction === 'asc' ? 
-      <ArrowUp size={14} className="text-blue-400" /> : 
-      <ArrowDown size={14} className="text-blue-400" />;
+    return sortConfig.direction === 'asc' ? (
+      <ArrowUp size={14} className="text-blue-400" />
+    ) : (
+      <ArrowDown size={14} className="text-blue-400" />
+    );
   };
 
   // Check if there are any active loans
@@ -177,7 +191,8 @@ export default function RWALoansDashboard() {
             <FileText size={48} className="text-slate-600 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-white mb-2">No Active Loans</h3>
             <p className="text-slate-400 text-sm max-w-md mb-6">
-              There are currently no active RWA loans in the system. Check back later or create a new invoice to get started.
+              There are currently no active RWA loans in the system. Check back later or create a
+              new invoice to get started.
             </p>
             <button
               onClick={() => console.log('Create new invoice')}
@@ -247,47 +262,32 @@ export default function RWALoansDashboard() {
                 </div>
               </th>
               <th className="p-4 font-semibold">
-                <div className="flex items-center gap-2">
-                  Status
-                </div>
+                <div className="flex items-center gap-2">Status</div>
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-tradeflow-muted/20">
             {sortedLoans.map((loan) => (
-              <tr
-                key={loan.id}
-                className="hover:bg-tradeflow-muted/10 transition-colors"
-              >
+              <tr key={loan.id} className="hover:bg-tradeflow-muted/10 transition-colors">
                 <td className="p-4">
                   <div className="flex items-center gap-2">
                     <span className="font-mono text-sm text-blue-300">
                       #{loan.invoiceId.slice(-6)}
                     </span>
-                    <span className="text-xs text-slate-500">
-                      ({loan.id})
-                    </span>
+                    <span className="text-xs text-slate-500">({loan.id})</span>
                   </div>
                 </td>
                 <td className="p-4">
-                  <div className="font-medium text-white">
-                    {loan.debtor}
-                  </div>
+                  <div className="font-medium text-white">{loan.debtor}</div>
                 </td>
                 <td className="p-4">
-                  <div className="font-bold text-lg text-white">
-                    {formatCurrency(loan.amount)}
-                  </div>
+                  <div className="font-bold text-lg text-white">{formatCurrency(loan.amount)}</div>
                 </td>
                 <td className="p-4">
-                  <div className="font-medium text-green-400">
-                    {loan.apy.toFixed(2)}%
-                  </div>
+                  <div className="font-medium text-green-400">{loan.apy.toFixed(2)}%</div>
                 </td>
                 <td className="p-4">
-                  <div className="text-sm text-slate-300">
-                    {formatDate(loan.maturityDate)}
-                  </div>
+                  <div className="text-sm text-slate-300">{formatDate(loan.maturityDate)}</div>
                 </td>
                 <td className="p-4">
                   <StatusBadge status={loan.status} />
