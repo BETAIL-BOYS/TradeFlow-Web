@@ -21,11 +21,7 @@ export default function NetworkToggle({
   onNetworkChange,
   className = '',
 }: NetworkToggleProps) {
-  // Hide in production builds
-  if (!isDevelopment()) {
-    return null;
-  }
-
+  // Hooks must be called before any early returns
   const [selectedNetwork, setSelectedNetwork] = useState<NetworkType>(() => {
     return getNetworkOverride() || currentNetwork || 'Testnet';
   });
@@ -38,6 +34,11 @@ export default function NetworkToggle({
       setSelectedNetwork(override);
     }
   }, []);
+
+  // Hide in production builds - moved AFTER hooks
+  if (!isDevelopment()) {
+    return null;
+  }
 
   const handleNetworkChange = async (network: NetworkType) => {
     if (network === selectedNetwork || isSwitching) return;

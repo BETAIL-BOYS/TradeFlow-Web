@@ -32,7 +32,7 @@ export default function PoolsPage() {
       </div>
 
       <div className="flex-1 p-8">
-        {/* Stats Grid */
+        {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700">
             <Droplets className="text-blue-400 mb-4" />
