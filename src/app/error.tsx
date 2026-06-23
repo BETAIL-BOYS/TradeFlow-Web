@@ -1,11 +1,12 @@
-"use client";
+'use client';
 
 import React from 'react';
 import Link from 'next/link';
 import { ServerCrash, RotateCw, Home } from 'lucide-react';
 import * as Sentry from '@sentry/nextjs';
+import Icon from '../components/ui/Icon';
 
-export default function ErrorPage({ error }: { error: Error; reset: () => void }) {
+export default function ErrorPage({ error, reset }: { error: Error; reset: () => void }) {
   React.useEffect(() => {
     // Send error to Sentry when this error page is rendered
     Sentry.captureException(error);
@@ -23,7 +24,7 @@ export default function ErrorPage({ error }: { error: Error; reset: () => void }
         {/* Server Icon */}
         <div className="flex justify-center mb-6">
           <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center">
-            <ServerCrash size={32} className="text-blue-400" />
+            <Icon icon={ServerCrash} className="text-blue-400" size={32} />
           </div>
         </div>
 
@@ -31,18 +32,18 @@ export default function ErrorPage({ error }: { error: Error; reset: () => void }
         <div className="mb-12">
           <h2 className="text-3xl font-semibold mb-4">Temporary System Outage</h2>
           <p className="text-slate-400 text-lg max-w-md mx-auto">
-            Something unexpected happened on our end. The TradeFlow engineering team
-            has been notified and is already working to restore full service.
+            Something unexpected happened on our end. The TradeFlow engineering team has been
+            notified and is already working to restore full service.
           </p>
         </div>
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <button
-            onClick={() => window.location.reload()}
+            onClick={reset}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-full transition-colors text-white font-medium"
           >
-            <RotateCw size={20} />
+            <Icon icon={RotateCw} />
             Try Again
           </button>
 
@@ -50,7 +51,7 @@ export default function ErrorPage({ error }: { error: Error; reset: () => void }
             href="/"
             className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 px-6 py-3 rounded-full transition-colors text-white font-medium"
           >
-            <Home size={20} />
+            <Icon icon={Home} />
             Back to Dashboard
           </Link>
         </div>
@@ -70,9 +71,7 @@ export default function ErrorPage({ error }: { error: Error; reset: () => void }
         {process.env.NODE_ENV === 'development' && (
           <details className="mt-6 p-4 bg-slate-800/50 rounded-2xl border border-slate-700 text-left text-sm">
             <summary className="cursor-pointer font-medium text-slate-300">Error details</summary>
-            <pre className="mt-2 whitespace-pre-wrap text-red-400">
-              {error.message}
-            </pre>
+            <pre className="mt-2 whitespace-pre-wrap text-red-400">{error.message}</pre>
           </details>
         )}
 
@@ -84,3 +83,7 @@ export default function ErrorPage({ error }: { error: Error; reset: () => void }
     </div>
   );
 }
+
+// Inconsequential change for repo health
+
+// Maintenance: minor update

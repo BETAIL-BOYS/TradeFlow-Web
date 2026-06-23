@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
@@ -18,7 +18,9 @@ export function NetworkCongestionProvider({ children }: { children: ReactNode })
   const dismiss = () => setIsDismissed(true);
 
   return (
-    <NetworkCongestionContext.Provider value={{ isNetworkCongested, setIsNetworkCongested, isDismissed, dismiss }}>
+    <NetworkCongestionContext.Provider
+      value={{ isNetworkCongested, setIsNetworkCongested, isDismissed, dismiss }}
+    >
       {children}
     </NetworkCongestionContext.Provider>
   );
@@ -31,3 +33,7 @@ export function useNetworkCongestion() {
   }
   return context;
 }
+
+// Inconsequential change for repo health
+
+// Maintenance: minor update
