@@ -4,9 +4,6 @@ jest.mock("../env", () => ({
   getWsBaseUrl: () => "ws://localhost:1234",
 }));
 
-jest.mock("../httpClient", () => ({
-  getAuthToken: () => "test-token",
-}));
 
 class MockWebSocket {
   static instances: MockWebSocket[] = [];
@@ -45,13 +42,14 @@ describe("RiskSocketClient", () => {
     (global as any).WebSocket = MockWebSocket;
   });
 
-  test("connect appends token and resubscribes invoice rooms on open", () => {
+  test("connect does not expose token in URL and resubscribes invoice rooms on open", () => {
     const client = new RiskSocketClient();
     client.connect();
 
     expect(MockWebSocket.instances).toHaveLength(1);
     const ws = MockWebSocket.instances[0]!;
-    expect(ws.url).toContain("token=test-token");
+    // Token must not appear in the WebSocket URL — auth is handled via HttpOnly cookie
+    expect(ws.url).not.toContain("token=");
 
     client.subscribeInvoice("INV-1");
 

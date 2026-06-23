@@ -1,5 +1,4 @@
 import { getWsBaseUrl } from "./env";
-import { getAuthToken } from "./httpClient";
 
 export interface RiskUpdateEvent {
   invoiceId: string;
@@ -14,7 +13,6 @@ export type RiskSocketEvent =
 
 export interface RiskSocketClientOptions {
   wsBaseUrl?: string;
-  token?: string | null;
 }
 
 type Listener = (event: RiskSocketEvent) => void;
@@ -29,11 +27,9 @@ export class RiskSocketClient {
   private riskFeedEnabled = false;
 
   private wsBaseUrl: string;
-  private token: string | null;
 
   constructor(options: RiskSocketClientOptions = {}) {
     this.wsBaseUrl = options.wsBaseUrl ?? getWsBaseUrl();
-    this.token = options.token ?? getAuthToken();
   }
 
   /**
@@ -63,18 +59,12 @@ export class RiskSocketClient {
     this.clearReconnectTimer();
 
     const url = new URL(this.wsBaseUrl);
-    if (this.token) url.searchParams.set("token", this.token);
-
     const ws = new WebSocket(url.toString());
     this.ws = ws;
 
     ws.onopen = () => {
       this.reconnectAttempt = 0;
       this.emit({ event: "connected" });
-
-      if (this.token) {
-        this.safeSend({ type: "auth", payload: { token: this.token } });
-      }
 
       if (this.riskFeedEnabled) this.safeSend({ type: "subscribe", payload: { room: "risk:feed" } });
       for (const room of this.invoiceRooms) {
