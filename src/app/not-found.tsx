@@ -1,8 +1,9 @@
-"use client";
+'use client';
 
-import React from "react";
-import Link from "next/link";
-import { Home, Search } from "lucide-react";
+import React from 'react';
+import Link from 'next/link';
+import { Home, Search } from 'lucide-react';
+import Icon from '../components/ui/Icon';
 
 export default function NotFound() {
   return (
@@ -18,7 +19,7 @@ export default function NotFound() {
         <div className="mb-12">
           <h2 className="text-3xl font-semibold mb-4">This pool doesn&apos;t exist</h2>
           <p className="text-slate-400 text-lg max-w-md mx-auto">
-            The trading pool or page you&apos;re looking for seems to have vanished into the void. 
+            The trading pool or page you&apos;re looking for seems to have vanished into the void.
             Let&apos;s get you back to the dashboard where the action is.
           </p>
         </div>
@@ -29,22 +30,24 @@ export default function NotFound() {
             href="/"
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-full transition-colors text-white font-medium"
           >
-            <Home size={20} />
+            <Icon icon={Home} />
             Back to Dashboard
           </Link>
-          
+
           <button
             onClick={() => window.history.back()}
             className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 px-6 py-3 rounded-full transition-colors text-white font-medium"
           >
-            <Search size={20} />
+            <Icon icon={Search} />
             Go Back
           </button>
         </div>
 
         {/* Additional Help */}
         <div className="mt-16 p-6 bg-slate-800/50 rounded-2xl border border-slate-700">
-          <h3 className="text-lg font-medium mb-3 text-blue-400">Looking for something specific?</h3>
+          <h3 className="text-lg font-medium mb-3 text-blue-400">
+            Looking for something specific?
+          </h3>
           <ul className="text-slate-400 space-y-2 text-sm">
             <li>• Check the URL for typos</li>
             <li>• Browse our active trading pools</li>
@@ -61,3 +64,7 @@ export default function NotFound() {
     </div>
   );
 }
+
+// Inconsequential change for repo health
+
+// Maintenance: minor update

@@ -17,6 +17,4 @@ async function handler(request: NextRequest): Promise<NextResponse> {
   });
 }
 
-export async function GET(req: NextRequest) {
-  return withRateLimit(req, handler, 'standard');
-}
+// Maintenance: minor update

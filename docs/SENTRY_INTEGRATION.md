@@ -5,6 +5,7 @@ This document outlines the Sentry integration implemented for frontend error tra
 ## Overview
 
 Sentry has been integrated to automatically capture:
+
 - Uncaught JavaScript exceptions
 - React render errors
 - Failed API promises
@@ -14,6 +15,7 @@ Sentry has been integrated to automatically capture:
 ## Files Added/Modified
 
 ### New Files Created:
+
 - `sentry.server.config.ts` - Server-side Sentry configuration
 - `sentry.client.config.ts` - Client-side Sentry configuration
 - `src/components/ErrorBoundary.tsx` - React error boundary component
@@ -21,6 +23,7 @@ Sentry has been integrated to automatically capture:
 - `src/middleware.ts` - Middleware for request tracing
 
 ### Modified Files:
+
 - `package.json` - Added @sentry/nextjs dependency
 - `.env.example` - Added NEXT_PUBLIC_SENTRY_DSN environment variable
 - `src/app/layout.tsx` - Wrapped app with ErrorBoundary
@@ -47,6 +50,7 @@ NEXT_PUBLIC_SENTRY_DSN=your_sentry_dsn_here
    - Reference `.env.example` for the required format
 
 3. **Install Dependencies:**
+
    ```bash
    npm install
    ```
@@ -59,33 +63,39 @@ NEXT_PUBLIC_SENTRY_DSN=your_sentry_dsn_here
 ## Features Implemented
 
 ### Error Boundary
+
 - Custom ErrorBoundary component wraps the entire application
 - Automatically captures React errors and sends them to Sentry
 - Provides user-friendly error UI with recovery options
 - Shows error details in development mode
 
 ### 500 Error Page
+
 - Next.js error.tsx page for server errors
 - Automatically reports errors to Sentry
 - Graceful fallback UI for users
 
 ### Performance Monitoring
+
 - Traces enabled for performance monitoring
 - Session replays for debugging user interactions
 - Automatic breadcrumb collection
 
 ### Request Tracing
+
 - Middleware integration for request tracing
 - Continues traces across server and client
 
 ## Configuration Details
 
 ### Server Configuration (sentry.server.config.ts)
+
 - Initializes Sentry for server-side rendering
 - Configures traces sampling
 - Sets debug mode appropriately
 
 ### Client Configuration (sentry.client.config.ts)
+
 - Initializes Sentry for client-side
 - Includes Replay integration for session recording
 - Masks sensitive data in replays
@@ -96,6 +106,7 @@ NEXT_PUBLIC_SENTRY_DSN=your_sentry_dsn_here
 To test the Sentry integration:
 
 1. **Development Testing:**
+
    ```bash
    npm run dev
    ```
@@ -125,6 +136,7 @@ To test the Sentry integration:
 ## Monitoring
 
 Once deployed, monitor:
+
 - Error rates and trends
 - Performance metrics
 - User session replays

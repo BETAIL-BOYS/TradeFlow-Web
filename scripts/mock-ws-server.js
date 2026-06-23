@@ -3,7 +3,7 @@ const WebSocket = require('ws');
 // Create WebSocket server on port 3001 (IPv4 only)
 const wss = new WebSocket.Server({
   port: 3001,
-  host: '127.0.0.1'
+  host: '127.0.0.1',
 });
 
 console.log('WebSocket server started on ws://127.0.0.1:3001');
@@ -17,24 +17,24 @@ function generateTradeData(symbol) {
   const volatility = 0.001;
 
   return {
-    type: "trade",
+    type: 'trade',
     symbol: symbol,
     payload: {
       timestamp: now,
       open: basePrice,
-      high: basePrice + (Math.random() * volatility),
-      low: basePrice - (Math.random() * volatility),
-      close: basePrice + ((Math.random() - 0.5) * volatility),
+      high: basePrice + Math.random() * volatility,
+      low: basePrice - Math.random() * volatility,
+      close: basePrice + (Math.random() - 0.5) * volatility,
       volume: Math.floor(500 + Math.random() * 2000),
-      previousClose: basePrice - ((Math.random() - 0.5) * volatility)
-    }
+      previousClose: basePrice - (Math.random() - 0.5) * volatility,
+    },
   };
 }
 
 function generateRiskUpdate(invoiceId) {
   const riskScore = Math.max(0, Math.min(100, Math.round(40 + Math.random() * 55)));
   return {
-    event: "risk_update",
+    event: 'risk_update',
     data: {
       invoiceId,
       riskScore,
@@ -98,7 +98,7 @@ wss.on('connection', (ws) => {
     console.log('Client disconnected');
 
     // Remove client from all subscriptions
-    clientSubscriptions.forEach(topic => {
+    clientSubscriptions.forEach((topic) => {
       if (!subscriptions.has(topic)) return;
       subscriptions.get(topic).delete(ws);
       if (subscriptions.get(topic).size === 0) subscriptions.delete(topic);
@@ -123,7 +123,7 @@ setInterval(() => {
       payload = generateTradeData(topic);
     }
 
-    clients.forEach(client => {
+    clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) client.send(JSON.stringify(payload));
     });
   });

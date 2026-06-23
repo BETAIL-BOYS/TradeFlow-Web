@@ -1,5 +1,4 @@
-import { getWsBaseUrl } from "./env";
-import { getAuthToken } from "./httpClient";
+import { getWsBaseUrl } from './env';
 
 export interface RiskUpdateEvent {
   invoiceId: string;
@@ -8,13 +7,12 @@ export interface RiskUpdateEvent {
 }
 
 export type RiskSocketEvent =
-  | { event: "risk_update"; data: RiskUpdateEvent }
-  | { event: "connected" }
-  | { event: "disconnected" };
+  | { event: 'risk_update'; data: RiskUpdateEvent }
+  | { event: 'connected' }
+  | { event: 'disconnected' };
 
 export interface RiskSocketClientOptions {
   wsBaseUrl?: string;
-  token?: string | null;
 }
 
 type Listener = (event: RiskSocketEvent) => void;
@@ -29,13 +27,16 @@ export class RiskSocketClient {
   private riskFeedEnabled = false;
 
   private wsBaseUrl: string;
-  private token: string | null;
 
   constructor(options: RiskSocketClientOptions = {}) {
     this.wsBaseUrl = options.wsBaseUrl ?? getWsBaseUrl();
-    this.token = options.token ?? getAuthToken();
   }
 
+  /**
+   * Registers an event listener for WebSocket events.
+   * @param listener - Callback invoked on RiskSocketEvent.
+   * @returns An unsubscribe function to remove the listener.
+   */
   on(listener: Listener): () => void {
     this.listeners.add(listener);
     return () => {
@@ -43,10 +44,17 @@ export class RiskSocketClient {
     };
   }
 
+  /**
+   * Opens the WebSocket connection and subscribes to any previously registered rooms.
+   * Handles reconnection with exponential backoff on unexpected close.
+   */
   connect(): void {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
     if (!this.wsBaseUrl) return;
-    if (this.ws && (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING)) {
+    if (
+      this.ws &&
+      (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING)
+    ) {
       return;
     }
 
@@ -54,22 +62,19 @@ export class RiskSocketClient {
     this.clearReconnectTimer();
 
     const url = new URL(this.wsBaseUrl);
-    if (this.token) url.searchParams.set("token", this.token);
-
     const ws = new WebSocket(url.toString());
     this.ws = ws;
 
     ws.onopen = () => {
       this.reconnectAttempt = 0;
-      this.emit({ event: "connected" });
+      this.emit({ event: 'connected' });
 
-      if (this.token) {
-        this.safeSend({ type: "auth", payload: { token: this.token } });
+      if (this.riskFeedEnabled) {
+        this.safeSend({ type: 'subscribe', payload: { room: 'risk:feed' } });
       }
 
-      if (this.riskFeedEnabled) this.safeSend({ type: "subscribe", payload: { room: "risk:feed" } });
       for (const room of this.invoiceRooms) {
-        this.safeSend({ type: "subscribe", payload: { room } });
+        this.safeSend({ type: 'subscribe', payload: { room } });
       }
     };
 
@@ -77,7 +82,7 @@ export class RiskSocketClient {
       const parsed = this.parseMessage(msg.data);
       if (!parsed) return;
 
-      if (parsed.event === "risk_update") {
+      if (parsed.event === 'risk_update') {
         this.emit(parsed);
       }
     };
@@ -88,11 +93,15 @@ export class RiskSocketClient {
 
     ws.onclose = () => {
       this.ws = null;
-      this.emit({ event: "disconnected" });
+      this.emit({ event: 'disconnected' });
       if (!this.intentionallyClosed) this.scheduleReconnect();
     };
   }
 
+  /**
+   * Closes the WebSocket connection and clears the reconnect timer.
+   * Will not automatically reconnect after calling this.
+   */
   disconnect(): void {
     this.intentionallyClosed = true;
     this.clearReconnectTimer();
@@ -106,32 +115,49 @@ export class RiskSocketClient {
     }
   }
 
+  /**
+   * Enables or disables the generic risk feed subscription.
+   * @param enabled - True to subscribe, false to unsubscribe.
+   */
   enableRiskFeed(enabled: boolean): void {
     this.riskFeedEnabled = enabled;
-    if (enabled) this.safeSend({ type: "subscribe", payload: { room: "risk:feed" } });
-    else this.safeSend({ type: "unsubscribe", payload: { room: "risk:feed" } });
+    if (enabled) this.safeSend({ type: 'subscribe', payload: { room: 'risk:feed' } });
+    else this.safeSend({ type: 'unsubscribe', payload: { room: 'risk:feed' } });
   }
 
+  /**
+   * Subscribes to real-time risk updates for a specific invoice.
+   * @param invoiceId - The invoice to subscribe to.
+   */
   subscribeInvoice(invoiceId: string): void {
     const room = `invoice:${invoiceId}`;
     if (this.invoiceRooms.has(room)) return;
     this.invoiceRooms.add(room);
-    this.safeSend({ type: "subscribe", payload: { room, invoiceId } });
+    this.safeSend({ type: 'subscribe', payload: { room, invoiceId } });
   }
 
+  /**
+   * Unsubscribes from real-time risk updates for a specific invoice.
+   * @param invoiceId - The invoice to unsubscribe from.
+   */
   unsubscribeInvoice(invoiceId: string): void {
     const room = `invoice:${invoiceId}`;
     if (!this.invoiceRooms.has(room)) return;
     this.invoiceRooms.delete(room);
-    this.safeSend({ type: "unsubscribe", payload: { room, invoiceId } });
+    this.safeSend({ type: 'unsubscribe', payload: { room, invoiceId } });
   }
 
+  /**
+   * Synchronises the set of subscribed invoices to match the given list.
+   * Unsubscribes removed invoices and subscribes new ones.
+   * @param invoiceIds - The full set of invoice IDs to subscribe to.
+   */
   syncInvoices(invoiceIds: string[]): void {
     const desired = new Set(invoiceIds.map((id) => `invoice:${id}`));
 
     for (const existing of Array.from(this.invoiceRooms)) {
       if (!desired.has(existing)) {
-        const invoiceId = existing.slice("invoice:".length);
+        const invoiceId = existing.slice('invoice:'.length);
         this.unsubscribeInvoice(invoiceId);
       }
     }
@@ -159,7 +185,7 @@ export class RiskSocketClient {
   }
 
   private parseMessage(data: unknown): RiskSocketEvent | null {
-    if (typeof data !== "string") return null;
+    if (typeof data !== 'string') return null;
 
     let obj: any;
     try {
@@ -171,18 +197,22 @@ export class RiskSocketClient {
     const eventName = obj?.event || obj?.type;
     const payload = obj?.data ?? obj?.payload ?? obj;
 
-    if (eventName === "risk_update") {
+    if (eventName === 'risk_update') {
       const invoiceId = payload?.invoiceId;
       const riskScore = payload?.riskScore;
-      if (typeof invoiceId !== "string" || typeof riskScore !== "number") return null;
-      const updatedAt = typeof payload?.updatedAt === "string" ? payload.updatedAt : undefined;
-      return { event: "risk_update", data: { invoiceId, riskScore, updatedAt } };
+      if (typeof invoiceId !== 'string' || typeof riskScore !== 'number') return null;
+      const updatedAt = typeof payload?.updatedAt === 'string' ? payload.updatedAt : undefined;
+      return { event: 'risk_update', data: { invoiceId, riskScore, updatedAt } };
     }
 
-    if (typeof payload?.invoiceId === "string" && typeof payload?.riskScore === "number") {
+    if (typeof payload?.invoiceId === 'string' && typeof payload?.riskScore === 'number') {
       return {
-        event: "risk_update",
-        data: { invoiceId: payload.invoiceId, riskScore: payload.riskScore, updatedAt: payload.updatedAt },
+        event: 'risk_update',
+        data: {
+          invoiceId: payload.invoiceId,
+          riskScore: payload.riskScore,
+          updatedAt: payload.updatedAt,
+        },
       };
     }
 
@@ -208,4 +238,3 @@ export class RiskSocketClient {
     this.reconnectTimer = null;
   }
 }
-

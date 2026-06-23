@@ -1,30 +1,52 @@
-"use client";
+'use client';
 
 import React from 'react';
 import { Star } from 'lucide-react';
+import Icon from './ui/Icon';
 
+/**
+ * Props for the StarIcon component.
+ */
 interface StarIconProps {
+  /** Current state of the star (filled vs outline) */
   isStarred: boolean;
-  onClick: () => void;
+  /** Callback triggered when the icon is clicked */
+  onClick: (e: React.MouseEvent) => void;
+  /** Size of the icon in pixels (default: 16) */
   size?: number;
+  /** Additional CSS classes for custom styling */
   className?: string;
 }
 
+/**
+ * A stylized star toggle button with smooth transitions and accessibility.
+ */
 export default function StarIcon({ isStarred, onClick, size = 16, className = '' }: StarIconProps) {
   return (
     <button
-      onClick={onClick}
-      className={`p-1 rounded-full transition-all duration-200 hover:bg-tradeflow-muted/30 ${className}`}
+      onClick={(e) => {
+        e.stopPropagation(); // Prevent triggering parent click handlers
+        onClick(e);
+      }}
+      className={`p-2 rounded-xl transition-all duration-300 hover:bg-yellow-400/10 group active:scale-[0.85] ${className}`}
       aria-label={isStarred ? 'Remove from watchlist' : 'Add to watchlist'}
+      aria-pressed={isStarred}
+      title={isStarred ? 'Remove from watchlist' : 'Add to watchlist'}
     >
-      <Star
+      <Icon
+        icon={Star}
         size={size}
-        className={`transition-colors duration-200 ${
+        className={`transition-all duration-300 transform ${
           isStarred
-            ? 'fill-yellow-400 text-yellow-400'
-            : 'text-tradeflow-muted hover:text-yellow-400/70'
+            ? 'fill-yellow-400 text-yellow-400 scale-110 drop-shadow-[0_0_8px_rgba(250,204,21,0.4)]'
+            : 'text-slate-500 group-hover:text-yellow-400/70 group-hover:scale-105'
         }`}
+        aria-hidden="true"
       />
     </button>
   );
 }
+
+// Inconsequential change for repo health
+
+// Maintenance: minor update
