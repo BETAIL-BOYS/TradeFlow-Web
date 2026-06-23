@@ -1,6 +1,6 @@
-import { Ratelimit } from "@upstash/ratelimit";
-import { Redis } from "@upstash/redis";
-import { NextRequest, NextResponse } from "next/server";
+import { Ratelimit } from '@upstash/ratelimit';
+import { Redis } from '@upstash/redis';
+import { NextRequest, NextResponse } from 'next/server';
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -9,50 +9,50 @@ const redis = new Redis({
 
 const standardLimiter = new Ratelimit({
   redis,
-  limiter: Ratelimit.slidingWindow(20, "1 m"),
+  limiter: Ratelimit.slidingWindow(20, '1 m'),
   analytics: true,
 });
 
 const submissionLimiter = new Ratelimit({
   redis,
-  limiter: Ratelimit.slidingWindow(5, "1 m"),
+  limiter: Ratelimit.slidingWindow(5, '1 m'),
   analytics: true,
 });
 
-type LimiterType = "standard" | "submission";
+type LimiterType = 'standard' | 'submission';
 
 export async function withRateLimit(
   req: NextRequest,
   handler: (req: NextRequest) => Promise<NextResponse>,
-  type: LimiterType = "standard"
+  type: LimiterType = 'standard'
 ): Promise<NextResponse> {
   const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    req.headers.get("x-real-ip") ??
-    "127.0.0.1";
+    req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+    req.headers.get('x-real-ip') ??
+    '127.0.0.1';
 
-  const limiter = type === "submission" ? submissionLimiter : standardLimiter;
+  const limiter = type === 'submission' ? submissionLimiter : standardLimiter;
   const { success, limit, remaining, reset } = await limiter.limit(ip);
 
   if (!success) {
     const retryAfter = Math.ceil((reset - Date.now()) / 1000);
     return NextResponse.json(
-      { error: "Too Many Requests", message: "Rate limit exceeded. Please try again later." },
+      { error: 'Too Many Requests', message: 'Rate limit exceeded. Please try again later.' },
       {
         status: 429,
         headers: {
-          "Retry-After": String(retryAfter),
-          "X-RateLimit-Limit": String(limit),
-          "X-RateLimit-Remaining": "0",
-          "X-RateLimit-Reset": String(reset),
+          'Retry-After': String(retryAfter),
+          'X-RateLimit-Limit': String(limit),
+          'X-RateLimit-Remaining': '0',
+          'X-RateLimit-Reset': String(reset),
         },
       }
     );
   }
 
   const response = await handler(req);
-  response.headers.set("X-RateLimit-Limit", String(limit));
-  response.headers.set("X-RateLimit-Remaining", String(remaining));
-  response.headers.set("X-RateLimit-Reset", String(reset));
+  response.headers.set('X-RateLimit-Limit', String(limit));
+  response.headers.set('X-RateLimit-Remaining', String(remaining));
+  response.headers.set('X-RateLimit-Reset', String(reset));
   return response;
 }
