@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { motion, AnimatePresence } from "framer-motion";
-import { usePathname } from "next/navigation";
-import { ReactNode, useEffect, useState } from "react";
+import { motion, AnimatePresence } from 'framer-motion';
+import { usePathname } from 'next/navigation';
+import { ReactNode, useEffect, useState } from 'react';
 
 interface PageTransitionProps {
   children: ReactNode;
@@ -27,10 +27,10 @@ const pageVariants = {
 };
 
 const pageTransition = {
-  type: "tween",
-  ease: "anticipate",
+  type: 'tween',
+  ease: 'anticipate',
   duration: 0.4,
-};
+} as const;
 
 const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   const pathname = usePathname();
@@ -63,7 +63,7 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
         transition={pageTransition}
         className="w-full"
         style={{
-          willChange: "transform, opacity",
+          willChange: 'transform, opacity',
         }}
       >
         {children}
@@ -73,3 +73,7 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
 };
 
 export default PageTransition;
+
+// Inconsequential change for repo health
+
+// Maintenance: minor update

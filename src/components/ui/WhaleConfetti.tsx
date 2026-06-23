@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react';
 import Confetti from 'react-confetti';
@@ -33,3 +33,6 @@ export default function WhaleConfetti({ isActive, onComplete }: WhaleConfettiPro
     />
   );
 }
+// Inconsequential change for repo health
+
+// Maintenance: minor update

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface DataMetricProps {
   title: string;
@@ -7,14 +7,9 @@ interface DataMetricProps {
   className?: string;
 }
 
-export default function DataMetric({
-  title,
-  value,
-  trend,
-  className = "",
-}: DataMetricProps) {
-  const isPositive = trend?.startsWith("+");
-  const isNegative = trend?.startsWith("-");
+export default function DataMetric({ title, value, trend, className = '' }: DataMetricProps) {
+  const isPositive = trend?.startsWith('+');
+  const isNegative = trend?.startsWith('-');
 
   return (
     <div
@@ -25,11 +20,7 @@ export default function DataMetric({
       {trend && (
         <p
           className={`text-xs font-medium mt-1.5 ${
-            isPositive
-              ? "text-emerald-400"
-              : isNegative
-                ? "text-red-400"
-                : "text-slate-400"
+            isPositive ? 'text-emerald-400' : isNegative ? 'text-red-400' : 'text-slate-400'
           }`}
         >
           {trend}
@@ -38,3 +29,7 @@ export default function DataMetric({
     </div>
   );
 }
+
+// Inconsequential change for repo health
+
+// Maintenance: minor update

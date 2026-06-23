@@ -1,60 +1,69 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { Server } from "soroban-client";
-import StickyHeader from "../../../components/StickyHeader";
-import FractionalPurchaseModal, {
-  type Invoice,
-} from "../../../components/FractionalPurchaseModal";
-import { useTokenStore } from "../../../stores/tokenStore";
-import { useTxWithToast } from "../../../hooks/useTxWithToast";
-import { ArrowLeft, ExternalLink, Shield, TrendingUp } from "lucide-react";
-import Link from "next/link";
+import React, { useState, useEffect } from 'react';
+import StickyHeader from '../../../components/StickyHeader';
+import FractionalPurchaseModal, { type Invoice } from '../../../components/FractionalPurchaseModal';
+import DynamicRiskAssessmentChart from '../../../components/DynamicRiskAssessmentChart';
+import RepayInvoiceButton from '../../../components/RepayInvoiceButton';
+import { useTokenStore } from '../../../stores/tokenStore';
+import { useTxWithToast } from '../../../hooks/useTxWithToast';
+import { useInvoice } from '../../../hooks/useInvoice';
+import { ArrowLeft, ExternalLink, Shield, TrendingUp } from 'lucide-react';
+import Link from 'next/link';
+import Icon from '../../../components/ui/Icon';
 
 // Stellar testnet USDC issuer
-const USDC_CODE = "USDC";
-const USDC_ISSUER = "GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5";
+const USDC_CODE = 'USDC';
+const USDC_ISSUER = 'GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5';
 
-const server = new Server("https://soroban-testnet.stellar.org", {
-  allowHttp: true,
-});
-
-// TODO: Replace with real invoice data from your API / contract query
+// Static fallback data used while on-chain data loads or if the contract is
+// not yet deployed on testnet.
 const INVOICE_DATA: Invoice = {
-  id: "INV-00123",
+  id: 'INV-00123',
   faceValue: 50000,
   apy: 8.5,
-  dueDate: "2026-12-15",
-  currency: "USDC",
+  dueDate: '2026-12-15',
+  currency: 'USDC',
+};
+
+const MOCK_RISK_DATA = {
+  creditScore: 85,
+  paymentHistory: 92,
+  marketSectorRisk: 78,
+  collateralRatio: 75,
+  liquidityScore: 90,
+  debtToIncomeRatio: 68,
 };
 
 export default function InvoiceDetailPage() {
   const { publicKey, isConnected } = useTokenStore();
   const [showBuyModal, setShowBuyModal] = useState(false);
-  const [usdcBalance, setUsdcBalance] = useState("0");
+  const [usdcBalance, setUsdcBalance] = useState('0');
 
   const { executeTx } = useTxWithToast();
+  const { invoice, loading, error } = useInvoice('INV-00123');
+  const isIssuer = publicKey === invoice?.issuer;
+  const totalDue = invoice ? Number(invoice.amount) / 10_000_000 : 50000;
 
   // Fetch live USDC balance from Stellar network whenever wallet connects
   useEffect(() => {
     if (!isConnected || !publicKey) {
-      setUsdcBalance("0");
+      setUsdcBalance('0');
       return;
     }
 
     const fetchBalance = async () => {
       try {
-        const accountResponse = await server
-          .accounts()
-          .accountId(publicKey)
-          .call();
+        const res = await fetch(`https://horizon-testnet.stellar.org/accounts/${publicKey}`);
+        if (!res.ok) throw new Error();
+        const accountResponse = await res.json();
         const usdcEntry = accountResponse.balances.find(
           (b: { asset_code?: string; asset_issuer?: string }) =>
             b.asset_code === USDC_CODE && b.asset_issuer === USDC_ISSUER
         );
-        setUsdcBalance(usdcEntry ? usdcEntry.balance : "0");
+        setUsdcBalance(usdcEntry ? usdcEntry.balance : '0');
       } catch {
-        setUsdcBalance("0");
+        setUsdcBalance('0');
       }
     };
 
@@ -63,24 +72,20 @@ export default function InvoiceDetailPage() {
 
   // Wrapping the Soroban call with executeTx ensures any Freighter error
   // (user rejection, network failure, contract error) fires the correct toast.
-  const handleBuyFraction = async (
-    amountStroops: string,
-    invoiceId: string
-  ): Promise<void> => {
+  const handleBuyFraction = async (amountStroops: string, invoiceId: string): Promise<void> => {
     await executeTx(async () => {
       // TODO: Replace the lines below with your real Soroban client call, e.g.:
       // await sorobanClient.buy_fraction({
       //   invoice_id: invoiceId,
       //   amount: BigInt(amountStroops),
       // });
-      console.log("buy_fraction called:", { invoiceId, amountStroops });
+      console.log('buy_fraction called:', { invoiceId, amountStroops });
       await new Promise((r) => setTimeout(r, 1500));
     });
   };
 
   return (
     <div className="min-h-screen bg-tradeflow-dark text-white font-sans">
-      {/* Sticky Header */}
       <StickyHeader
         title="INV-123"
         subtitle="Real World Asset token details and performance metrics"
@@ -90,21 +95,20 @@ export default function InvoiceDetailPage() {
               href="/marketplace"
               className="flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors"
             >
-              <ArrowLeft size={16} />
+              <Icon icon={ArrowLeft} dense />
               Back
             </Link>
             <button
               onClick={() => setShowBuyModal(true)}
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
             >
-              <ExternalLink size={16} />
+              <Icon icon={ExternalLink} dense />
               Trade
             </button>
           </div>
         }
       />
 
-      {/* Main Content */}
       <div className="px-4 lg:px-8 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column */}
@@ -112,22 +116,38 @@ export default function InvoiceDetailPage() {
             {/* Invoice Overview */}
             <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-6">
               <h2 className="text-xl font-semibold mb-4">Invoice Overview</h2>
+
+              {loading && (
+                <p className="text-slate-400 text-sm animate-pulse">Loading on-chain data…</p>
+              )}
+              {error && (
+                <p className="text-red-400 text-sm bg-red-400/10 px-3 py-2 rounded-lg mb-4">
+                  Could not load contract data: {error}
+                </p>
+              )}
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-slate-400 text-sm mb-1">Invoice ID</p>
-                  <p className="font-mono text-blue-300">INV-00123</p>
+                  <p className="font-mono text-blue-300">{invoice?.id ?? 'INV-00123'}</p>
                 </div>
                 <div>
                   <p className="text-slate-400 text-sm mb-1">Token ID</p>
-                  <p className="font-mono text-green-300">TKN-0x1234...5678</p>
+                  <p className="font-mono text-green-300">TKN-0x1234…5678</p>
                 </div>
                 <div>
                   <p className="text-slate-400 text-sm mb-1">Principal Amount</p>
-                  <p className="text-xl font-bold">$50,000</p>
+                  <p className="text-xl font-bold">
+                    {invoice
+                      ? `$${(Number(invoice.amount) / 10_000_000).toLocaleString()}`
+                      : '$50,000'}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-slate-400 text-sm mb-1">Interest Rate</p>
-                  <p className="text-xl font-bold">8.5% APR</p>
+                  <p className="text-slate-400 text-sm mb-1">Recipient</p>
+                  <p className="font-mono text-sm truncate text-slate-300">
+                    {invoice?.recipient ?? '—'}
+                  </p>
                 </div>
                 <div>
                   <p className="text-slate-400 text-sm mb-1">Maturity Date</p>
@@ -135,8 +155,14 @@ export default function InvoiceDetailPage() {
                 </div>
                 <div>
                   <p className="text-slate-400 text-sm mb-1">Status</p>
-                  <span className="px-3 py-1 rounded-full bg-green-600/20 text-green-400 text-sm font-medium">
-                    Active
+                  <span
+                    className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      invoice?.status === 'past_due'
+                        ? 'bg-red-600/20 text-red-400'
+                        : 'bg-green-600/20 text-green-400'
+                    }`}
+                  >
+                    {invoice?.status === 'past_due' ? 'Past Due' : (invoice?.status ?? 'Active')}
                   </span>
                 </div>
               </div>
@@ -147,7 +173,7 @@ export default function InvoiceDetailPage() {
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold">Performance</h2>
                 <div className="flex items-center gap-2 text-green-400">
-                  <TrendingUp size={20} />
+                  <Icon icon={TrendingUp} />
                   <span className="font-medium">+12.5%</span>
                 </div>
               </div>
@@ -161,9 +187,9 @@ export default function InvoiceDetailPage() {
               <h2 className="text-xl font-semibold mb-4">Transaction History</h2>
               <div className="space-y-3">
                 {[
-                  { date: "2024-01-15", type: "Payment", amount: "$2,125", status: "Completed" },
-                  { date: "2024-01-01", type: "Payment", amount: "$2,125", status: "Completed" },
-                  { date: "2023-12-15", type: "Initial", amount: "$50,000", status: "Completed" },
+                  { date: '2024-01-15', type: 'Payment', amount: '$2,125', status: 'Completed' },
+                  { date: '2024-01-01', type: 'Payment', amount: '$2,125', status: 'Completed' },
+                  { date: '2023-12-15', type: 'Initial', amount: '$50,000', status: 'Completed' },
                 ].map((tx, index) => (
                   <div
                     key={index}
@@ -185,42 +211,7 @@ export default function InvoiceDetailPage() {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Risk Assessment */}
-            <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <Shield className="text-blue-400" size={20} />
-                <h2 className="text-xl font-semibold">Risk Assessment</h2>
-              </div>
-              <div className="space-y-4">
-                <div>
-                  <div className="flex justify-between mb-1">
-                    <span className="text-sm">Credit Score</span>
-                    <span className="text-sm font-medium">A+</span>
-                  </div>
-                  <div className="w-full bg-slate-700 h-2 rounded-full">
-                    <div className="bg-green-500 h-2 rounded-full" style={{ width: "85%" }} />
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between mb-1">
-                    <span className="text-sm">Collateral Ratio</span>
-                    <span className="text-sm font-medium">150%</span>
-                  </div>
-                  <div className="w-full bg-slate-700 h-2 rounded-full">
-                    <div className="bg-blue-500 h-2 rounded-full" style={{ width: "75%" }} />
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between mb-1">
-                    <span className="text-sm">Liquidity Score</span>
-                    <span className="text-sm font-medium">High</span>
-                  </div>
-                  <div className="w-full bg-slate-700 h-2 rounded-full">
-                    <div className="bg-purple-500 h-2 rounded-full" style={{ width: "90%" }} />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <DynamicRiskAssessmentChart data={MOCK_RISK_DATA} />
 
             {/* Quick Actions */}
             <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-6">
@@ -232,6 +223,19 @@ export default function InvoiceDetailPage() {
                 >
                   Buy Fraction
                 </button>
+
+                {/* Issue #194: Show Repay Loan CTA only to the original issuer */}
+                {isConnected && isIssuer && publicKey && (
+                  <RepayInvoiceButton
+                    invoiceId={invoice?.id ?? 'INV-00123'}
+                    callerPublicKey={publicKey}
+                    totalDue={totalDue}
+                    onSuccess={() => {
+                      // Optionally refresh invoice state after repayment
+                    }}
+                  />
+                )}
+
                 <button className="w-full px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors">
                   View Documents
                 </button>
@@ -242,17 +246,20 @@ export default function InvoiceDetailPage() {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Fractional Purchase Modal */}
-      {showBuyModal && (
-        <FractionalPurchaseModal
-          invoice={INVOICE_DATA}
-          walletBalance={usdcBalance}
-          onClose={() => setShowBuyModal(false)}
-          onBuyFraction={handleBuyFraction}
-        />
-      )}
+        {showBuyModal && (
+          <FractionalPurchaseModal
+            invoice={INVOICE_DATA}
+            walletBalance={usdcBalance}
+            onClose={() => setShowBuyModal(false)}
+            onBuyFraction={handleBuyFraction}
+          />
+        )}
+      </div>
     </div>
   );
 }
+
+// Inconsequential change for repo health
+
+// Maintenance: minor update

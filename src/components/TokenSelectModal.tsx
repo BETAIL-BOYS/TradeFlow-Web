@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
 import React, { useState, useMemo } from 'react';
 import { X, AlertCircle } from 'lucide-react';
+import Icon from './ui/Icon';
 
 interface Token {
   symbol: string;
@@ -17,14 +18,20 @@ interface TokenSelectModalProps {
   onSelect: (token: Token) => void;
 }
 
-export const TokenSelectModal: React.FC<TokenSelectModalProps> = ({ isOpen, onClose, tokens, onSelect }) => {
+export const TokenSelectModal: React.FC<TokenSelectModalProps> = ({
+  isOpen,
+  onClose,
+  tokens,
+  onSelect,
+}) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [agreedToRisks, setAgreedToRisks] = useState(false);
 
   const filteredTokens = useMemo(() => {
-    return tokens.filter(t => 
-      t.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      t.address.toLowerCase() === searchQuery.toLowerCase()
+    return tokens.filter(
+      (t) =>
+        t.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        t.address.toLowerCase() === searchQuery.toLowerCase()
     );
   }, [tokens, searchQuery]);
 
@@ -44,7 +51,7 @@ export const TokenSelectModal: React.FC<TokenSelectModalProps> = ({ isOpen, onCl
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold text-gray-900">Select a Token</h2>
             <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-full">
-              <X size={20} />
+              <Icon icon={X} />
             </button>
           </div>
 
@@ -68,11 +75,12 @@ export const TokenSelectModal: React.FC<TokenSelectModalProps> = ({ isOpen, onCl
                     Unknown Asset
                   </span>
                 </div>
-                
+
                 <div className="flex gap-2 mb-4">
-                  <AlertCircle size={16} className="text-red-600 shrink-0 mt-0.5" />
+                  <Icon icon={AlertCircle} dense className="text-red-600 shrink-0 mt-0.5" />
                   <p className="text-sm font-bold text-red-600 leading-tight">
-                    Warning: This token is unverified. Always verify the contract address before trading.
+                    Warning: This token is unverified. Always verify the contract address before
+                    trading.
                   </p>
                 </div>
 
@@ -92,7 +100,9 @@ export const TokenSelectModal: React.FC<TokenSelectModalProps> = ({ isOpen, onCl
                   <button
                     disabled={!agreedToRisks}
                     className="w-full rounded-xl bg-red-600 py-3 font-bold text-white transition-opacity disabled:opacity-50"
-                    onClick={() => onSelect({ symbol: 'UNKNOWN', name: 'Imported Asset', address: searchQuery })}
+                    onClick={() =>
+                      onSelect({ symbol: 'UNKNOWN', name: 'Imported Asset', address: searchQuery })
+                    }
                   >
                     Import
                   </button>
@@ -122,3 +132,6 @@ export const TokenSelectModal: React.FC<TokenSelectModalProps> = ({ isOpen, onCl
     </div>
   );
 };
+// Inconsequential change for repo health
+
+// Maintenance: minor update

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 const urlSchema = z.string().url();
 
@@ -23,17 +23,17 @@ export function getPublicEnvConfig(): PublicEnvConfig {
   if (raw) {
     const parsed = urlSchema.safeParse(raw);
     if (!parsed.success) {
-      throw new Error("Invalid NEXT_PUBLIC_API_URL. Expected an absolute URL.");
+      throw new Error('Invalid NEXT_PUBLIC_API_URL. Expected an absolute URL.');
     }
-    out.apiUrl = parsed.data.replace(/\/+$/, "");
+    out.apiUrl = parsed.data.replace(/\/+$/, '');
   }
 
   if (wsRaw) {
     const parsed = urlSchema.safeParse(wsRaw);
     if (!parsed.success) {
-      throw new Error("Invalid NEXT_PUBLIC_WS_URL. Expected an absolute URL.");
+      throw new Error('Invalid NEXT_PUBLIC_WS_URL. Expected an absolute URL.');
     }
-    out.wsUrl = parsed.data.replace(/\/+$/, "");
+    out.wsUrl = parsed.data.replace(/\/+$/, '');
   }
 
   return out;
@@ -57,9 +57,9 @@ export function getApiBaseUrl(options: ApiUrlOptions = {}): string {
 
   if (!apiUrl) {
     if (required) {
-      throw new Error("NEXT_PUBLIC_API_URL is required but not set.");
+      throw new Error('NEXT_PUBLIC_API_URL is required but not set.');
     }
-    return "";
+    return '';
   }
 
   return apiUrl;
@@ -69,6 +69,13 @@ export interface WsUrlOptions {
   required?: boolean;
 }
 
+/**
+ * Returns the WebSocket base URL.
+ * Falls back to deriving a WS URL from the API base URL,
+ * or from the current window location in the browser.
+ * @param options - Configuration options.
+ * @returns The WebSocket base URL string.
+ */
 export function getWsBaseUrl(options: WsUrlOptions = {}): string {
   const { required = false } = options;
   const { wsUrl } = getPublicEnvConfig();
@@ -78,18 +85,18 @@ export function getWsBaseUrl(options: WsUrlOptions = {}): string {
   const apiUrl = getApiBaseUrl();
   if (apiUrl) {
     const url = new URL(apiUrl);
-    url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
+    url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
     return url.origin;
   }
 
-  if (typeof window !== "undefined") {
-    const proto = window.location.protocol === "https:" ? "wss:" : "ws:";
+  if (typeof window !== 'undefined') {
+    const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     return `${proto}//${window.location.host}`;
   }
 
   if (required) {
-    throw new Error("NEXT_PUBLIC_WS_URL is required but not set.");
+    throw new Error('NEXT_PUBLIC_WS_URL is required but not set.');
   }
 
-  return "";
+  return '';
 }

@@ -5,7 +5,7 @@
 // This file is not used in the server environment.
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/
 
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from '@sentry/nextjs';
 
 const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN;
 
@@ -18,7 +18,7 @@ Sentry.init({
   replaysOnErrorSampleRate: 1.0,
   replaysSessionSampleRate: 0.1,
   integrations: [
-    new Sentry.Replay({
+    new (Sentry as any).Replay({
       // Additional Replay configuration goes in here, for example:
       maskAllText: true,
       blockAllMedia: true,

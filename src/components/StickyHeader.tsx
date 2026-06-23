@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react';
 import { usePathname } from 'next/navigation';
@@ -30,26 +30,20 @@ export default function StickyHeader({ title, subtitle, actions }: StickyHeaderP
             {/* Page Title and Subtitle */}
             <div className="flex items-center gap-4">
               <div className="flex-1 min-w-0">
-                <h1 className="text-2xl font-bold text-white truncate">
-                  {headerTitle}
-                </h1>
-                {subtitle && (
-                  <p className="text-slate-400 text-sm mt-1">
-                    {subtitle}
-                  </p>
-                )}
+                <h1 className="text-2xl font-bold text-white truncate">{headerTitle}</h1>
+                {subtitle && <p className="text-slate-400 text-sm mt-1">{subtitle}</p>}
               </div>
             </div>
           </div>
 
           {/* Header Actions */}
-          {actions && (
-            <div className="flex items-center gap-4 ml-4">
-              {actions}
-            </div>
-          )}
+          {actions && <div className="flex items-center gap-4 ml-4">{actions}</div>}
         </div>
       </div>
     </header>
   );
 }
+
+// Inconsequential change for repo health
+
+// Maintenance: minor update

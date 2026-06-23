@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useNetworkCongestion } from "../contexts/NetworkCongestionContext";
+import { useEffect } from 'react';
+import { useNetworkCongestion } from '../contexts/NetworkCongestionContext';
 
 // Baseline average fee in stroops (adjust based on real network observations)
 const BASELINE_FEE_STROOPS = 100;
@@ -19,16 +19,16 @@ export default function NetworkCongestionDetector() {
   useEffect(() => {
     const checkNetworkCongestion = async () => {
       try {
-        const res = await fetch("/api/v1/network/fees");
+        const res = await fetch('/api/v1/network/fees');
         if (!res.ok) {
-          console.warn("[NetworkCongestionDetector] Failed to fetch network fees");
+          console.warn('[NetworkCongestionDetector] Failed to fetch network fees');
           return;
         }
         const data: NetworkFeesResponse = await res.json();
         const { estimatedTotal } = data;
 
-        if (typeof estimatedTotal !== "number" || estimatedTotal <= 0) {
-          console.warn("[NetworkCongestionDetector] Invalid fee response:", data);
+        if (typeof estimatedTotal !== 'number' || estimatedTotal <= 0) {
+          console.warn('[NetworkCongestionDetector] Invalid fee response:', data);
           return;
         }
 
@@ -38,7 +38,7 @@ export default function NetworkCongestionDetector() {
         );
         setIsNetworkCongested(isCongested);
       } catch (error) {
-        console.error("[NetworkCongestionDetector] Error checking network congestion:", error);
+        console.error('[NetworkCongestionDetector] Error checking network congestion:', error);
         // Default to not congested on error to avoid false alarms
         setIsNetworkCongested(false);
       }
@@ -54,3 +54,7 @@ export default function NetworkCongestionDetector() {
 
   return null; // This component is side-effect only
 }
+
+// Inconsequential change for repo health
+
+// Maintenance: minor update

@@ -1,10 +1,11 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import BigNumber from "bignumber.js";
-import { X, Wallet, TrendingUp, Zap } from "lucide-react";
-import Button from "./ui/Button";
-import { useTxWithToast } from "../hooks/useTxWithToast";
+import React, { useState } from 'react';
+import BigNumber from 'bignumber.js';
+import { X, Wallet, TrendingUp, Zap } from 'lucide-react';
+import Button from './ui/Button';
+import Icon from './ui/Icon';
+import { useTxWithToast } from '../hooks/useTxWithToast';
 
 BigNumber.config({ EXPONENTIAL_AT: 1e9, DECIMAL_PLACES: 7 });
 
@@ -15,7 +16,7 @@ export interface Invoice {
   faceValue: number;
   apy: number;
   dueDate: string;
-  currency: "XLM" | "USDC";
+  currency: 'XLM' | 'USDC';
 }
 
 interface FractionalPurchaseModalProps {
@@ -32,7 +33,7 @@ function daysToMaturity(dueDate: string): number {
 
 function calcExpectedReturn(amount: string, apy: number, days: number) {
   if (!amount || Number(amount) <= 0) {
-    return { yieldAmt: "0.0000000", total: "0.0000000" };
+    return { yieldAmt: '0.0000000', total: '0.0000000' };
   }
   const principal = new BigNumber(amount);
   const yieldAmt = principal.multipliedBy(apy / 100).multipliedBy(days / 365);
@@ -55,22 +56,21 @@ export default function FractionalPurchaseModal({
   onClose,
   onBuyFraction,
 }: FractionalPurchaseModalProps) {
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
 
   const { executeTx } = useTxWithToast();
 
   const days = daysToMaturity(invoice.dueDate);
-  const balance = new BigNumber(walletBalance || "0");
-  const entered = new BigNumber(amount || "0");
-  const isValid =
-    entered.isGreaterThan(0) && entered.isLessThanOrEqualTo(balance);
+  const balance = new BigNumber(walletBalance || '0');
+  const entered = new BigNumber(amount || '0');
+  const isValid = entered.isGreaterThan(0) && entered.isLessThanOrEqualTo(balance);
   const { yieldAmt, total } = calcExpectedReturn(amount, invoice.apy, days);
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
-    if (/^\d*\.?\d{0,7}$/.test(val) || val === "") {
+    if (/^\d*\.?\d{0,7}$/.test(val) || val === '') {
       setAmount(val);
       setValidationError(null);
     }
@@ -86,8 +86,8 @@ export default function FractionalPurchaseModal({
     if (!isValid) {
       setValidationError(
         entered.isGreaterThan(balance)
-          ? "Amount exceeds wallet balance."
-          : "Enter a valid amount greater than 0."
+          ? 'Amount exceeds wallet balance.'
+          : 'Enter a valid amount greater than 0.'
       );
       return;
     }
@@ -99,9 +99,7 @@ export default function FractionalPurchaseModal({
     //   - "User Rejected Signature" → warning toast
     //   - Network / Contract error  → error toast
     // Returns null if the transaction failed (toast already shown).
-    const result = await executeTx(() =>
-      onBuyFraction(toStroops(amount), invoice.id)
-    );
+    const result = await executeTx(() => onBuyFraction(toStroops(amount), invoice.id));
 
     setIsSubmitting(false);
 
@@ -113,7 +111,6 @@ export default function FractionalPurchaseModal({
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-slate-800 rounded-2xl border border-slate-700 w-full max-w-md shadow-2xl">
-
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-slate-700">
           <div>
@@ -124,12 +121,11 @@ export default function FractionalPurchaseModal({
             onClick={onClose}
             className="text-slate-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-slate-700"
           >
-            <X size={20} />
+            <Icon icon={X} />
           </button>
         </div>
 
         <div className="p-6 space-y-5">
-
           {/* Invoice Stats */}
           <div className="grid grid-cols-3 gap-3">
             <div className="bg-slate-700/50 rounded-xl p-3 text-center">
@@ -140,9 +136,7 @@ export default function FractionalPurchaseModal({
             </div>
             <div className="bg-slate-700/50 rounded-xl p-3 text-center">
               <p className="text-xs text-slate-400 mb-1">APY</p>
-              <p className="text-emerald-400 font-semibold text-sm">
-                {invoice.apy}%
-              </p>
+              <p className="text-emerald-400 font-semibold text-sm">{invoice.apy}%</p>
             </div>
             <div className="bg-slate-700/50 rounded-xl p-3 text-center">
               <p className="text-xs text-slate-400 mb-1">Days Left</p>
@@ -153,7 +147,7 @@ export default function FractionalPurchaseModal({
           {/* Wallet Balance */}
           <div className="flex items-center justify-between px-4 py-3 bg-slate-700/40 rounded-xl border border-slate-600/50">
             <div className="flex items-center gap-2 text-slate-300 text-sm">
-              <Wallet size={15} className="text-slate-400" />
+              <Icon icon={Wallet} dense className="text-slate-400" />
               <span>Available Balance</span>
             </div>
             <div className="flex items-center gap-2">
@@ -188,9 +182,7 @@ export default function FractionalPurchaseModal({
                 {invoice.currency}
               </span>
             </div>
-            {validationError && (
-              <p className="mt-2 text-sm text-red-400">{validationError}</p>
-            )}
+            {validationError && <p className="mt-2 text-sm text-red-400">{validationError}</p>}
             <p className="mt-1.5 text-xs text-slate-500">
               Up to 7 decimal places (Stellar precision)
             </p>
@@ -199,14 +191,13 @@ export default function FractionalPurchaseModal({
           {/* Expected Return */}
           <div className="bg-slate-900/60 rounded-xl border border-slate-700/60 p-4 space-y-3">
             <div className="flex items-center gap-2 text-sm font-medium text-slate-300">
-              <TrendingUp size={15} className="text-emerald-400" />
+              <Icon icon={TrendingUp} dense className="text-emerald-400" />
               <span>Expected Return</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-slate-400">Principal</span>
               <span className="text-white font-medium">
-                {amount ? new BigNumber(amount).toFixed(7) : "0.0000000"}{" "}
-                {invoice.currency}
+                {amount ? new BigNumber(amount).toFixed(7) : '0.0000000'} {invoice.currency}
               </span>
             </div>
             <div className="flex justify-between text-sm">
@@ -233,15 +224,15 @@ export default function FractionalPurchaseModal({
             disabled={isSubmitting || !isValid}
             className="w-full py-3 px-4 flex items-center justify-center gap-2 disabled:bg-slate-600 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            <Zap size={16} />
-            {isSubmitting ? "Confirming Transaction..." : "Buy Fraction"}
+            <Icon icon={Zap} dense />
+            {isSubmitting ? 'Confirming Transaction...' : 'Buy Fraction'}
           </Button>
 
           <p className="text-center text-xs text-slate-500">
-            Calls{" "}
+            Calls{' '}
             <code className="text-slate-400 bg-slate-700/60 px-1.5 py-0.5 rounded">
               buy_fraction
-            </code>{" "}
+            </code>{' '}
             via Soroban contract
           </p>
         </div>
@@ -249,3 +240,6 @@ export default function FractionalPurchaseModal({
     </div>
   );
 }
+// Inconsequential change for repo health
+
+// Maintenance: minor update
