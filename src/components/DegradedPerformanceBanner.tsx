@@ -85,6 +85,7 @@ export default function DegradedPerformanceBanner() {
               onClick={() => resetHealth()}
               className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700/50 transition-colors"
               title="Dismiss"
+              aria-label="Dismiss performance banner"
             >
               <Icon icon={X} dense />
             </button>

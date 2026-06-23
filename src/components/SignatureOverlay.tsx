@@ -22,6 +22,7 @@ export default function SignatureOverlay() {
           onClick={stopSigning}
           className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors p-1"
           title="Cancel signing"
+          aria-label="Cancel signing"
         >
           <Icon icon={X} />
         </button>

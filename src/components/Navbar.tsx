@@ -114,6 +114,7 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
               onClick={copyToClipboard}
               className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white rounded-full transition-colors border border-slate-700"
               title="Copy address"
+              aria-label="Copy address to clipboard"
             >
               {copied ? (
                 <Check size={16} className="text-green-300" />

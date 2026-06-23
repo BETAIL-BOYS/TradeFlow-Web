@@ -45,11 +45,16 @@ export default function Icon({
 }: IconProps) {
   const finalSize = dense ? 16 : size;
 
+  // Default icons to be decorative unless explicitly given accessible attributes.
+  // If a developer passes an `aria-label` or other ARIA attributes, they will override this.
+  const ariaHidden = (props as any)["aria-hidden"] ?? ((props as any)["aria-label"] ? undefined : true);
+
   return (
     <IconComponent
       size={finalSize}
       strokeWidth={strokeWidth}
       className={className}
+      aria-hidden={ariaHidden}
       {...props}
     />
   );

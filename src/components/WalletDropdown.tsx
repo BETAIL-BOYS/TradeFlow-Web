@@ -136,6 +136,7 @@ export default function WalletDropdown({ address, isOpen, onToggle }: WalletDrop
             disabled={isRefreshing || isLoading}
             className="p-1 hover:bg-slate-700 rounded-full transition-colors disabled:opacity-50"
             title="Refresh balances"
+            aria-label="Refresh balances"
           >
             <RefreshCw 
               className={`w-4 h-4 text-slate-400 ${isRefreshing || isLoading ? 'animate-spin' : ''}`} 
