@@ -13,7 +13,7 @@ export default function TermsPage() {
     <div className="min-h-screen bg-tradeflow-dark text-white flex flex-col font-sans">
       <Navbar onConnect={() => {}} address="" />
 
-      <main className="flex-1 py-16 px-4">
+      <div className="flex-1 py-16 px-4">
         <div className="max-w-3xl mx-auto space-y-12">
           {/* Header */}
           <div className="border-b border-slate-700 pb-8">
@@ -93,7 +93,7 @@ export default function TermsPage() {
             </div>
           </section>
         </div>
-      </main>
+      </div>
 
       <Footer />
     </div>

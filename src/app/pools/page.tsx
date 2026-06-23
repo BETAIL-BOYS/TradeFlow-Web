@@ -31,8 +31,8 @@ export default function PoolsPage() {
         <p className="text-slate-400 mt-2">Provide liquidity and earn protocol fees.</p>
       </div>
 
-      <main className="flex-1 p-8">
-        {/* Stats Grid */}
+      <div className="flex-1 p-8">
+        {/* Stats Grid */
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700">
             <Droplets className="text-blue-400 mb-4" />
@@ -104,7 +104,7 @@ export default function PoolsPage() {
             onPageChange={setCurrentPage} 
           />
         </div>
-      </main>
+      </div>
 
       <Footer />
     </div>
