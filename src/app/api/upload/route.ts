@@ -5,11 +5,12 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { withRateLimit } from '@/lib/rateLimit';
 
 /**
  * POST handler for the upload endpoint.
  * Currently returns a 503 Service Unavailable error as the feature is locked.
- * 
+ *
  * @param {NextRequest} request - The incoming upload request.
  */
 export async function POST(request: NextRequest) {
@@ -19,10 +20,10 @@ export async function POST(request: NextRequest) {
 
   // 2. Return a consistent error response
   return NextResponse.json(
-    { 
+    {
       error: 'Upload service temporarily disabled',
       reason: 'Undergoing maintenance',
-      retryAfter: 3600 
+      retryAfter: 3600,
     },
     { status: 503 }
   );

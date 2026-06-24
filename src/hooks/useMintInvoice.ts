@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { mintInvoice, type MintInvoiceParams } from "@/soroban";
+import { useState } from 'react';
+import { mintInvoice, type MintInvoiceParams } from '@/soroban';
 
 /**
  * Hook for minting a new invoice via the Soroban smart contract.

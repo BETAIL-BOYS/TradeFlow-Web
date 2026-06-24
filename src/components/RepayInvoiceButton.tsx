@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useRepayInvoice } from "@/hooks/useRepayInvoice";
-import { CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import React from 'react';
+import { useRepayInvoice } from '@/hooks/useRepayInvoice';
+import { CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 
 interface RepayInvoiceButtonProps {
   invoiceId: string;
@@ -47,7 +47,7 @@ export default function RepayInvoiceButton({
     <div className="space-y-2">
       {totalDue !== undefined && (
         <p className="text-sm text-slate-400">
-          Total due:{" "}
+          Total due:{' '}
           <span className="text-white font-semibold">
             ${totalDue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </span>
@@ -65,7 +65,7 @@ export default function RepayInvoiceButton({
             Submitting repayment…
           </>
         ) : (
-          "Repay Loan"
+          'Repay Loan'
         )}
       </button>
 

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
-import { ChevronDownIcon } from "./icons";
-import { Wallet, Loader2 } from "lucide-react";
+import React from 'react';
+import { ChevronDownIcon } from './icons';
+import { Wallet, Loader2 } from 'lucide-react';
 
 interface AuthenticatedSkeletonProps {
   walletAddress?: string;
@@ -10,15 +10,15 @@ interface AuthenticatedSkeletonProps {
   isRevalidating?: boolean;
 }
 
-export default function AuthenticatedSkeleton({ 
-  walletAddress, 
-  walletType, 
-  isRevalidating = false 
+export default function AuthenticatedSkeleton({
+  walletAddress,
+  walletType,
+  isRevalidating = false,
 }: AuthenticatedSkeletonProps) {
   // Truncate address for display
-  const displayAddress = walletAddress 
+  const displayAddress = walletAddress
     ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
-    : "...";
+    : '...';
 
   return (
     <div className="flex items-center gap-3 animate-pulse">
@@ -26,7 +26,7 @@ export default function AuthenticatedSkeleton({
       <div className="w-8 h-8 bg-blue-500/20 rounded-full flex items-center justify-center">
         <Wallet className="w-4 h-4 text-blue-400" />
       </div>
-      
+
       {/* Wallet Address */}
       <div className="flex items-center gap-2">
         <span className="text-white font-medium">{displayAddress}</span>
@@ -42,7 +42,7 @@ export default function AuthenticatedSkeleton({
           </div>
         )}
       </div>
-      
+
       {/* Dropdown Arrow */}
       <div className="w-4 h-4 text-slate-400">
         <ChevronDownIcon />

@@ -1,31 +1,31 @@
-import "./globals.css";
-import React from "react";
-import { Inter } from "next/font/google";
+import './globals.css';
+import React from 'react';
+import { Inter } from 'next/font/google';
 
-import ToasterProvider from "../components/general/ToasterProvider";
-import { SlippageProvider } from "../contexts/SlippageContext";
-import { NetworkCongestionProvider } from "../contexts/NetworkCongestionContext";
-import { BackendHealthProvider } from "../contexts/BackendHealthContext";
-import Footer from "../components/layout/Footer";
-import NetworkCongestionBanner from "../components/NetworkCongestionBanner";
-import DegradedPerformanceBanner from "../components/DegradedPerformanceBanner";
-import ErrorBoundary from "../components/ErrorBoundary";
-import PageTransition from "../components/PageTransition";
-import QueryProvider from "../providers/QueryClientProvider";
-import { SettingsProvider } from "../lib/context/SettingsContext";
-import { ThemeProvider } from "../lib/context/ThemeContext";
-import NetworkGuard from "../components/general/NetworkGuard";
-import SignatureOverlay from "../components/SignatureOverlay";
-import { NetworkMismatchWarning } from "../components/NetworkMismatchWarning";
+import ToasterProvider from '../components/general/ToasterProvider';
+import { SlippageProvider } from '../contexts/SlippageContext';
+import { NetworkCongestionProvider } from '../contexts/NetworkCongestionContext';
+import { BackendHealthProvider } from '../contexts/BackendHealthContext';
+import Footer from '../components/layout/Footer';
+import NetworkCongestionBanner from '../components/NetworkCongestionBanner';
+import DegradedPerformanceBanner from '../components/DegradedPerformanceBanner';
+import ErrorBoundary from '../components/ErrorBoundary';
+import PageTransition from '../components/PageTransition';
+import QueryProvider from '../providers/QueryClientProvider';
+import { SettingsProvider } from '../lib/context/SettingsContext';
+import { ThemeProvider } from '../lib/context/ThemeContext';
+import NetworkGuard from '../components/general/NetworkGuard';
+import SignatureOverlay from '../components/SignatureOverlay';
+import { NetworkMismatchWarning } from '../components/NetworkMismatchWarning';
 
 const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
+  subsets: ['latin'],
+  variable: '--font-inter',
 });
 
 export const metadata = {
-  title: "TradeFlow",
-  description: "TradeFlow RWA Dashboard",
+  title: 'TradeFlow',
+  description: 'TradeFlow RWA Dashboard',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -40,29 +40,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <ErrorBoundary>
           <ThemeProvider>
-          <SettingsProvider>
-            <QueryProvider>
-              <BackendHealthProvider>
-                <NetworkGuard>
-                  <NetworkCongestionProvider>
-                    <SlippageProvider>
-                      <ToasterProvider />
-                      <NetworkCongestionBanner />
-                      <DegradedPerformanceBanner />
-                      <NetworkMismatchWarning />
-                      <main id="main-content">
-                        <PageTransition>
-                          {children}
-                        </PageTransition>
-                      </main>
-                      <SignatureOverlay />
-                      <Footer />
-                    </SlippageProvider>
-                  </NetworkCongestionProvider>
-                </NetworkGuard>
-              </BackendHealthProvider>
-            </QueryProvider>
-          </SettingsProvider>
+            <SettingsProvider>
+              <QueryProvider>
+                <BackendHealthProvider>
+                  <NetworkGuard>
+                    <NetworkCongestionProvider>
+                      <SlippageProvider>
+                        <ToasterProvider />
+                        <NetworkCongestionBanner />
+                        <DegradedPerformanceBanner />
+                        <NetworkMismatchWarning />
+                        <main id="main-content">
+                          <PageTransition>{children}</PageTransition>
+                        </main>
+                        <SignatureOverlay />
+                        <Footer />
+                      </SlippageProvider>
+                    </NetworkCongestionProvider>
+                  </NetworkGuard>
+                </BackendHealthProvider>
+              </QueryProvider>
+            </SettingsProvider>
           </ThemeProvider>
         </ErrorBoundary>
       </body>

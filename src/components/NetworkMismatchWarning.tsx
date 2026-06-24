@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { AlertTriangle, X, RefreshCw } from "lucide-react";
-import { useNetworkDetection } from "../hooks/useNetworkDetection";
+import { AlertTriangle, X, RefreshCw } from 'lucide-react';
+import { useNetworkDetection } from '../hooks/useNetworkDetection';
 
 export function NetworkMismatchWarning() {
   const {
@@ -20,21 +20,21 @@ export function NetworkMismatchWarning() {
 
   const getWalletName = (type: string) => {
     switch (type) {
-      case "freighter":
-        return "Freighter";
-      case "xbull":
-        return "xBull";
-      case "albedo":
-        return "Albedo";
+      case 'freighter':
+        return 'Freighter';
+      case 'xbull':
+        return 'xBull';
+      case 'albedo':
+        return 'Albedo';
       default:
-        return "Wallet";
+        return 'Wallet';
     }
   };
 
   const getNetworkInstructions = (walletType: string, targetNetwork: string) => {
     const walletName = getWalletName(walletType);
-    
-    if (walletType === "freighter") {
+
+    if (walletType === 'freighter') {
       return `1. Click on the ${walletName} extension icon\n2. Go to Settings\n3. Switch to ${targetNetwork} network\n4. Refresh this page`;
     } else {
       return `Please switch to ${targetNetwork} network in your ${walletName} wallet settings`;
@@ -50,22 +50,17 @@ export function NetworkMismatchWarning() {
             <div className="text-sm text-red-800">
               <span className="font-semibold">Network Mismatch Detected!</span>
               <div className="mt-1">
-                Your {getWalletName(walletType || "")} wallet is on{" "}
-                <span className="font-mono bg-red-100 px-1 rounded">
-                  {currentWalletNetwork}
-                </span>{" "}
-                but TradeFlow is configured for{" "}
-                <span className="font-mono bg-green-100 px-1 rounded">
-                  {expectedNetwork}
-                </span>
-                .
+                Your {getWalletName(walletType || '')} wallet is on{' '}
+                <span className="font-mono bg-red-100 px-1 rounded">{currentWalletNetwork}</span>{' '}
+                but TradeFlow is configured for{' '}
+                <span className="font-mono bg-green-100 px-1 rounded">{expectedNetwork}</span>.
               </div>
               <div className="mt-2 text-xs text-red-700 whitespace-pre-line">
-                {getNetworkInstructions(walletType || "", expectedNetwork)}
+                {getNetworkInstructions(walletType || '', expectedNetwork)}
               </div>
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-2">
             <button
               onClick={recheckNetwork}

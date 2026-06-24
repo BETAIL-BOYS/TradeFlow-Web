@@ -15,7 +15,7 @@ export type ApiStatusCode =
   | 503
   | 504;
 
-export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 /**
  * A normalized API error payload used throughout the frontend.
@@ -68,7 +68,7 @@ export type ApiResult<TData> = ApiSuccess<TData> | ApiFailure;
  * - error: service is unhealthy
  */
 export interface HealthResponse {
-  status: "ok" | "degraded" | "error";
+  status: 'ok' | 'degraded' | 'error';
   service?: string;
   version?: string;
   timestamp?: string;
@@ -152,7 +152,7 @@ export type PnlResponse = PnlPoint[];
  * Narrowly validates that an unknown value is a plain object (and not null/array).
  */
 export function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
 /**
@@ -160,9 +160,9 @@ export function isRecord(value: unknown): value is Record<string, unknown> {
  */
 export function isApiErrorResponse(value: unknown): value is ApiErrorResponse {
   if (!isRecord(value)) return false;
-  if (!("error" in value)) return false;
+  if (!('error' in value)) return false;
   const err = value.error;
-  return isRecord(err) && typeof err.message === "string";
+  return isRecord(err) && typeof err.message === 'string';
 }
 
 /**
@@ -171,7 +171,7 @@ export function isApiErrorResponse(value: unknown): value is ApiErrorResponse {
 export function isHealthResponse(value: unknown): value is HealthResponse {
   if (!isRecord(value)) return false;
   const status = value.status;
-  return status === "ok" || status === "degraded" || status === "error";
+  return status === 'ok' || status === 'degraded' || status === 'error';
 }
 
 /**
@@ -179,7 +179,7 @@ export function isHealthResponse(value: unknown): value is HealthResponse {
  */
 export function isRiskScoreResponse(value: unknown): value is RiskScoreResponse {
   if (!isRecord(value)) return false;
-  return typeof value.invoiceId === "string" && typeof value.riskScore === "number";
+  return typeof value.invoiceId === 'string' && typeof value.riskScore === 'number';
 }
 
 /**
@@ -192,10 +192,10 @@ export function isInvoicesResponse(value: unknown): value is InvoicesResponse {
   return value.data.every((item) => {
     if (!isRecord(item)) return false;
     return (
-      typeof item.id === "string" &&
-      typeof item.riskScore === "number" &&
-      typeof item.status === "string" &&
-      (typeof item.amount === "number" || typeof item.amount === "string")
+      typeof item.id === 'string' &&
+      typeof item.riskScore === 'number' &&
+      typeof item.status === 'string' &&
+      (typeof item.amount === 'number' || typeof item.amount === 'string')
     );
   });
 }
@@ -207,6 +207,6 @@ export function isPnlResponse(value: unknown): value is PnlResponse {
   if (!Array.isArray(value)) return false;
   return value.every((item) => {
     if (!isRecord(item)) return false;
-    return typeof item.date === "string" && typeof item.value === "number";
+    return typeof item.date === 'string' && typeof item.value === 'number';
   });
 }

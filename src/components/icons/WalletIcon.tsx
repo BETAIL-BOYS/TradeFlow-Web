@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
 interface WalletIconProps {
   className?: string;
 }
 
-export default function WalletIcon({ className = "" }: WalletIconProps) {
+export default function WalletIcon({ className = '' }: WalletIconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -25,12 +25,7 @@ export default function WalletIcon({ className = "" }: WalletIconProps) {
         fill="none"
       />
       {/* Wallet flap */}
-      <path
-        d="M4 26h56"
-        stroke="#60a5fa"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-      />
+      <path d="M4 26h56" stroke="#60a5fa" strokeWidth="2.5" strokeLinecap="round" />
       {/* Card slot */}
       <path
         d="M8 16v-3a4 4 0 0 1 4-4h40a4 4 0 0 1 4 4v3"

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react';
 
@@ -11,7 +11,14 @@ interface SliderProps {
   className?: string;
 }
 
-const Slider: React.FC<SliderProps> = ({ min, max, step, value, onValueChange, className = '' }) => {
+const Slider: React.FC<SliderProps> = ({
+  min,
+  max,
+  step,
+  value,
+  onValueChange,
+  className = '',
+}) => {
   const [isDragging, setIsDragging] = React.useState<'min' | 'max' | null>(null);
   const sliderRef = React.useRef<HTMLDivElement>(null);
 
@@ -61,7 +68,7 @@ const Slider: React.FC<SliderProps> = ({ min, max, step, value, onValueChange, c
     <div ref={sliderRef} className={`relative h-6 ${className}`}>
       {/* Track */}
       <div className="absolute top-1/2 left-0 right-0 h-2 bg-tradeflow-muted rounded-full -translate-y-1/2" />
-      
+
       {/* Active Range */}
       <div
         className="absolute top-1/2 h-2 bg-blue-500 rounded-full -translate-y-1/2"

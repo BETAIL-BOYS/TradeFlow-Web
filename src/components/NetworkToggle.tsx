@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { NetworkType } from "../stores/useWeb3Store";
-import { 
-  getNetworkOverride, 
-  setNetworkOverride, 
+import React, { useState, useEffect } from 'react';
+import { NetworkType } from '../stores/useWeb3Store';
+import {
+  getNetworkOverride,
+  setNetworkOverride,
   getEffectiveNetwork,
   isDevelopment,
-  NETWORK_CONFIGS 
-} from "../lib/networkConfig";
+  NETWORK_CONFIGS,
+} from '../lib/networkConfig';
 
 interface NetworkToggleProps {
   currentNetwork?: NetworkType;
@@ -16,16 +16,12 @@ interface NetworkToggleProps {
   className?: string;
 }
 
-export default function NetworkToggle({ 
-  currentNetwork, 
-  onNetworkChange, 
-  className = "" 
+export default function NetworkToggle({
+  currentNetwork,
+  onNetworkChange,
+  className = '',
 }: NetworkToggleProps) {
-  // Hide in production builds
-  if (!isDevelopment()) {
-    return null;
-  }
-
+  // Hooks must be called before any early returns
   const [selectedNetwork, setSelectedNetwork] = useState<NetworkType>(() => {
     return getNetworkOverride() || currentNetwork || 'Testnet';
   });
@@ -39,27 +35,31 @@ export default function NetworkToggle({
     }
   }, []);
 
+  // Hide in production builds - moved AFTER hooks
+  if (!isDevelopment()) {
+    return null;
+  }
+
   const handleNetworkChange = async (network: NetworkType) => {
     if (network === selectedNetwork || isSwitching) return;
 
     setIsSwitching(true);
-    
+
     try {
       // Save to localStorage
       setNetworkOverride(network);
       setSelectedNetwork(network);
-      
+
       // Notify parent component
       if (onNetworkChange) {
         onNetworkChange(network);
       }
-      
+
       // Reload the page to apply network changes
       // This ensures all API clients are re-initialized with new endpoints
       setTimeout(() => {
         window.location.reload();
       }, 500);
-      
     } catch (error) {
       console.error('Failed to switch network:', error);
     } finally {
@@ -76,17 +76,21 @@ export default function NetworkToggle({
         <span className="text-xs text-slate-400 font-medium">Network:</span>
         <div className="relative">
           {/* Network Badge */}
-          <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
-            isTestnet 
-              ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' 
-              : 'bg-green-500/20 text-green-400 border border-green-500/30'
-          }`}>
-            <div className={`w-2 h-2 rounded-full ${
-              isTestnet ? 'bg-blue-400' : 'bg-green-400'
-            } ${isSwitching ? 'animate-pulse' : ''}`} />
+          <div
+            className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+              isTestnet
+                ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                : 'bg-green-500/20 text-green-400 border border-green-500/30'
+            }`}
+          >
+            <div
+              className={`w-2 h-2 rounded-full ${
+                isTestnet ? 'bg-blue-400' : 'bg-green-400'
+              } ${isSwitching ? 'animate-pulse' : ''}`}
+            />
             {networkConfig.name}
           </div>
-          
+
           {/* Toggle Switch */}
           <button
             onClick={() => handleNetworkChange(isTestnet ? 'Mainnet' : 'Testnet')}
@@ -104,13 +108,13 @@ export default function NetworkToggle({
           </button>
         </div>
       </div>
-      
+
       {/* Dev indicator */}
       <div className="flex items-center gap-1">
         <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
         <span className="text-xs text-orange-400 font-medium">DEV</span>
       </div>
-      
+
       {/* Switching indicator */}
       {isSwitching && (
         <div className="flex items-center gap-1">
@@ -125,7 +129,7 @@ export default function NetworkToggle({
 // Hook to get current effective network
 export function useEffectiveNetwork(defaultNetwork: NetworkType = 'Testnet'): NetworkType {
   const [network, setNetwork] = useState<NetworkType>(() => getEffectiveNetwork(defaultNetwork));
-  
+
   useEffect(() => {
     const checkOverride = () => {
       const effective = getEffectiveNetwork(defaultNetwork);
@@ -133,21 +137,21 @@ export function useEffectiveNetwork(defaultNetwork: NetworkType = 'Testnet'): Ne
         setNetwork(effective);
       }
     };
-    
+
     // Check immediately
     checkOverride();
-    
+
     // Listen for storage changes from other tabs
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'tradeflow_network_override') {
         checkOverride();
       }
     };
-    
+
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, [network, defaultNetwork]);
-  
+
   return network;
 }
 

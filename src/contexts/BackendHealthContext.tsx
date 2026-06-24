@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 
@@ -37,7 +37,7 @@ export function BackendHealthProvider({ children }: BackendHealthProviderProps) 
   });
 
   const updateStatus = useCallback((newStatus: BackendStatus, error?: string) => {
-    setHealthState(prev => ({
+    setHealthState((prev) => ({
       ...prev,
       status: newStatus,
       lastError: error,
@@ -48,10 +48,10 @@ export function BackendHealthProvider({ children }: BackendHealthProviderProps) 
   const reportError = useCallback((error: Error | string, endpoint?: string) => {
     const errorMessage = typeof error === 'string' ? error : error.message;
     const endpointInfo = endpoint ? ` (${endpoint})` : '';
-    
+
     console.warn(`Backend error reported: ${errorMessage}${endpointInfo}`);
-    
-    setHealthState(prev => {
+
+    setHealthState((prev) => {
       const newConsecutiveFailures = prev.consecutiveFailures + 1;
       let newStatus: BackendStatus;
 
@@ -74,7 +74,7 @@ export function BackendHealthProvider({ children }: BackendHealthProviderProps) 
 
     // Auto-reset after delay if no more errors occur
     setTimeout(() => {
-      setHealthState(prev => {
+      setHealthState((prev) => {
         if (prev.consecutiveFailures > 0 && prev.status !== 'healthy') {
           return {
             ...prev,
@@ -89,9 +89,11 @@ export function BackendHealthProvider({ children }: BackendHealthProviderProps) 
   }, []);
 
   const reportSuccess = useCallback((endpoint?: string) => {
-    setHealthState(prev => {
+    setHealthState((prev) => {
       if (prev.consecutiveFailures > 0) {
-        console.log(`Backend success reported, resetting failure count${endpoint ? ` (${endpoint})` : ''}`);
+        console.log(
+          `Backend success reported, resetting failure count${endpoint ? ` (${endpoint})` : ''}`
+        );
         return {
           ...prev,
           status: 'healthy',
@@ -130,11 +132,7 @@ export function BackendHealthProvider({ children }: BackendHealthProviderProps) 
     isOffline,
   };
 
-  return (
-    <BackendHealthContext.Provider value={value}>
-      {children}
-    </BackendHealthContext.Provider>
-  );
+  return <BackendHealthContext.Provider value={value}>{children}</BackendHealthContext.Provider>;
 }
 
 export function useBackendHealth(): BackendHealthContextType {

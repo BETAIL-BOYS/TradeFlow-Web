@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect } from 'react';
-import { ArrowUpIcon } from "../icons";
+import { ArrowUpIcon } from '../icons';
 
 export const ScrollToTop: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -16,7 +16,7 @@ export const ScrollToTop: React.FC = () => {
     };
 
     window.addEventListener('scroll', toggleVisibility);
-    
+
     // Clean up the event listener on component unmount
     return () => window.removeEventListener('scroll', toggleVisibility);
   }, []);

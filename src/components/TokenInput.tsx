@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react';
 import { ChevronDown } from 'lucide-react';
@@ -14,10 +14,17 @@ interface TokenInputProps {
   onSelectClick: () => void;
 }
 
-export const TokenInput: React.FC<TokenInputProps> = ({ label, value, tokenSymbol, onSelectClick }) => {
+export const TokenInput: React.FC<TokenInputProps> = ({
+  label,
+  value,
+  tokenSymbol,
+  onSelectClick,
+}) => {
   return (
     <div className="rounded-2xl bg-gray-50 p-4 border border-transparent focus-within:border-blue-500/30 transition-all">
-      <label className="text-xs font-medium text-gray-500 mb-2 block uppercase tracking-wider">{label}</label>
+      <label className="text-xs font-medium text-gray-500 mb-2 block uppercase tracking-wider">
+        {label}
+      </label>
       <div className="flex items-center justify-between gap-4">
         <input
           type="number"

@@ -1,20 +1,20 @@
 /**
  * Invoice Minting Form Component.
- * Provides a guided interface for users to upload invoice PDFs and 
+ * Provides a guided interface for users to upload invoice PDFs and
  * define metadata for on-chain NFT minting.
  */
 
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { X, Upload, Calendar, DollarSign, Building, FileText, Info } from "lucide-react";
-import { useSession } from "next-auth/react";
-import Button from "./ui/Button";
-import { useMintInvoice } from "@/hooks/useMintInvoice";
-import Icon from "./ui/Icon";
+import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { X, Upload, Calendar, DollarSign, Building, FileText, Info } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import Button from './ui/Button';
+import { useMintInvoice } from '@/hooks/useMintInvoice';
+import Icon from './ui/Icon';
 
 // Enhanced validation schema with sanitization
 const sanitizeString = (str: string) => str.trim().replace(/[<>"'&]/g, '');
@@ -22,33 +22,29 @@ const sanitizeString = (str: string) => str.trim().replace(/[<>"'&]/g, '');
 const invoiceSchema = z.object({
   debtorName: z
     .string()
-    .min(2, "Debtor name must be at least 2 characters")
-    .max(100, "Debtor name cannot exceed 100 characters")
+    .min(2, 'Debtor name must be at least 2 characters')
+    .max(100, 'Debtor name cannot exceed 100 characters')
     .transform(sanitizeString),
   amount: z
     .number()
-    .min(0.01, "Amount must be greater than 0")
-    .max(1000000, "Amount cannot exceed $1,000,000"),
+    .min(0.01, 'Amount must be greater than 0')
+    .max(1000000, 'Amount cannot exceed $1,000,000'),
   /** Expected payment date for the invoice */
   dueDate: z
     .string()
-    .min(1, "Due date is required")
+    .min(1, 'Due date is required')
     .refine((date) => {
       const selectedDate = new Date(date);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       return selectedDate > today;
-    }, "Due date must be in the future"),
+    }, 'Due date must be in the future'),
   invoiceFile: z
     .instanceof(File)
-    .refine((file) => file.type === "application/pdf", "Only PDF files are allowed")
-    .refine((file) => file.size <= 5 * 1024 * 1024, "File size must be less than 5MB")
+    .refine((file) => file.type === 'application/pdf', 'Only PDF files are allowed')
+    .refine((file) => file.size <= 5 * 1024 * 1024, 'File size must be less than 5MB')
     .optional(),
-  supportingDocumentUri: z
-    .string()
-    .url("Must be a valid URL")
-    .optional()
-    .or(z.literal("")),
+  supportingDocumentUri: z.string().url('Must be a valid URL').optional().or(z.literal('')),
 });
 
 /** TypeScript type inferred from the validation schema */
@@ -74,7 +70,7 @@ export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormP
   const [feeEstimate, setFeeEstimate] = useState<FeeEstimate>({
     networkFee: 0,
     protocolFee: 0,
-    totalFee: 0
+    totalFee: 0,
   });
   const { data: session } = useSession();
   const { mint, loading: minting, error: mintError, txStatus } = useMintInvoice();
@@ -92,41 +88,41 @@ export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormP
   });
 
   // Calculate fees whenever amount changes
-  const watchedAmount = watch("amount");
-  
+  const watchedAmount = watch('amount');
+
   useEffect(() => {
     if (watchedAmount && watchedAmount > 0) {
       // Network fee: ~0.01 XLM per transaction (converted to USD)
       // Protocol fee: 0.5% of invoice amount
       const networkFeeXLM = 0.01;
-      const xlmPrice = 0.10; // Approximate XLM price in USD (should come from oracle)
+      const xlmPrice = 0.1; // Approximate XLM price in USD (should come from oracle)
       const networkFeeUSD = networkFeeXLM * xlmPrice;
       const protocolFee = watchedAmount * 0.005; // 0.5% protocol fee
-      
+
       setFeeEstimate({
         networkFee: networkFeeUSD,
         protocolFee: protocolFee,
-        totalFee: networkFeeUSD + protocolFee
+        totalFee: networkFeeUSD + protocolFee,
       });
     } else {
       setFeeEstimate({
         networkFee: 0,
         protocolFee: 0,
-        totalFee: 0
+        totalFee: 0,
       });
     }
   }, [watchedAmount]);
 
   /**
    * Manually updates the file field in react-hook-form when a file is selected.
-   * 
+   *
    * @param {React.ChangeEvent<HTMLInputElement>} event - The file input change event.
    */
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       setFilePreview(file.name);
-      setValue("invoiceFile", file);
+      setValue('invoiceFile', file);
     }
   };
 
@@ -135,7 +131,7 @@ export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormP
     const publicKey = (session?.user as any)?.publicKey;
     const amountInStroops = BigInt(Math.round(data.amount * 10_000_000));
     const invoiceId = `INV-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    
+
     return {
       invoiceId,
       amount: amountInStroops,
@@ -145,21 +141,21 @@ export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormP
         debtorName: data.debtorName,
         dueDate: data.dueDate,
         supportingDocumentUri: data.supportingDocumentUri || null,
-        timestamp: Date.now()
-      }
+        timestamp: Date.now(),
+      },
     };
   };
 
   const onFormSubmit = async (data: InvoiceFormData) => {
     const publicKey = (session?.user as any)?.publicKey;
     if (!publicKey) {
-      alert("Please connect your Stellar wallet first.");
+      alert('Please connect your Stellar wallet first.');
       return;
     }
 
     // Validate that at least one document is provided
     if (!data.invoiceFile && !data.supportingDocumentUri) {
-      alert("Please provide either an invoice file or a supporting document URI.");
+      alert('Please provide either an invoice file or a supporting document URI.');
       return;
     }
 
@@ -201,10 +197,12 @@ export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormP
             <input
               type="text"
               placeholder="Enter debtor company or individual name"
-              {...register("debtorName")}
+              {...register('debtorName')}
               className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
-            {errors.debtorName && <p className="mt-2 text-sm text-red-400">{errors.debtorName.message}</p>}
+            {errors.debtorName && (
+              <p className="mt-2 text-sm text-red-400">{errors.debtorName.message}</p>
+            )}
           </div>
 
           {/* Invoice Amount Field */}
@@ -218,7 +216,7 @@ export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormP
               step="0.01"
               min="0"
               placeholder="0.00"
-              {...register("amount", { valueAsNumber: true })}
+              {...register('amount', { valueAsNumber: true })}
               className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             {errors.amount && <p className="mt-2 text-sm text-red-400">{errors.amount.message}</p>}
@@ -232,10 +230,12 @@ export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormP
             </label>
             <input
               type="date"
-              {...register("dueDate")}
+              {...register('dueDate')}
               className="w-full px-4 py-3.5 bg-slate-900/50 border border-slate-700 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             />
-            {errors.dueDate && <p className="mt-2 text-sm text-red-400">{errors.dueDate.message}</p>}
+            {errors.dueDate && (
+              <p className="mt-2 text-sm text-red-400">{errors.dueDate.message}</p>
+            )}
           </div>
 
           {/* Invoice File Field */}
@@ -256,13 +256,13 @@ export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormP
               <label
                 htmlFor="invoice-file"
                 className={`flex flex-col items-center justify-center w-full px-4 py-8 border-2 border-dashed rounded-3xl cursor-pointer transition-all ${
-                  filePreview 
-                  ? "bg-indigo-500/5 border-indigo-500/50" 
-                  : "bg-slate-900/50 border-slate-700 hover:border-slate-600 hover:bg-slate-900/80"
+                  filePreview
+                    ? 'bg-indigo-500/5 border-indigo-500/50'
+                    : 'bg-slate-900/50 border-slate-700 hover:border-slate-600 hover:bg-slate-900/80'
                 }`}
               >
                 <Icon icon={Upload} dense className="mr-2 text-slate-400" />
-                <span className="text-slate-300">{filePreview || "Choose PDF file"}</span>
+                <span className="text-slate-300">{filePreview || 'Choose PDF file'}</span>
               </label>
             </div>
             {errors.invoiceFile && (
@@ -279,13 +279,15 @@ export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormP
             <input
               type="url"
               placeholder="https://example.com/invoice-doc.pdf"
-              {...register("supportingDocumentUri")}
+              {...register('supportingDocumentUri')}
               className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             {errors.supportingDocumentUri && (
               <p className="mt-2 text-sm text-red-400">{errors.supportingDocumentUri.message}</p>
             )}
-            <p className="mt-1 text-xs text-slate-500">Optional: Provide a link to additional documentation</p>
+            <p className="mt-1 text-xs text-slate-500">
+              Optional: Provide a link to additional documentation
+            </p>
           </div>
 
           {/* Fee Breakdown */}
@@ -324,10 +326,10 @@ export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormP
 
           <Button
             type="submit"
-            disabled={busy || !watch("debtorName") || !watch("amount") || !watch("dueDate")}
+            disabled={busy || !watch('debtorName') || !watch('amount') || !watch('dueDate')}
             className="w-full py-3 px-4 disabled:bg-slate-600 disabled:cursor-not-allowed"
           >
-            {busy ? "Submitting to Stellar..." : "Mint Invoice NFT"}
+            {busy ? 'Submitting to Stellar...' : 'Mint Invoice NFT'}
           </Button>
         </form>
       </div>

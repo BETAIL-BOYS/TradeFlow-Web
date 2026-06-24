@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react';
 import { Database, RefreshCw, AlertCircle, Wifi, WifiOff } from 'lucide-react';
@@ -18,7 +18,7 @@ export default function DataUnavailable({
   message,
   onRetry,
   showRetry = true,
-  type = 'general'
+  type = 'general',
 }: DataUnavailableProps) {
   const { isOffline, isDegraded } = useBackendHealth();
 
@@ -38,7 +38,9 @@ export default function DataUnavailable({
       return {
         icon: <Icon icon={AlertCircle} size={48} />,
         title: title || 'Data Unavailable',
-        message: message || 'Risk data is temporarily unavailable. Blockchain operations remain functional.',
+        message:
+          message ||
+          'Risk data is temporarily unavailable. Blockchain operations remain functional.',
         bgColor: 'bg-yellow-500/10',
         borderColor: 'border-yellow-500/30',
         iconColor: 'text-yellow-400',
@@ -69,19 +71,19 @@ export default function DataUnavailable({
   };
 
   return (
-    <div className={`flex flex-col items-center justify-center p-12 rounded-xl border ${content.bgColor} ${content.borderColor} min-h-[300px]`}>
-      <div className={`flex items-center justify-center w-16 h-16 rounded-full ${content.bgColor} ${content.iconColor} mb-4`}>
+    <div
+      className={`flex flex-col items-center justify-center p-12 rounded-xl border ${content.bgColor} ${content.borderColor} min-h-[300px]`}
+    >
+      <div
+        className={`flex items-center justify-center w-16 h-16 rounded-full ${content.bgColor} ${content.iconColor} mb-4`}
+      >
         {content.icon}
       </div>
-      
+
       <div className="text-center max-w-md">
-        <h3 className={`text-lg font-semibold mb-2 ${content.iconColor}`}>
-          {content.title}
-        </h3>
-        
-        <p className="text-slate-300 text-sm mb-6">
-          {getSpecificMessage()}
-        </p>
+        <h3 className={`text-lg font-semibold mb-2 ${content.iconColor}`}>{content.title}</h3>
+
+        <p className="text-slate-300 text-sm mb-6">{getSpecificMessage()}</p>
 
         {!isOffline && (
           <p className="text-slate-400 text-xs mb-6">

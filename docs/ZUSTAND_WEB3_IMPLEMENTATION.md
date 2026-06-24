@@ -9,23 +9,27 @@ The `useWeb3Store` provides a centralized state management solution for Web3 fun
 ## Features
 
 ### 🔄 Wallet Connection
+
 - **connectWallet()**: Connect to Freighter wallet
 - **disconnectWallet()**: Disconnect and clear state
 - **isConnecting**: Loading state during connection
 - **error**: Comprehensive error handling
 
 ### 🌐 Network Management
+
 - **switchNetwork()**: Switch between Testnet and Mainnet
 - **network**: Current active network
 - **NETWORKS**: Predefined network constants
 
 ### 💰 Balance Management
+
 - **updateBalances()**: Fetch all token balances from Stellar
 - **updateTokenBalance()**: Update specific token balance
 - **balances**: Record of all token balances
 - **useTokenBalance()**: Hook for specific token balance
 
 ### 🎯 Custom Hooks
+
 - **useWalletConnection()**: Wallet-related state and actions
 - **useNetwork()**: Network state and switching
 - **useBalances()**: Balance state and updates
@@ -34,6 +38,7 @@ The `useWeb3Store` provides a centralized state management solution for Web3 fun
 ## Usage Examples
 
 ### Basic Wallet Connection
+
 ```typescript
 import { useWalletConnection } from '../stores/useWeb3Store';
 
@@ -49,6 +54,7 @@ function WalletButton() {
 ```
 
 ### Network Switching
+
 ```typescript
 import { useNetwork, NETWORKS } from '../stores/useWeb3Store';
 
@@ -70,6 +76,7 @@ function NetworkSelector() {
 ```
 
 ### Balance Display
+
 ```typescript
 import { useBalances, useTokenBalance } from '../stores/useWeb3Store';
 
@@ -96,13 +103,13 @@ interface Web3State {
   walletAddress: string | null;
   isConnected: boolean;
   isConnecting: boolean;
-  
+
   // Network
   network: NetworkType; // 'Testnet' | 'Mainnet'
-  
+
   // Token balances
   balances: Record<string, number>;
-  
+
   // Loading and error states
   isLoading: boolean;
   error: string | null;
@@ -112,23 +119,28 @@ interface Web3State {
 ## Actions
 
 ### Wallet Actions
+
 - `connectWallet(): Promise<void>` - Connect to Freighter wallet
 - `disconnectWallet(): void` - Disconnect and clear state
 
 ### Network Actions
+
 - `switchNetwork(network: NetworkType): Promise<void>` - Switch networks
 
 ### Balance Actions
+
 - `updateBalances(): Promise<void>` - Fetch all balances
 - `updateTokenBalance(tokenCode: string, balance: number): void` - Update specific token
 
 ### Utility Actions
+
 - `clearError(): void` - Clear error state
 - `setLoading(loading: boolean): void` - Set loading state
 
 ## Integration with Existing Code
 
 ### Replacing Context Providers
+
 The new Zustand store can replace existing React Context providers:
 
 ```typescript
@@ -140,6 +152,7 @@ const { walletAddress } = useWalletConnection();
 ```
 
 ### Migration Strategy
+
 1. **Phase 1**: Add Zustand store alongside existing context
 2. **Phase 2**: Gradually migrate components to use Zustand hooks
 3. **Phase 3**: Remove old context providers
@@ -147,12 +160,14 @@ const { walletAddress } = useWalletConnection();
 ## Error Handling
 
 The store includes comprehensive error handling:
+
 - Wallet installation checks
 - Connection failures
 - Network switching errors
 - Balance fetching issues
 
 All errors are stored in the `error` state and can be accessed via:
+
 ```typescript
 const { error, clearError } = useWeb3Store();
 ```
@@ -160,6 +175,7 @@ const { error, clearError } = useWeb3Store();
 ## Testing
 
 A test component `Web3TestComponent.tsx` is provided to verify all functionality:
+
 - Wallet connection/disconnection
 - Network switching
 - Balance fetching and display

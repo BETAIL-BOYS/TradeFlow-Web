@@ -1,10 +1,10 @@
 /**
  * Shared Card Component.
- * Provides a consistent container for UI sections with standard 
+ * Provides a consistent container for UI sections with standard
  * TradeFlow styling (borders, padding, and background).
  */
 
-import React from "react";
+import React from 'react';
 
 /**
  * Props for the Card component.
@@ -23,29 +23,31 @@ interface CardProps {
 /**
  * A versatile layout component for grouping related content.
  */
-export default function Card({ 
-  children, 
-  className = "", 
-  onClick,
-  hoverable = false 
-}: CardProps) {
+export default function Card({ children, className = '', onClick, hoverable = false }: CardProps) {
   // --- Styling ---
-  const baseStyles = "bg-slate-800 border border-slate-700 rounded-3xl p-6 transition-all duration-300 shadow-xl shadow-black/5";
-  const hoverStyles = hoverable ? "hover:border-slate-600 hover:bg-slate-800/80 hover:translate-y-[-2px]" : "";
-  const interactiveStyles = onClick ? "cursor-pointer active:scale-[0.99]" : "";
+  const baseStyles =
+    'bg-slate-800 border border-slate-700 rounded-3xl p-6 transition-all duration-300 shadow-xl shadow-black/5';
+  const hoverStyles = hoverable
+    ? 'hover:border-slate-600 hover:bg-slate-800/80 hover:translate-y-[-2px]'
+    : '';
+  const interactiveStyles = onClick ? 'cursor-pointer active:scale-[0.99]' : '';
 
   return (
-    <div 
+    <div
       className={`${baseStyles} ${hoverStyles} ${interactiveStyles} ${className}`}
       onClick={onClick}
-      role={onClick ? "button" : undefined}
+      role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
-      onKeyDown={onClick ? (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onClick();
-        }
-      } : undefined}
+      onKeyDown={
+        onClick
+          ? (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onClick();
+              }
+            }
+          : undefined
+      }
     >
       {children}
     </div>

@@ -1,10 +1,15 @@
-"use client";
+'use client';
 
-import React from "react";
-import { FREIGHTER_ID, XBULL_ID, ALBEDO_ID, WalletType } from "../lib/stellar";
-import { getWalletDisplayName, getWalletDescription, getWalletIcon, getWalletBgColor } from "../lib/walletConnector";
-import { CloseIcon } from "./icons";
-import { Shield, Info } from "lucide-react";
+import React from 'react';
+import { FREIGHTER_ID, XBULL_ID, ALBEDO_ID, WalletType } from '../lib/stellar';
+import {
+  getWalletDisplayName,
+  getWalletDescription,
+  getWalletIcon,
+  getWalletBgColor,
+} from '../lib/walletConnector';
+import { CloseIcon } from './icons';
+import { Shield, Info } from 'lucide-react';
 
 /**
  * Props for the WalletModal component.
@@ -43,22 +48,22 @@ const walletOptions: WalletOption[] = [
     name: getWalletDisplayName(FREIGHTER_ID),
     description: getWalletDescription(FREIGHTER_ID),
     icon: getWalletIcon(FREIGHTER_ID),
-    bgColor: getWalletBgColor(FREIGHTER_ID)
+    bgColor: getWalletBgColor(FREIGHTER_ID),
   },
   {
     id: XBULL_ID,
     name: getWalletDisplayName(XBULL_ID),
     description: getWalletDescription(XBULL_ID),
     icon: getWalletIcon(XBULL_ID),
-    bgColor: getWalletBgColor(XBULL_ID)
+    bgColor: getWalletBgColor(XBULL_ID),
   },
   {
     id: ALBEDO_ID,
     name: getWalletDisplayName(ALBEDO_ID),
     description: getWalletDescription(ALBEDO_ID),
     icon: getWalletIcon(ALBEDO_ID),
-    bgColor: getWalletBgColor(ALBEDO_ID)
-  }
+    bgColor: getWalletBgColor(ALBEDO_ID),
+  },
 ];
 
 /**
@@ -78,7 +83,7 @@ export default function WalletModal({ isOpen, onClose, onConnect }: WalletModalP
   };
 
   return (
-    <div 
+    <div
       className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-300"
       role="dialog"
       aria-modal="true"
@@ -91,7 +96,9 @@ export default function WalletModal({ isOpen, onClose, onConnect }: WalletModalP
             <div className="p-2 bg-blue-500/10 rounded-xl text-blue-400">
               <Shield size={20} />
             </div>
-            <h2 id="modal-title" className="text-xl font-bold text-white tracking-tight">Connect Wallet</h2>
+            <h2 id="modal-title" className="text-xl font-bold text-white tracking-tight">
+              Connect Wallet
+            </h2>
           </div>
           <button
             onClick={onClose}
@@ -104,19 +111,25 @@ export default function WalletModal({ isOpen, onClose, onConnect }: WalletModalP
 
         {/* Options List */}
         <div className="p-6 space-y-3">
-          <p className="text-xs font-black text-slate-500 uppercase tracking-widest mb-4 ml-1">Select Provider</p>
+          <p className="text-xs font-black text-slate-500 uppercase tracking-widest mb-4 ml-1">
+            Select Provider
+          </p>
           {walletOptions.map((wallet) => (
             <button
               key={wallet.id}
               className="w-full bg-slate-900/40 hover:bg-slate-700/60 border border-slate-700/50 hover:border-blue-500/30 rounded-2xl p-4 flex items-center gap-4 transition-all group active:scale-[0.98]"
               onClick={() => handleWalletSelect(wallet.id)}
             >
-              <div className={`w-12 h-12 ${wallet.bgColor} rounded-xl flex items-center justify-center text-white shadow-lg shadow-black/20 group-hover:scale-110 transition-transform`}>
+              <div
+                className={`w-12 h-12 ${wallet.bgColor} rounded-xl flex items-center justify-center text-white shadow-lg shadow-black/20 group-hover:scale-110 transition-transform`}
+              >
                 {wallet.icon}
               </div>
               <div className="text-left">
                 <div className="font-bold text-white tracking-tight">{wallet.name}</div>
-                <div className="text-xs text-slate-400 leading-relaxed mt-0.5">{wallet.description}</div>
+                <div className="text-xs text-slate-400 leading-relaxed mt-0.5">
+                  {wallet.description}
+                </div>
               </div>
             </button>
           ))}
@@ -126,7 +139,10 @@ export default function WalletModal({ isOpen, onClose, onConnect }: WalletModalP
         <div className="px-6 py-5 bg-slate-900/50 flex gap-3 items-start border-t border-slate-700/50">
           <Info size={16} className="text-blue-400 shrink-0 mt-0.5" />
           <p className="text-[11px] text-slate-400 leading-relaxed font-medium">
-            By connecting a wallet, you agree to our <span className="text-blue-400 hover:underline cursor-pointer">Terms of Service</span> and acknowledge you have read our <span className="text-blue-400 hover:underline cursor-pointer">Privacy Policy</span>.
+            By connecting a wallet, you agree to our{' '}
+            <span className="text-blue-400 hover:underline cursor-pointer">Terms of Service</span>{' '}
+            and acknowledge you have read our{' '}
+            <span className="text-blue-400 hover:underline cursor-pointer">Privacy Policy</span>.
           </p>
         </div>
       </div>

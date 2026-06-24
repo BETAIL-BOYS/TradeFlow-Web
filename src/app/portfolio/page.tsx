@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { connectWallet, WalletType } from "../../lib/stellar";
-import Navbar from "../../components/Navbar";
-import WalletModal from "../../components/WalletModal";
-import PortfolioChart from "../../components/PortfolioChart";
-import WalletNotConnected from "../../components/WalletNotConnected";
-import AssetsList from "../../components/AssetsList";
-import LiquidityList from "../../components/LiquidityList";
+import React, { useState } from 'react';
+import { connectWallet, WalletType } from '../../lib/stellar';
+import Navbar from '../../components/Navbar';
+import WalletModal from '../../components/WalletModal';
+import PortfolioChart from '../../components/PortfolioChart';
+import WalletNotConnected from '../../components/WalletNotConnected';
+import AssetsList from '../../components/AssetsList';
+import LiquidityList from '../../components/LiquidityList';
 
 export default function PortfolioPage() {
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleConnectWallet = async (walletType: WalletType) => {
@@ -20,8 +20,8 @@ export default function PortfolioPage() {
         setAddress(userInfo.publicKey);
       }
     } catch (e: any) {
-      console.error("Connection failed:", e.message);
-      alert(e.message || "Failed to connect to wallet.");
+      console.error('Connection failed:', e.message);
+      alert(e.message || 'Failed to connect to wallet.');
     }
   };
 
@@ -36,9 +36,7 @@ export default function PortfolioPage() {
           <>
             <div className="mb-8">
               <h1 className="text-4xl font-bold text-white mb-2">Portfolio</h1>
-              <p className="text-tradeflow-muted text-lg">
-                Track your wealth growth over time
-              </p>
+              <p className="text-tradeflow-muted text-lg">Track your wealth growth over time</p>
             </div>
 
             <div className="bg-gradient-to-r from-tradeflow-accent/20 to-blue-600/20 rounded-2xl border border-tradeflow-accent/30 p-8 mb-8">

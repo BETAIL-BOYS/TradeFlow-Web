@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import { X, Sparkles } from 'lucide-react';
@@ -15,7 +15,7 @@ export default function NewsBanner() {
   if (!isVisible) return null;
 
   return (
-    <div 
+    <div
       className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-2.5 px-4 relative shadow-md z-50 animate-in slide-in-from-top duration-500"
       role="status"
       aria-label="Important Announcement"
@@ -27,14 +27,14 @@ export default function NewsBanner() {
             <Sparkles size={14} className="text-blue-100" />
           </div>
           <span className="text-[11px] sm:text-xs font-black uppercase tracking-[0.2em]">
-            TradeFlow Mainnet Beta is now live! 
+            TradeFlow Mainnet Beta is now live!
           </span>
           <span className="hidden sm:inline-block bg-white text-blue-600 text-[10px] px-2 py-0.5 rounded-full font-bold">
             NEW
           </span>
         </div>
       </div>
-      
+
       {/* Dismiss Button */}
       <button
         onClick={() => setIsVisible(false)}

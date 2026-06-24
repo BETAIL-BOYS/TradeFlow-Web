@@ -1,23 +1,23 @@
 /**
  * Main Navigation Bar Component.
- * Provides access to primary application routes, wallet connectivity status, 
+ * Provides access to primary application routes, wallet connectivity status,
  * network selection, and utility features like the fiat on-ramp.
  */
 
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Wallet, Copy, Check, CreditCard, Menu, X } from "lucide-react";
-import { showError, showSuccess } from "../lib/toast";
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Wallet, Copy, Check, CreditCard, Menu, X } from 'lucide-react';
+import { showError, showSuccess } from '../lib/toast';
 
 // Core UI components and modals
-import NetworkSelector from "./NetworkSelector";
-import FiatOnRampModal from "./FiatOnRampModal";
-import NetworkFeeIndicator from "./ui/NetworkFeeIndicator";
-import WalletDropdown from "./WalletDropdown";
-import Icon from "./ui/Icon";
+import NetworkSelector from './NetworkSelector';
+import FiatOnRampModal from './FiatOnRampModal';
+import NetworkFeeIndicator from './ui/NetworkFeeIndicator';
+import WalletDropdown from './WalletDropdown';
+import Icon from './ui/Icon';
 
 interface NavbarProps {
   address?: string;
@@ -37,20 +37,20 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
         await navigator.clipboard.writeText(address);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
-        showSuccess("Address copied to clipboard!");
+        showSuccess('Address copied to clipboard!');
       } catch (err) {
         console.error('Failed to copy address:', err);
-        showError("Failed to copy address");
+        showError('Failed to copy address');
       }
     }
   };
 
   const navLinks = [
-    { name: "Dashboard", href: "/" },
-    { name: "Swap", href: "/swap" },
-    { name: "Pools", href: "/pools" },
-    { name: "Portfolio", href: "/portfolio" },
-    { name: "FAQ", href: "/faq" },
+    { name: 'Dashboard', href: '/' },
+    { name: 'Swap', href: '/swap' },
+    { name: 'Pools', href: '/pools' },
+    { name: 'Portfolio', href: '/portfolio' },
+    { name: 'FAQ', href: '/faq' },
   ];
 
   return (
@@ -72,10 +72,9 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-medium transition-colors ${isActive
-                    ? "text-cyan-400"
-                    : "text-slate-400 hover:text-white"
-                  }`}
+                className={`text-sm font-medium transition-colors ${
+                  isActive ? 'text-cyan-400' : 'text-slate-400 hover:text-white'
+                }`}
               >
                 {link.name}
               </Link>
@@ -122,7 +121,7 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
                 <Copy size={16} className="text-white" />
               )}
             </button>
-            
+
             <WalletDropdown
               address={address}
               isOpen={isDropdownOpen}
@@ -139,19 +138,16 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
           </button>
         )}
 
-        <button 
+        <button
           className="lg:hidden p-2 text-slate-400 hover:text-white transition-colors"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
-      <FiatOnRampModal
-        isOpen={isFiatModalOpen}
-        onClose={() => setIsFiatModalOpen(false)}
-      />
+      <FiatOnRampModal isOpen={isFiatModalOpen} onClose={() => setIsFiatModalOpen(false)} />
     </header>
   );
 }

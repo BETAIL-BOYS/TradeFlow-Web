@@ -1,9 +1,9 @@
 /**
  * Tab Navigation Component.
- * A reusable horizontal navigation bar for switching between different 
+ * A reusable horizontal navigation bar for switching between different
  * content views within a page.
  */
-"use client";
+'use client';
 
 import React from 'react';
 
@@ -20,14 +20,14 @@ interface TabNavigationProps {
   className?: string;
 }
 
-export default function TabNavigation({ 
-  tabs, 
-  activeTab, 
-  onTabChange, 
-  className = '' 
+export default function TabNavigation({
+  tabs,
+  activeTab,
+  onTabChange,
+  className = '',
 }: TabNavigationProps) {
   return (
-    <div 
+    <div
       className={`border-b border-slate-700/50 mb-8 ${className}`}
       role="tablist"
       aria-label="Navigation Tabs"
@@ -35,7 +35,7 @@ export default function TabNavigation({
       <nav className="flex space-x-10" aria-label="Tabs">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
-          
+
           return (
             <button
               key={tab.id}
@@ -52,13 +52,15 @@ export default function TabNavigation({
             >
               <div className="flex items-center gap-2.5">
                 {tab.icon && (
-                  <span className={`transition-transform duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
+                  <span
+                    className={`transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}
+                  >
                     {tab.icon}
                   </span>
                 )}
                 {tab.label}
               </div>
-              
+
               {isActive && (
                 <div className="absolute -bottom-[2px] left-0 right-0 h-[2px] bg-blue-500 shadow-[0_0_12px_rgba(59,130,246,0.5)]" />
               )}

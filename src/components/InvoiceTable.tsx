@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
@@ -115,60 +115,61 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ filters }) => {
             </tr>
           </thead>
           <tbody className="relative">
-            {isLoading && !invoicesData ? (
-              // Show skeleton rows on initial load
-              Array.from({ length: itemsPerPage }).map((_, index) => (
-                <SkeletonRow key={`skeleton-${index}`} />
-              ))
-            ) : (
-              invoicesData?.data.map((invoice: Invoice) => (
-                <tr
-                  key={invoice.id}
-                  className={`border-b border-tradeflow-muted/50 hover:bg-tradeflow-muted/20 transition ${isFetching ? 'opacity-60' : ''
+            {isLoading && !invoicesData
+              ? // Show skeleton rows on initial load
+                Array.from({ length: itemsPerPage }).map((_, index) => (
+                  <SkeletonRow key={`skeleton-${index}`} />
+                ))
+              : invoicesData?.data.map((invoice: Invoice) => (
+                  <tr
+                    key={invoice.id}
+                    className={`border-b border-tradeflow-muted/50 hover:bg-tradeflow-muted/20 transition ${
+                      isFetching ? 'opacity-60' : ''
                     }`}
-                >
-                  <td className="p-4 font-mono text-sm text-blue-300">
-                    #{invoice.id.slice(-6)}
-                  </td>
-                  <td className="p-4">
-                    <div className="w-full bg-tradeflow-muted h-2 rounded-full max-w-25">
-                      <div
-                        className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${invoice.riskScore}%` }}
-                      ></div>
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    {invoice.riskTier && (
+                  >
+                    <td className="p-4 font-mono text-sm text-blue-300">#{invoice.id.slice(-6)}</td>
+                    <td className="p-4">
+                      <div className="w-full bg-tradeflow-muted h-2 rounded-full max-w-25">
+                        <div
+                          className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${invoice.riskScore}%` }}
+                        ></div>
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      {invoice.riskTier && (
+                        <span
+                          className={`px-2 py-1 rounded text-xs font-bold ${
+                            invoice.riskTier === 'A'
+                              ? 'bg-green-500/20 text-green-400'
+                              : invoice.riskTier === 'B'
+                                ? 'bg-blue-500/20 text-blue-400'
+                                : invoice.riskTier === 'C'
+                                  ? 'bg-yellow-500/20 text-yellow-400'
+                                  : 'bg-red-500/20 text-red-400'
+                          }`}
+                        >
+                          {invoice.riskTier}
+                        </span>
+                      )}
+                    </td>
+                    <td className="p-4 font-medium text-green-400">
+                      {invoice.apy ? `${invoice.apy.toFixed(2)}%` : 'N/A'}
+                    </td>
+                    <td className="p-4 text-sm font-medium">
                       <span
-                        className={`px-2 py-1 rounded text-xs font-bold ${
-                          invoice.riskTier === 'A' ? 'bg-green-500/20 text-green-400' :
-                          invoice.riskTier === 'B' ? 'bg-blue-500/20 text-blue-400' :
-                          invoice.riskTier === 'C' ? 'bg-yellow-500/20 text-yellow-400' :
-                          'bg-red-500/20 text-red-400'
+                        className={`px-3 py-1 rounded-full ${
+                          invoice.status === 'Approved'
+                            ? 'bg-tradeflow-success/20 text-tradeflow-success'
+                            : 'bg-tradeflow-warning/20 text-tradeflow-warning'
                         }`}
                       >
-                        {invoice.riskTier}
+                        {invoice.status}
                       </span>
-                    )}
-                  </td>
-                  <td className="p-4 font-medium text-green-400">
-                    {invoice.apy ? `${invoice.apy.toFixed(2)}%` : 'N/A'}
-                  </td>
-                  <td className="p-4 text-sm font-medium">
-                    <span
-                      className={`px-3 py-1 rounded-full ${invoice.status === "Approved"
-                        ? "bg-tradeflow-success/20 text-tradeflow-success"
-                        : "bg-tradeflow-warning/20 text-tradeflow-warning"
-                        }`}
-                    >
-                      {invoice.status}
-                    </span>
-                  </td>
-                  <td className="p-4 font-bold text-lg">${invoice.amount.toLocaleString()}</td>
-                </tr>
-              ))
-            )}
+                    </td>
+                    <td className="p-4 font-bold text-lg">${invoice.amount.toLocaleString()}</td>
+                  </tr>
+                ))}
           </tbody>
         </table>
 

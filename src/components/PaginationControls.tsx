@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -24,13 +24,14 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
   onPageChange,
   isLoading = false,
 }) => {
-  const { currentPage, totalPages, totalItems, itemsPerPage, hasNextPage, hasPreviousPage } = pagination;
+  const { currentPage, totalPages, totalItems, itemsPerPage, hasNextPage, hasPreviousPage } =
+    pagination;
 
   // Generate page numbers to show
   const getVisiblePages = () => {
     const pages: number[] = [];
     const maxVisiblePages = 5;
-    
+
     if (totalPages <= maxVisiblePages) {
       // Show all pages if total is less than max visible
       for (let i = 1; i <= totalPages; i++) {
@@ -39,32 +40,32 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
     } else {
       // Always show first page
       pages.push(1);
-      
+
       // Calculate middle pages
       const start = Math.max(2, currentPage - 1);
       const end = Math.min(totalPages - 1, currentPage + 1);
-      
+
       // Add ellipsis if needed before middle pages
       if (start > 2) {
         pages.push(-1); // -1 represents ellipsis
       }
-      
+
       // Add middle pages
       for (let i = start; i <= end; i++) {
         pages.push(i);
       }
-      
+
       // Add ellipsis if needed after middle pages
       if (end < totalPages - 1) {
         pages.push(-1); // -1 represents ellipsis
       }
-      
+
       // Always show last page
       if (totalPages > 1) {
         pages.push(totalPages);
       }
     }
-    
+
     return pages;
   };
 
@@ -77,7 +78,7 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
       <div className="text-sm text-slate-400">
         Showing {startItem} to {endItem} of {totalItems} results
       </div>
-      
+
       <div className="flex items-center gap-2">
         {/* Previous Button */}
         <button
@@ -88,7 +89,7 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
           <Icon icon={ChevronLeft} dense />
           Previous
         </button>
-        
+
         {/* Page Numbers */}
         <div className="flex items-center gap-1">
           {visiblePages.map((page, index) => (
@@ -112,7 +113,7 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
             </React.Fragment>
           ))}
         </div>
-        
+
         {/* Next Button */}
         <button
           onClick={() => onPageChange(currentPage + 1)}

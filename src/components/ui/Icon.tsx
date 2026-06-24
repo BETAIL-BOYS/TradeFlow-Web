@@ -23,13 +23,13 @@ interface IconProps extends Omit<LucideProps, 'size' | 'strokeWidth'> {
 
 /**
  * Standardized Icon wrapper component for consistent icon rendering across the application.
- * 
+ *
  * Default props:
  * - size: 20 (for normal text flow)
  * - strokeWidth: 1.5
- * 
+ *
  * For dense areas (tables, compact UI), use the `dense` prop to automatically set size to 16.
- * 
+ *
  * @example
  * <Icon icon={Wallet} />
  * <Icon icon={Search} dense />

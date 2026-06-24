@@ -3,11 +3,11 @@
  * Contains copyright information, primary resource links, and social media integrations.
  * Automatically sticks to the bottom of the viewport via flexbox in the layout.
  */
-"use client";
+'use client';
 
-import React from "react";
-import { ExternalLink, Twitter, Github } from "lucide-react";
-import Link from "next/link";
+import React from 'react';
+import { ExternalLink, Twitter, Github } from 'lucide-react';
+import Link from 'next/link';
 
 /**
  * A consistent footer for all TradeFlow pages.
@@ -16,29 +16,35 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-slate-900 border-t border-slate-800 py-12 px-8 mt-auto" role="contentinfo">
+    <footer
+      className="bg-slate-900 border-t border-slate-800 py-12 px-8 mt-auto"
+      role="contentinfo"
+    >
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-12 lg:gap-8">
-          
           {/* Brand Info */}
           <div className="space-y-4 max-w-sm">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-black text-sm">T</span>
               </div>
-              <span className="text-lg font-black tracking-tight text-white uppercase">TradeFlow</span>
+              <span className="text-lg font-black tracking-tight text-white uppercase">
+                TradeFlow
+              </span>
             </div>
             <p className="text-slate-500 text-sm leading-relaxed">
-              The premier dashboard for managing Real World Asset (RWA) backed invoices on the Stellar network.
+              The premier dashboard for managing Real World Asset (RWA) backed invoices on the
+              Stellar network.
             </p>
           </div>
 
           {/* Navigation & Links */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-12 w-full lg:w-auto">
-            
             {/* Resources Column */}
             <div className="space-y-4">
-              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Resources</h4>
+              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                Resources
+              </h4>
               <nav className="flex flex-col gap-3">
                 <a
                   href="https://docs.tradeflow.example"
@@ -49,7 +55,10 @@ export default function Footer() {
                   Documentation
                   <ExternalLink size={12} className="opacity-50" />
                 </a>
-                <Link href="/faq" className="text-slate-500 hover:text-blue-400 transition-colors text-sm font-medium">
+                <Link
+                  href="/faq"
+                  className="text-slate-500 hover:text-blue-400 transition-colors text-sm font-medium"
+                >
                   Help Center
                 </Link>
               </nav>
@@ -59,10 +68,16 @@ export default function Footer() {
             <div className="space-y-4">
               <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Legal</h4>
               <nav className="flex flex-col gap-3">
-                <Link href="/legal/terms" className="text-slate-500 hover:text-blue-400 transition-colors text-sm font-medium">
+                <Link
+                  href="/legal/terms"
+                  className="text-slate-500 hover:text-blue-400 transition-colors text-sm font-medium"
+                >
                   Terms of Service
                 </Link>
-                <Link href="/legal/privacy" className="text-slate-500 hover:text-blue-400 transition-colors text-sm font-medium">
+                <Link
+                  href="/legal/privacy"
+                  className="text-slate-500 hover:text-blue-400 transition-colors text-sm font-medium"
+                >
                   Privacy Policy
                 </Link>
               </nav>
@@ -70,7 +85,9 @@ export default function Footer() {
 
             {/* Social Column */}
             <div className="space-y-4">
-              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Connect</h4>
+              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                Connect
+              </h4>
               <div className="flex gap-4">
                 <a
                   href="https://twitter.com"

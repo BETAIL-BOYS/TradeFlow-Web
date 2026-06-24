@@ -1,7 +1,15 @@
-"use client";
+'use client';
 
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
 
 interface PriceData {
   date: string;
@@ -24,14 +32,8 @@ export default function PriceChart() {
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={hardcodedData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" strokeOpacity={0.3} />
-          <XAxis 
-            dataKey="date" 
-            stroke="#64748b"
-            fontSize={12}
-            tickLine={false}
-            axisLine={false}
-          />
-          <YAxis 
+          <XAxis dataKey="date" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+          <YAxis
             stroke="#64748b"
             fontSize={12}
             tickLine={false}
@@ -39,20 +41,20 @@ export default function PriceChart() {
             domain={['dataMin - 0.005', 'dataMax + 0.005']}
             tickFormatter={(value) => `$${value.toFixed(3)}`}
           />
-          <Tooltip 
+          <Tooltip
             contentStyle={{
               backgroundColor: '#1e293b',
               border: '1px solid #334155',
               borderRadius: '8px',
-              color: '#f1f5f9'
+              color: '#f1f5f9',
             }}
             labelStyle={{ color: '#94a3b8' }}
             formatter={(value: any) => [`$${parseFloat(value).toFixed(3)}`, 'Price']}
           />
-          <Line 
-            type="monotone" 
-            dataKey="price" 
-            stroke="#3b82f6" 
+          <Line
+            type="monotone"
+            dataKey="price"
+            stroke="#3b82f6"
             strokeWidth={2}
             dot={false}
             activeDot={{ r: 4, fill: '#3b82f6' }}

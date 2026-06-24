@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
-import { X, AlertTriangle } from "lucide-react";
-import { useNetworkCongestion } from "../contexts/NetworkCongestionContext";
+import React from 'react';
+import { X, AlertTriangle } from 'lucide-react';
+import { useNetworkCongestion } from '../contexts/NetworkCongestionContext';
 
 export default function NetworkCongestionBanner() {
   const { isNetworkCongested, isDismissed, dismiss } = useNetworkCongestion();
@@ -18,7 +18,7 @@ export default function NetworkCongestionBanner() {
           <div className="flex items-center py-2">
             <AlertTriangle className="h-5 w-5 text-yellow-400 mr-3 flex-shrink-0" />
             <p className="text-sm text-yellow-200">
-              <span className="font-medium">Stellar Network is currently congested.</span>{" "}
+              <span className="font-medium">Stellar Network is currently congested.</span>{' '}
               Transactions may take longer than usual.
             </p>
           </div>

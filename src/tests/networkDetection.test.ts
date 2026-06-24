@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import { useNetworkDetection } from '../hooks/useNetworkDetection';
 import { useWeb3Store } from '../stores/useWeb3Store';
 
@@ -13,10 +13,10 @@ const mockUseWeb3Store = useWeb3Store as jest.MockedFunction<typeof useWeb3Store
 describe('useNetworkDetection', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     // Mock environment variable
     process.env.NEXT_PUBLIC_STELLAR_NETWORK = 'TESTNET';
-    
+
     // Mock window.freighter
     Object.defineProperty(window, 'freighter', {
       value: {
@@ -45,9 +45,15 @@ describe('useNetworkDetection', () => {
 
     const { result } = renderHook(() => useNetworkDetection());
 
-    expect(result.current.isMismatched).toBe(true);
+    // Wait for async initialization and state update to complete
+    await waitFor(() => {
+      expect(result.current.isMismatched).toBe(true);
+    });
+
     expect(result.current.expectedNetwork).toBe('Testnet');
-    expect(result.current.currentWalletNetwork).toBe('Public Global Stellar Network ; September 2015');
+    expect(result.current.currentWalletNetwork).toBe(
+      'Public Global Stellar Network ; September 2015'
+    );
     expect(result.current.showWarning).toBe(true);
   });
 
@@ -68,7 +74,11 @@ describe('useNetworkDetection', () => {
 
     const { result } = renderHook(() => useNetworkDetection());
 
-    expect(result.current.isMismatched).toBe(false);
+    // Ensure async evaluation runs through before verifying no mismatch
+    await waitFor(() => {
+      expect(result.current.isMismatched).toBe(false);
+    });
+
     expect(result.current.showWarning).toBe(false);
   });
 
@@ -91,7 +101,11 @@ describe('useNetworkDetection', () => {
 
     const { result } = renderHook(() => useNetworkDetection());
 
-    expect(result.current.isMismatched).toBe(true);
+    // Wait for the mainnet check state to settle
+    await waitFor(() => {
+      expect(result.current.isMismatched).toBe(true);
+    });
+
     expect(result.current.expectedNetwork).toBe('Mainnet');
   });
 
@@ -112,8 +126,10 @@ describe('useNetworkDetection', () => {
 
     const { result } = renderHook(() => useNetworkDetection());
 
-    // Initially should show warning
-    expect(result.current.showWarning).toBe(true);
+    // Wait for the hook to asynchronously calculate and render the initial warning
+    await waitFor(() => {
+      expect(result.current.showWarning).toBe(true);
+    });
 
     // Dismiss warning
     act(() => {

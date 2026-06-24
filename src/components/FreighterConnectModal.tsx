@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { Wallet, Download, Shield, ExternalLink, Loader2 } from "lucide-react";
-import { useWalletConnection } from "../stores/useWeb3Store";
-import { FREIGHTER_ID } from "../lib/stellar";
-import toast from "react-hot-toast";
+import React, { useState, useEffect } from 'react';
+import { Wallet, Download, Shield, ExternalLink, Loader2 } from 'lucide-react';
+import { useWalletConnection } from '../stores/useWeb3Store';
+import { FREIGHTER_ID } from '../lib/stellar';
+import toast from 'react-hot-toast';
 
 interface FreighterConnectModalProps {
   isOpen: boolean;
@@ -22,12 +22,11 @@ export default function FreighterConnectModal({ isOpen, onClose }: FreighterConn
       if (!isOpen) return;
 
       setIsChecking(true);
-      
+
       try {
         // Check if Freighter is available in window
-        const isInstalled = typeof window !== 'undefined' && 
-          !!window.freighter;
-        
+        const isInstalled = typeof window !== 'undefined' && !!window.freighter;
+
         setIsFreighterInstalled(isInstalled);
       } catch (error) {
         console.error('Error checking Freighter installation:', error);
@@ -44,11 +43,11 @@ export default function FreighterConnectModal({ isOpen, onClose }: FreighterConn
   const handleConnect = async () => {
     try {
       await connectWallet(FREIGHTER_ID);
-      toast.success("Wallet connected successfully!");
+      toast.success('Wallet connected successfully!');
       onClose();
     } catch (error: any) {
       console.error('Connection failed:', error);
-      toast.error(error.message || "Failed to connect to Freighter wallet");
+      toast.error(error.message || 'Failed to connect to Freighter wallet');
     }
   };
 
@@ -79,12 +78,7 @@ export default function FreighterConnectModal({ isOpen, onClose }: FreighterConn
             aria-label="Close modal"
             title="Close modal"
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -153,7 +147,9 @@ export default function FreighterConnectModal({ isOpen, onClose }: FreighterConn
                   </div>
                   <div>
                     <p className="text-amber-400 font-medium">Freighter Not Detected</p>
-                    <p className="text-sm text-slate-400">Install the browser extension to continue</p>
+                    <p className="text-sm text-slate-400">
+                      Install the browser extension to continue
+                    </p>
                   </div>
                 </div>
               </div>

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useEffect, useState, useCallback } from "react";
-import { useWeb3Store } from "../stores/useWeb3Store";
-import { getNetworkConfig } from "../lib/networkConfig";
-import { createWalletConnector } from "../lib/walletConnector";
+import { useEffect, useState, useCallback } from 'react';
+import { useWeb3Store } from '../stores/useWeb3Store';
+import { getNetworkConfig } from '../lib/networkConfig';
+import { createWalletConnector } from '../lib/walletConnector';
 
 export interface NetworkMismatchState {
   isMismatched: boolean;
@@ -21,31 +21,26 @@ export interface NetworkMismatchState {
 export function useNetworkDetection() {
   const [networkState, setNetworkState] = useState<NetworkMismatchState>({
     isMismatched: false,
-    expectedNetwork: "",
+    expectedNetwork: '',
     currentWalletNetwork: null,
     walletType: null,
     showWarning: false,
   });
 
   const [isListening, setIsListening] = useState(false);
-  
-  const {
-    isConnected,
-    walletType,
-    network: appNetwork,
-    switchNetwork
-  } = useWeb3Store();
+
+  const { isConnected, walletType, network: appNetwork, switchNetwork } = useWeb3Store();
 
   // Get the expected network from environment variable
   const getExpectedNetwork = useCallback(() => {
     const envNetwork = process.env.NEXT_PUBLIC_STELLAR_NETWORK?.toUpperCase();
-    return envNetwork === "PUBLIC" ? "Mainnet" : "Testnet";
+    return envNetwork === 'PUBLIC' ? 'Mainnet' : 'Testnet';
   }, []);
 
   // Check if current wallet network matches expected network
   const checkNetworkMismatch = useCallback(async () => {
     if (!isConnected || !walletType) {
-      setNetworkState(prev => ({
+      setNetworkState((prev) => ({
         ...prev,
         isMismatched: false,
         currentWalletNetwork: null,
@@ -58,14 +53,14 @@ export function useNetworkDetection() {
       const connector = createWalletConnector(walletType);
       const walletNetwork = await connector.getNetwork();
       const expectedNetwork = getExpectedNetwork();
-      
+
       // Normalize network names for comparison
       const normalizeNetwork = (network: string) => {
-        if (network.includes("TESTNET") || network.includes("Test SDF Network")) {
-          return "Testnet";
+        if (network.includes('TESTNET') || network.includes('Test SDF Network')) {
+          return 'Testnet';
         }
-        if (network.includes("PUBLIC") || network.includes("Public Global Stellar Network")) {
-          return "Mainnet";
+        if (network.includes('PUBLIC') || network.includes('Public Global Stellar Network')) {
+          return 'Mainnet';
         }
         return network;
       };
@@ -80,10 +75,9 @@ export function useNetworkDetection() {
         walletType,
         showWarning: isMismatched,
       });
-
     } catch (error) {
-      console.error("Failed to check network mismatch:", error);
-      setNetworkState(prev => ({
+      console.error('Failed to check network mismatch:', error);
+      setNetworkState((prev) => ({
         ...prev,
         isMismatched: false,
         currentWalletNetwork: null,
@@ -94,12 +88,12 @@ export function useNetworkDetection() {
 
   // Set up network change listener for Freighter
   const setupNetworkListener = useCallback(() => {
-    if (!isConnected || !walletType || walletType !== "freighter") {
+    if (!isConnected || !walletType || walletType !== 'freighter') {
       return;
     }
 
     // Check if Freighter API is available
-    if (typeof window === "undefined" || !window.freighter) {
+    if (typeof window === 'undefined' || !window.freighter) {
       return;
     }
 
@@ -111,12 +105,12 @@ export function useNetworkDetection() {
     };
 
     // Add event listener for network changes
-    window.freighter.on("networkChange", handleNetworkChange);
+    window.freighter.on('networkChange', handleNetworkChange);
 
     // Cleanup function
     return () => {
       if (window.freighter && window.freighter.off) {
-        window.freighter.off("networkChange", handleNetworkChange);
+        window.freighter.off('networkChange', handleNetworkChange);
       }
       setIsListening(false);
     };
@@ -124,7 +118,7 @@ export function useNetworkDetection() {
 
   // Dismiss warning
   const dismissWarning = useCallback(() => {
-    setNetworkState(prev => ({ ...prev, showWarning: false }));
+    setNetworkState((prev) => ({ ...prev, showWarning: false }));
   }, []);
 
   // Force recheck network

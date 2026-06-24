@@ -1,6 +1,7 @@
 # Freighter Wallet Connection Modal
 
 ## Overview
+
 This document describes the dedicated Freighter wallet connection modal implemented for TradeFlow-Web as part of the wallet connection enhancement.
 
 ## Features Implemented
@@ -36,16 +37,19 @@ This document describes the dedicated Freighter wallet connection modal implemen
 ## Technical Implementation
 
 ### Components
+
 - **`FreighterConnectModal.tsx`**: Main modal component with wallet detection
 - **`page.tsx`**: Updated to use new modal and Web3 store integration
 - **`freighter.d.ts`**: TypeScript declarations for Freighter API
 
 ### State Management
+
 - Uses existing `useWeb3Store` for wallet connection state
 - Integrates with `useWalletConnection` hook for clean separation
 - Proper loading and error state handling
 
 ### UI/UX Features
+
 - Loading spinner during wallet detection
 - Clear success/error states with appropriate colors
 - Responsive design with proper mobile support
@@ -55,6 +59,7 @@ This document describes the dedicated Freighter wallet connection modal implemen
 ## Usage
 
 ### For Users
+
 1. Click "Connect Wallet" button in header
 2. If Freighter is not installed, click "Download Freighter Extension"
 3. Install and refresh the page
@@ -63,15 +68,13 @@ This document describes the dedicated Freighter wallet connection modal implemen
 6. Wallet address will appear in header button
 
 ### For Developers
+
 ```tsx
 import FreighterConnectModal from '../components/FreighterConnectModal';
 
 const [isModalOpen, setIsModalOpen] = useState(false);
 
-<FreighterConnectModal
-  isOpen={isModalOpen}
-  onClose={() => setIsModalOpen(false)}
-/>
+<FreighterConnectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />;
 ```
 
 ## Testing Checklist
@@ -86,6 +89,7 @@ const [isModalOpen, setIsModalOpen] = useState(false);
 - [x] Responsive design on mobile devices
 
 ## Dependencies
+
 - React hooks (`useState`, `useEffect`)
 - Lucide React icons
 - React Hot Toast for notifications
@@ -93,6 +97,7 @@ const [isModalOpen, setIsModalOpen] = useState(false);
 - Tailwind CSS for styling
 
 ## Future Enhancements
+
 - Support for additional wallet types
 - Connection persistence across sessions
 - Network switching capabilities

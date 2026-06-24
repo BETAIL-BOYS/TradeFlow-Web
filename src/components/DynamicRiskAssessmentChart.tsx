@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import dynamic from "next/dynamic";
-import { Suspense } from "react";
-import SkeletonCard from "./ui/SkeletonCard";
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
+import SkeletonCard from './ui/SkeletonCard';
 
 // Loading component
 const ChartLoadingSkeleton = () => (
@@ -14,14 +14,14 @@ const ChartLoadingSkeleton = () => (
       </div>
       <div className="h-6 w-20 bg-slate-600 rounded-full animate-pulse"></div>
     </div>
-    
+
     <div className="h-80 w-full flex items-center justify-center">
       <div className="text-center">
         <div className="w-16 h-16 border-4 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
         <p className="text-slate-400 text-sm">Loading risk assessment...</p>
       </div>
     </div>
-    
+
     <div className="mt-6 grid grid-cols-2 gap-4">
       {Array.from({ length: 6 }).map((_, index) => (
         <div key={index} className="p-3 bg-slate-700/30 rounded-lg">
@@ -35,7 +35,7 @@ const ChartLoadingSkeleton = () => (
 
 // Dynamic import with SSR disabled
 const DynamicRiskAssessmentChart = dynamic(
-  () => import("./RiskAssessmentChart").then((mod) => mod.default),
+  () => import('./RiskAssessmentChart').then((mod) => mod.default),
   {
     ssr: false,
     loading: () => <ChartLoadingSkeleton />,
@@ -56,9 +56,9 @@ interface DynamicRiskAssessmentChartProps {
   className?: string;
 }
 
-const DynamicRiskAssessmentChartWrapper: React.FC<DynamicRiskAssessmentChartProps> = ({ 
-  data, 
-  className = "" 
+const DynamicRiskAssessmentChartWrapper: React.FC<DynamicRiskAssessmentChartProps> = ({
+  data,
+  className = '',
 }) => {
   return (
     <Suspense fallback={<ChartLoadingSkeleton />}>

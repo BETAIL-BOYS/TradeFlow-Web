@@ -1,10 +1,10 @@
 /**
  * Network Fee Indicator Component.
- * Fetches and displays the current Stellar network base fee (in stroops) 
+ * Fetches and displays the current Stellar network base fee (in stroops)
  * with visual cues for congestion levels.
  */
 
-"use client";
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Fuel } from 'lucide-react';
@@ -65,19 +65,19 @@ export default function NetworkFeeIndicator() {
 
   /**
    * Returns a Tailwind color class based on the fee level.
-   * 
+   *
    * @param {number} baseFee - The fee in stroops.
    * @returns {string} The CSS class for the text color.
    */
   const getFeeColor = (baseFee: number) => {
-    if (baseFee < 150) return 'text-emerald-400';      // Cheap/Low congestion
-    if (baseFee < 300) return 'text-yellow-400';       // Moderate congestion
-    return 'text-red-500';                             // High congestion
+    if (baseFee < 150) return 'text-emerald-400'; // Cheap/Low congestion
+    if (baseFee < 300) return 'text-yellow-400'; // Moderate congestion
+    return 'text-red-500'; // High congestion
   };
 
   /**
    * Returns a human-readable label for the congestion level.
-   * 
+   *
    * @param {number} baseFee - The fee in stroops.
    * @returns {string} The status label.
    */
@@ -110,20 +110,16 @@ export default function NetworkFeeIndicator() {
   // 3. Main Data Display
   return (
     <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-800/50 border border-slate-700 hover:border-slate-600 transition-colors group">
-      <Icon 
-        icon={Fuel}
-        dense
-        className={`transition-colors ${getFeeColor(feeData.baseFee)}`} 
-      />
+      <Icon icon={Fuel} dense className={`transition-colors ${getFeeColor(feeData.baseFee)}`} />
       <div className="flex items-baseline gap-1">
-        <span 
+        <span
           className={`font-mono text-sm font-semibold transition-colors duration-300 ${getFeeColor(feeData.baseFee)}`}
         >
           {feeData.baseFee}
         </span>
         <span className="text-[10px] text-slate-500 font-medium">stroops</span>
       </div>
-      
+
       <div className="text-[10px] text-slate-500 hidden group-hover:inline-block ml-1 border-l border-slate-700 pl-2 transition-all">
         {getFeeLabel(feeData.baseFee)}
       </div>

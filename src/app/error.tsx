@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react';
 import Link from 'next/link';
@@ -32,8 +32,8 @@ export default function ErrorPage({ error, reset }: { error: Error; reset: () =>
         <div className="mb-12">
           <h2 className="text-3xl font-semibold mb-4">Temporary System Outage</h2>
           <p className="text-slate-400 text-lg max-w-md mx-auto">
-            Something unexpected happened on our end. The TradeFlow engineering team
-            has been notified and is already working to restore full service.
+            Something unexpected happened on our end. The TradeFlow engineering team has been
+            notified and is already working to restore full service.
           </p>
         </div>
 
@@ -71,9 +71,7 @@ export default function ErrorPage({ error, reset }: { error: Error; reset: () =>
         {process.env.NODE_ENV === 'development' && (
           <details className="mt-6 p-4 bg-slate-800/50 rounded-2xl border border-slate-700 text-left text-sm">
             <summary className="cursor-pointer font-medium text-slate-300">Error details</summary>
-            <pre className="mt-2 whitespace-pre-wrap text-red-400">
-              {error.message}
-            </pre>
+            <pre className="mt-2 whitespace-pre-wrap text-red-400">{error.message}</pre>
           </details>
         )}
 

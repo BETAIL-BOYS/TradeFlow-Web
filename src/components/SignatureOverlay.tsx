@@ -1,9 +1,14 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Loader2, Wallet, X } from "lucide-react";
-import { useIsSigning, useSigningMessage, useTransactionDetails, useSigningActions } from "../stores/signatureStore";
-import Icon from "./ui/Icon";
+import React from 'react';
+import { Loader2, Wallet, X } from 'lucide-react';
+import {
+  useIsSigning,
+  useSigningMessage,
+  useTransactionDetails,
+  useSigningActions,
+} from '../stores/signatureStore';
+import Icon from './ui/Icon';
 
 export default function SignatureOverlay() {
   const isSigning = useIsSigning();
@@ -41,19 +46,15 @@ export default function SignatureOverlay() {
 
           {/* Main Message */}
           <div className="space-y-2">
-            <h2 className="text-xl font-semibold text-white">
-              Waiting for Signature
-            </h2>
-            <p className="text-slate-300 text-lg">
-              {signingMessage}
-            </p>
+            <h2 className="text-xl font-semibold text-white">Waiting for Signature</h2>
+            <p className="text-slate-300 text-lg">{signingMessage}</p>
           </div>
 
           {/* Transaction Details */}
           {transactionDetails && (
             <div className="bg-slate-800/50 rounded-lg p-4 space-y-3 border border-slate-700/50">
               <h3 className="text-sm font-medium text-slate-400 mb-2">Transaction Details</h3>
-              
+
               {transactionDetails.amount && (
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-400">Amount:</span>
@@ -62,7 +63,7 @@ export default function SignatureOverlay() {
                   </span>
                 </div>
               )}
-              
+
               {transactionDetails.fromToken && transactionDetails.toToken && (
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-400">Swap:</span>
@@ -71,19 +72,22 @@ export default function SignatureOverlay() {
                   </span>
                 </div>
               )}
-              
+
               {transactionDetails.networkFee && (
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-400">Network Fee:</span>
-                  <span className="text-white font-medium">{transactionDetails.networkFee} XLM</span>
+                  <span className="text-white font-medium">
+                    {transactionDetails.networkFee} XLM
+                  </span>
                 </div>
               )}
-              
+
               {transactionDetails.contractAddress && (
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-400">Contract:</span>
                   <span className="text-white font-mono text-xs">
-                    {transactionDetails.contractAddress.slice(0, 8)}...{transactionDetails.contractAddress.slice(-8)}
+                    {transactionDetails.contractAddress.slice(0, 8)}...
+                    {transactionDetails.contractAddress.slice(-8)}
                   </span>
                 </div>
               )}
@@ -97,9 +101,7 @@ export default function SignatureOverlay() {
                 <div className="w-2 h-2 bg-blue-400 rounded-full" />
               </div>
               <div className="text-left">
-                <p className="text-sm text-blue-300 font-medium mb-1">
-                  Check Your Wallet
-                </p>
+                <p className="text-sm text-blue-300 font-medium mb-1">Check Your Wallet</p>
                 <p className="text-xs text-blue-200/80">
                   Open your wallet extension or app to review and sign the transaction.
                 </p>

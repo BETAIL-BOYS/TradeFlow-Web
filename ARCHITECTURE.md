@@ -48,17 +48,19 @@ src/
 To keep the codebase maintainable and scalable, we enforce a strict separation between routing/layouts and modular UI components.
 
 ### The `src/app/` Directory (Routing & Layouts)
-* **Purpose**: Defines routes, page templates, layouts, and error boundaries.
-* **Rule**: Files inside `src/app` should act primarily as **compositions** of UI components. Avoid writing complex form validation, raw layout styles, or massive component structures directly inside `page.tsx` or `layout.tsx`.
-* **Conventions**:
-  * `page.tsx`: Defines the unique UI for a route.
-  * `layout.tsx`: Defines shared UI across multiple pages (e.g., sidebar and header).
-  * `error.tsx` / `not-found.tsx`: Error boundaries and fallback pages.
-  * `api/` / `route.ts`: Server-side API endpoints (Route Handlers).
+
+- **Purpose**: Defines routes, page templates, layouts, and error boundaries.
+- **Rule**: Files inside `src/app` should act primarily as **compositions** of UI components. Avoid writing complex form validation, raw layout styles, or massive component structures directly inside `page.tsx` or `layout.tsx`.
+- **Conventions**:
+  - `page.tsx`: Defines the unique UI for a route.
+  - `layout.tsx`: Defines shared UI across multiple pages (e.g., sidebar and header).
+  - `error.tsx` / `not-found.tsx`: Error boundaries and fallback pages.
+  - `api/` / `route.ts`: Server-side API endpoints (Route Handlers).
 
 ### The `src/components/` Directory (Modular UI)
-* **Purpose**: Holds all modular, reusable components.
-* **Organization**:
+
+- **Purpose**: Holds all modular, reusable components.
+- **Organization**:
   1. **`src/components/ui/`**: Low-level, stateless, presentational primitives. These are the bricks of our application (e.g., `Button.tsx`, `Slider.tsx`, `Tooltip.tsx`). They should not depend on global Web3 state or business logic.
   2. **`src/components/layout/`**: Components responsible for structural placement (e.g., `Navbar.tsx`, `Sidebar.tsx`).
   3. **`src/components/` (Root)**: Domain-specific or stateful UI blocks. These components combine UI primitives with state and business logic (e.g., `InvoiceMintForm.tsx`, `ConnectWallet.tsx`, `SwapInterface.tsx`).
@@ -70,20 +72,25 @@ To keep the codebase maintainable and scalable, we enforce a strict separation b
 Next.js 14 uses **React Server Components (RSC)** by default. Understanding when to use the `'use client'` directive is crucial for application performance, bundle size optimization, and SEO.
 
 ### When to Keep it as a Server Component (Default)
+
 By default, keep components as Server Components. This keeps JS bundle sizes small and allows direct, secure server-side operations.
-* **Use Case**: Static layouts, fetching initial metadata, pure presentation content, and structural wrappers.
+
+- **Use Case**: Static layouts, fetching initial metadata, pure presentation content, and structural wrappers.
 
 ### When to Add `'use client'`
+
 Add the `'use client'` directive at the very top of your file when the component requires client-side interactivity or browser-specific APIs.
-* **Use Case**:
-  * Using React state or lifecycle hooks (`useState`, `useReducer`, `useEffect`, `useLayoutEffect`).
-  * Using browser APIs (e.g., `window`, `localStorage`, Web3 extension wallets like Freighter).
-  * Attaching event listeners (`onClick`, `onChange`, `onSubmit`).
-  * Interacting with client-side contexts or hooks (e.g., wallet state, slippage settings).
+
+- **Use Case**:
+  - Using React state or lifecycle hooks (`useState`, `useReducer`, `useEffect`, `useLayoutEffect`).
+  - Using browser APIs (e.g., `window`, `localStorage`, Web3 extension wallets like Freighter).
+  - Attaching event listeners (`onClick`, `onChange`, `onSubmit`).
+  - Interacting with client-side contexts or hooks (e.g., wallet state, slippage settings).
 
 ### Code Comparison
 
 #### 📝 Server Component Example (Default)
+
 ```tsx
 // src/components/ui/Card.tsx
 // No 'use client' is needed here. This runs entirely on the server.
@@ -105,6 +112,7 @@ export function Card({ title, children }: CardProps) {
 ```
 
 #### 📝 Client Component Example (`'use client'`)
+
 ```tsx
 // src/components/AddTrustlineButton.tsx
 'use client'; // Required for click handlers, state, and browser wallets
@@ -151,27 +159,34 @@ graph TD
 ```
 
 ### 1. Smart Contract Bindings (`src/soroban/contracts/`)
+
 TypeScript wrappers representing Soroban smart contracts (e.g., `invoice.ts`). These bindings:
-* Map contract methods to strongly typed TypeScript functions.
-* Serialize JavaScript arguments into XDR format.
-* Deserialize contract return values back into typed JavaScript structures.
+
+- Map contract methods to strongly typed TypeScript functions.
+- Serialize JavaScript arguments into XDR format.
+- Deserialize contract return values back into typed JavaScript structures.
 
 ### 2. Client & Config (`src/soroban/`)
-* **`config.ts`**: Resolves network-specific configurations (like Testnet or Mainnet RPC endpoints, passphrases, and contract IDs) by reading active network contexts and environment variables.
-* **`client.ts`**: Manages a cached, single instance of the Soroban `Server` client (`getSorobanClient()`). It handles cache clearing automatically when switching networks (e.g., Testnet to Futurenet).
+
+- **`config.ts`**: Resolves network-specific configurations (like Testnet or Mainnet RPC endpoints, passphrases, and contract IDs) by reading active network contexts and environment variables.
+- **`client.ts`**: Manages a cached, single instance of the Soroban `Server` client (`getSorobanClient()`). It handles cache clearing automatically when switching networks (e.g., Testnet to Futurenet).
 
 ### 3. Global State Providers & Stores
+
 We manage decentralized application state through a mix of React Contexts and global Zustand stores:
-* **`src/providers/`**: Holds high-level providers that wrap the app layout tree, such as `QueryClientProvider` (for React Query caching).
-* **`src/contexts/`**: Contains specialized providers for targeted slices of configuration/state (e.g., `SlippageContext`, `ExpertModeContext`, `NetworkCongestionContext`).
-* **`src/stores/`**: Holds Zustand state managers for high-performance reactive state. For example:
-  * `useWeb3Store.ts` stores user wallet connection state, selected Stellar network details, and active account public keys.
+
+- **`src/providers/`**: Holds high-level providers that wrap the app layout tree, such as `QueryClientProvider` (for React Query caching).
+- **`src/contexts/`**: Contains specialized providers for targeted slices of configuration/state (e.g., `SlippageContext`, `ExpertModeContext`, `NetworkCongestionContext`).
+- **`src/stores/`**: Holds Zustand state managers for high-performance reactive state. For example:
+  - `useWeb3Store.ts` stores user wallet connection state, selected Stellar network details, and active account public keys.
 
 ### 4. Custom Hooks (`src/hooks/`)
+
 Hooks bridge UI components with contract actions. They abstract asynchronous states, event handlers, and feedback mechanisms.
-* `useWalletConnection.ts`: Manages connecting/disconnecting via Freighter, loading balances, and handling browser extension events.
-* `useSorobanEvents.ts`: Listens to RPC event streams for contract emission events.
-* `useTxWithToast.ts`: Executes a transaction and automatically triggers success/error notifications (toasts).
+
+- `useWalletConnection.ts`: Manages connecting/disconnecting via Freighter, loading balances, and handling browser extension events.
+- `useSorobanEvents.ts`: Listens to RPC event streams for contract emission events.
+- `useTxWithToast.ts`: Executes a transaction and automatically triggers success/error notifications (toasts).
 
 ---
 

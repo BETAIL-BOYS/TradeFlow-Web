@@ -3,6 +3,7 @@
 This document defines the exact JSON contract between frontend and backend APIs. **NO KEY NAMES SHOULD BE CHANGED WITHOUT PRIOR NOTIFICATION TO FRONTEND TEAM**.
 
 ## Version
+
 v1.0.0
 
 ---
@@ -14,15 +15,17 @@ v1.0.0
 Returns paginated list of invoice summaries.
 
 #### Query Parameters
-| Name      | Type   | Required | Default | Description                              |
-|-----------|--------|----------|---------|------------------------------------------|
-| page      | number | No       | 1       | Current page number (1-based)            |
-| limit     | number | No       | 20      | Items per page (max 100)                 |
-| minApy    | number | No       | 0       | Minimum APY filter                       |
-| maxApy    | number | No       | 100     | Maximum APY filter                       |
-| tiers     | string | No       | -       | Comma-separated risk tiers (A,B,C,D)     |
+
+| Name   | Type   | Required | Default | Description                          |
+| ------ | ------ | -------- | ------- | ------------------------------------ |
+| page   | number | No       | 1       | Current page number (1-based)        |
+| limit  | number | No       | 20      | Items per page (max 100)             |
+| minApy | number | No       | 0       | Minimum APY filter                   |
+| maxApy | number | No       | 100     | Maximum APY filter                   |
+| tiers  | string | No       | -       | Comma-separated risk tiers (A,B,C,D) |
 
 #### Response Shape
+
 ```json
 {
   "data": [
@@ -47,6 +50,7 @@ Returns paginated list of invoice summaries.
 ```
 
 #### TypeScript Interface (frontend)
+
 `InvoicesResponse` in `types/api.ts`
 
 ---
@@ -56,11 +60,13 @@ Returns paginated list of invoice summaries.
 Returns risk assessment for a specific invoice.
 
 #### Query Parameters
-| Name      | Type   | Required | Description                              |
-|-----------|--------|----------|------------------------------------------|
-| invoiceId | string | Yes      | Invoice identifier                       |
+
+| Name      | Type   | Required | Description        |
+| --------- | ------ | -------- | ------------------ |
+| invoiceId | string | Yes      | Invoice identifier |
 
 #### Response Shape (200 OK)
+
 ```json
 {
   "invoiceId": "string",
@@ -78,6 +84,7 @@ Returns risk assessment for a specific invoice.
 ```
 
 #### TypeScript Interface (frontend)
+
 `RiskScoreResponse` in `types/api.ts`
 
 ---
@@ -97,6 +104,7 @@ All error responses follow this shape:
 ```
 
 #### TypeScript Interface (frontend)
+
 `ApiErrorResponse` in `types/api.ts`
 
 ---

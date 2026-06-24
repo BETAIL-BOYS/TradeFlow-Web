@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { Droplets, TrendingUp, Info } from "lucide-react";
-import Pagination from "../../components/ui/Pagination";
-import { formatCurrency } from "../../lib/format";
-import Footer from "../../components/layout/Footer";
+import React, { useState } from 'react';
+import { Droplets, TrendingUp, Info } from 'lucide-react';
+import Pagination from '../../components/ui/Pagination';
+import { formatCurrency } from '../../lib/format';
+import Footer from '../../components/layout/Footer';
 
 // Mock data for pools
 const MOCK_POOLS = [
-  { id: 1, name: "XLM / USDC", liquidity: 500000, volume24h: 12000, apr: 5.2 },
-  { id: 2, name: "USDC / EURT", liquidity: 250000, volume24h: 8000, apr: 4.8 },
-  { id: 3, name: "XLM / EURT", liquidity: 150000, volume24h: 3000, apr: 6.1 },
-  { id: 4, name: "USDC / AQUA", liquidity: 100000, volume24h: 5000, apr: 12.4 },
-  { id: 5, name: "XLM / AQUA", liquidity: 80000, volume24h: 2000, apr: 15.0 },
-  { id: 6, name: "USDC / yUSDC", liquidity: 1200000, volume24h: 45000, apr: 3.2 },
-  { id: 7, name: "XLM / yXLM", liquidity: 900000, volume24h: 32000, apr: 3.5 },
+  { id: 1, name: 'XLM / USDC', liquidity: 500000, volume24h: 12000, apr: 5.2 },
+  { id: 2, name: 'USDC / EURT', liquidity: 250000, volume24h: 8000, apr: 4.8 },
+  { id: 3, name: 'XLM / EURT', liquidity: 150000, volume24h: 3000, apr: 6.1 },
+  { id: 4, name: 'USDC / AQUA', liquidity: 100000, volume24h: 5000, apr: 12.4 },
+  { id: 5, name: 'XLM / AQUA', liquidity: 80000, volume24h: 2000, apr: 15.0 },
+  { id: 6, name: 'USDC / yUSDC', liquidity: 1200000, volume24h: 45000, apr: 3.2 },
+  { id: 7, name: 'XLM / yXLM', liquidity: 900000, volume24h: 32000, apr: 3.5 },
 ];
 
 export default function PoolsPage() {
@@ -32,7 +32,7 @@ export default function PoolsPage() {
       </div>
 
       <div className="flex-1 p-8">
-        {/* Stats Grid */
+        {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700">
             <Droplets className="text-blue-400 mb-4" />
@@ -75,12 +75,8 @@ export default function PoolsPage() {
                         {pool.name}
                       </div>
                     </td>
-                    <td className="px-6 py-5 text-slate-300">
-                      {formatCurrency(pool.liquidity)}
-                    </td>
-                    <td className="px-6 py-5 text-slate-300">
-                      {formatCurrency(pool.volume24h)}
-                    </td>
+                    <td className="px-6 py-5 text-slate-300">{formatCurrency(pool.liquidity)}</td>
+                    <td className="px-6 py-5 text-slate-300">{formatCurrency(pool.volume24h)}</td>
                     <td className="px-6 py-5">
                       <span className="px-2.5 py-1 rounded-lg bg-green-500/10 text-green-400 font-bold text-sm">
                         {pool.apr}%
@@ -96,12 +92,12 @@ export default function PoolsPage() {
               </tbody>
             </table>
           </div>
-          
+
           {/* Pagination Component (Issue #77) */}
-          <Pagination 
-            currentPage={currentPage} 
-            totalPages={totalPages} 
-            onPageChange={setCurrentPage} 
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
           />
         </div>
       </div>

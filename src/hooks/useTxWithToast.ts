@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 /**
  * useTxWithToast.ts
@@ -9,9 +9,9 @@
  * Place at: src/hooks/useTxWithToast.ts
  */
 
-import { useCallback } from "react";
-import toast from "react-hot-toast";
-import { parseFreighterError, ERROR_TYPE } from "../lib/freighterErrors";
+import { useCallback } from 'react';
+import toast from 'react-hot-toast';
+import { parseFreighterError, ERROR_TYPE } from '../lib/freighterErrors';
 
 interface UseTxWithToastReturn {
   executeTx: <T>(fn: () => Promise<T>) => Promise<T | null>;
@@ -24,19 +24,19 @@ export function useTxWithToast(): UseTxWithToastReturn {
 
     if (type === ERROR_TYPE.USER_REJECTED) {
       toast(message, {
-        icon: "⚠️",
+        icon: '⚠️',
         style: {
-          background: "#FEF9C3",
-          color: "#854D0E",
-          border: "1px solid #FDE047",
+          background: '#FEF9C3',
+          color: '#854D0E',
+          border: '1px solid #FDE047',
         },
       });
     } else {
       toast.error(message, {
         style: {
-          background: "#FEE2E2",
-          color: "#991B1B",
-          border: "1px solid #FCA5A5",
+          background: '#FEE2E2',
+          color: '#991B1B',
+          border: '1px solid #FCA5A5',
         },
       });
     }
