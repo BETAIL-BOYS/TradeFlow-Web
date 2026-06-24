@@ -17,6 +17,7 @@ import { ThemeProvider } from '../lib/context/ThemeContext';
 import NetworkGuard from '../components/general/NetworkGuard';
 import SignatureOverlay from '../components/SignatureOverlay';
 import { NetworkMismatchWarning } from '../components/NetworkMismatchWarning';
+import SessionTimeoutProvider from '../components/SessionTimeoutProvider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -50,6 +51,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         <NetworkCongestionBanner />
                         <DegradedPerformanceBanner />
                         <NetworkMismatchWarning />
+                        <PageTransition>{children}</PageTransition>
+                        <SignatureOverlay />
+                        <SessionTimeoutProvider />
                         <main id="main-content">
                           <PageTransition>{children}</PageTransition>
                         </main>
