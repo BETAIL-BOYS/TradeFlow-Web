@@ -76,6 +76,8 @@ export default function FreighterConnectModal({ isOpen, onClose }: FreighterConn
           <button
             onClick={onClose}
             className="text-slate-400 hover:text-white transition-colors p-1"
+            aria-label="Close modal"
+            title="Close modal"
           >
             <svg
               className="w-6 h-6"

@@ -41,6 +41,8 @@ export default function PremiumUnlockModal({ isOpen, onClose, currentBalance }: 
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 rounded-full bg-slate-800/50 hover:bg-slate-700/50 transition-colors z-10"
+          aria-label="Close modal"
+          title="Close modal"
         >
           <Icon icon={X} className="w-4 h-4 text-slate-400" />
         </button>

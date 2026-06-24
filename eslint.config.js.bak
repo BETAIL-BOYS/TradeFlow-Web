@@ -1,0 +1,32 @@
+const { FlatCompat } = require("@eslint/eslintrc");
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
+
+module.exports = [
+  ...compat.config({
+    extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
+    plugins: ["@typescript-eslint", "jsx-a11y"],
+    rules: {
+      // Accessibility-focused jsx-a11y rules (enabled individually to avoid FlatCompat circular-config issues)
+      "jsx-a11y/alt-text": "warn",
+      "jsx-a11y/click-events-have-key-events": "warn",
+      "jsx-a11y/interactive-supports-focus": "warn",
+      "jsx-a11y/anchor-is-valid": "warn",
+      "jsx-a11y/aria-proptypes": "warn",
+
+      // existing project rules
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+        },
+      ],
+      "react/no-unescaped-entities": "warn",
+      "react-hooks/exhaustive-deps": "warn",
+    },
+  }),
+];

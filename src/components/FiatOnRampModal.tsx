@@ -43,6 +43,8 @@ export default function FiatOnRampModal({ isOpen, onClose }: FiatOnRampModalProp
           <button
             onClick={onClose}
             className="text-slate-400 hover:text-white transition-colors p-2 hover:bg-slate-900 rounded-full"
+            aria-label="Close modal"
+            title="Close modal"
           >
             <Icon icon={X} />
           </button>

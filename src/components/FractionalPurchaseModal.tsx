@@ -124,6 +124,8 @@ export default function FractionalPurchaseModal({
           <button
             onClick={onClose}
             className="text-slate-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-slate-700"
+            aria-label="Close buy modal"
+            title="Close buy modal"
           >
             <Icon icon={X} />
           </button>
