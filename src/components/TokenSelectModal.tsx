@@ -51,7 +51,12 @@ export const TokenSelectModal: React.FC<TokenSelectModalProps> = ({
         <div className="p-4">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold text-gray-900">Select a Token</h2>
-            <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-full" aria-label="Close token selector" title="Close token selector">
+            <button
+              onClick={onClose}
+              className="p-1 hover:bg-gray-100 rounded-full"
+              aria-label="Close token selector"
+              title="Close token selector"
+            >
               <Icon icon={X} />
             </button>
           </div>

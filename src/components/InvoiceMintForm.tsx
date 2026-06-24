@@ -182,7 +182,12 @@ export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormP
             <h2 className="text-xl font-semibold text-white">Mint Invoice NFT</h2>
             <p className="text-sm text-slate-400 mt-1">Submit your invoice for factoring</p>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors" aria-label="Close mint modal" title="Close mint modal">
+          <button
+            onClick={onClose}
+            className="text-slate-400 hover:text-white transition-colors"
+            aria-label="Close mint modal"
+            title="Close mint modal"
+          >
             <Icon icon={X} />
           </button>
         </div>

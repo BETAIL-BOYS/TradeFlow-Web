@@ -67,7 +67,7 @@ function crc16Xmodem(bytes: Uint8Array | number[]): number {
   for (let i = 0; i < bytes.length; i++) {
     crc ^= (bytes[i] & 0xff) << 8;
     for (let j = 0; j < 8; j++) {
-      crc = (crc & 0x8000) ? ((crc << 1) ^ 0x1021) : (crc << 1);
+      crc = crc & 0x8000 ? (crc << 1) ^ 0x1021 : crc << 1;
       crc &= 0xffff;
     }
   }

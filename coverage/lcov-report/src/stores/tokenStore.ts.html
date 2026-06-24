@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
@@ -216,14 +216,7 @@
 <a name='L151'></a><a href='#L151'>151</a>
 <a name='L152'></a><a href='#L152'>152</a>
 <a name='L153'></a><a href='#L153'>153</a>
-<a name='L154'></a><a href='#L154'>154</a>
-<a name='L155'></a><a href='#L155'>155</a>
-<a name='L156'></a><a href='#L156'>156</a>
-<a name='L157'></a><a href='#L157'>157</a>
-<a name='L158'></a><a href='#L158'>158</a>
-<a name='L159'></a><a href='#L159'>159</a>
-<a name='L160'></a><a href='#L160'>160</a>
-<a name='L161'></a><a href='#L161'>161</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L154'></a><a href='#L154'>154</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -239,13 +232,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -311,7 +297,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -390,7 +376,7 @@
  */
 &nbsp;
 import { create } from <span class="cstat-no" title="statement not covered" >'zustand';</span>
-import { Server, Asset } from <span class="cstat-no" title="statement not covered" >'soroban-client';</span>
+import { Server } from <span class="cstat-no" title="statement not covered" >'soroban-client';</span>
 &nbsp;
 /**
  * TradeFlow Token (TF) Configuration.
@@ -403,14 +389,7 @@ const PRO_MODE_THRESHOLD = <span class="cstat-no" title="statement not covered" 
 /**
  * Representation of a Stellar asset balance.
  */
-interface TokenBalance {
-  /** The 1-12 character asset code */
-  code: string;
-  /** The public address of the asset issuer */
-  issuer: string;
-  /** The current balance as a string (to maintain precision) */
-  balance: string;
-}
+// TokenBalance interface removed (unused)
 &nbsp;
 /**
  * State and actions for the Token Store.
@@ -471,7 +450,7 @@ export const <span class="cstat-no" title="statement not covered" >useTokenStore
 <span class="cstat-no" title="statement not covered" >      try {</span>
         // 1. Retrieve the account details
         const account: any = <span class="cstat-no" title="statement not covered" >await server.getAccount(publicKey);</span>
-        const tfAsset = <span class="cstat-no" title="statement not covered" >new Asset(TF_TOKEN_CODE, TF_TOKEN_ISSUER);</span>
+        // const tfAsset = new Asset(TF_TOKEN_CODE, TF_TOKEN_ISSUER); // unused helper
 &nbsp;
         // 2. Locate the TF token in the account's balances array
         const tfBalance = <span class="cstat-no" title="statement not covered" >account.balances.find(</span>
@@ -486,7 +465,7 @@ export const <span class="cstat-no" title="statement not covered" >useTokenStore
           tfTokenBalance: balance,
           isLoading: false,
         });
-      } catch (error) {
+      } catch {
         // Fallback: If account is not found or has no trustline, balance is 0
 <span class="cstat-no" title="statement not covered" >        set({</span>
           tfTokenBalance: 0,
@@ -494,8 +473,8 @@ export const <span class="cstat-no" title="statement not covered" >useTokenStore
           error: 'Unable to fetch token balance',
         });
       }
-    } catch (error) {
-<span class="cstat-no" title="statement not covered" >      console.error('[TokenStore] Critical error fetching balance:', error);</span>
+    } catch (_error) {
+<span class="cstat-no" title="statement not covered" >      console.error('[TokenStore] Critical error fetching balance:', _error);</span>
 <span class="cstat-no" title="statement not covered" >      set({</span>
         tfTokenBalance: 0,
         isLoading: false,
@@ -550,7 +529,7 @@ export const <span class="cstat-no" title="statement not covered" >TF_TOKEN_INFO
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T12:24:46.345Z
+                at 2026-06-24T12:56:58.204Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
