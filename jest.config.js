@@ -1,10 +1,10 @@
-const nextJest = require('next/jest');
-const path = require('path');
+import nextJest from 'next/jest.js';
 
 const createJestConfig = nextJest({
   dir: './',
 });
 
+/** @type {import('jest').Config} */
 const customJestConfig = {
   testEnvironment: 'jest-environment-jsdom',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
@@ -28,7 +28,7 @@ const customJestConfig = {
       lines: 80,
       statements: 80,
     },
-    // Enforcing strict thresholds on math and formatting files found in src/lib/
+    // Enforcing strict thresholds on math and formatting files
     './src/lib/format.ts': {
       branches: 95,
       functions: 95,
@@ -44,4 +44,4 @@ const customJestConfig = {
   },
 };
 
-module.exports = createJestConfig(customJestConfig);
+export default createJestConfig(customJestConfig);
