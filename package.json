@@ -67,6 +67,7 @@
     "@types/jest": "^29.5.14",
     "@types/node": "^20",
     "@types/react": "^18",
+    "chromatic": "^16.10.1",
     "eslint": "^9.0.0",
     "eslint-config-next": "^16.2.4",
     "globals": "^17.7.0",
