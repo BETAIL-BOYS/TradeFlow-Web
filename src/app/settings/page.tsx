@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Settings as SettingsIcon, Shield, Bell, User, Globe, HelpCircle } from 'lucide-react';
+import { Shield, Bell, User, Globe, HelpCircle } from 'lucide-react';
 import Icon from '../../components/ui/Icon';
 
 export default function SettingsPage() {

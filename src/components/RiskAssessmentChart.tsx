@@ -34,9 +34,8 @@ interface CustomTooltipProps extends TooltipProps<number, string> {
 
 const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
-    const data = payload[0];
-    const value = data.value;
-    const fullMark = 100;
+  const data = payload[0];
+  const value = data.value;
 
     // Determine risk level based on value
     let riskLevel = 'Low';

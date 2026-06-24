@@ -23,7 +23,7 @@ export async function apiFetch(
   options: RequestInit = {},
   healthOptions: ApiCallOptions = {}
 ): Promise<Response> {
-  const { endpoint = url, skipHealthCheck = false } = healthOptions;
+  const { skipHealthCheck = false } = healthOptions;
 
   try {
     const response = await fetch(url, options);

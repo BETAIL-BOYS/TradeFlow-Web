@@ -58,7 +58,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ filters }) => {
     isLoading,
     isFetching,
     error,
-  } = useQuery<any>({
+  } = useQuery<InvoicesResponse>({
     queryKey: ['invoices', currentPage, itemsPerPage, filters],
     queryFn: async () => {
       try {

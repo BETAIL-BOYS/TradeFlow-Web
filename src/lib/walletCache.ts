@@ -94,8 +94,8 @@ export function getCachedWalletConnection(): WalletConnectionState {
       isCached: true,
       needsRevalidation,
     };
-  } catch (error) {
-    console.warn('Failed to read wallet cache:', error);
+  } catch (_error) {
+    console.warn('Failed to read wallet cache:', _error);
     clearWalletCache();
     return {
       walletAddress: null,
@@ -134,8 +134,8 @@ export function setWalletConnectionCache(
     };
 
     localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
-  } catch (error) {
-    console.warn('Failed to save wallet cache:', error);
+  } catch (_error) {
+    console.warn('Failed to save wallet cache:', _error);
   }
 }
 
@@ -147,8 +147,8 @@ export function clearWalletCache(): void {
 
   try {
     localStorage.removeItem(CACHE_KEY);
-  } catch (error) {
-    console.warn('Failed to clear wallet cache:', error);
+  } catch (_error) {
+    console.warn('Failed to clear wallet cache:', _error);
   }
 }
 
@@ -193,7 +193,7 @@ export function getCacheAge(): number {
 
     const cache: WalletConnectionCache = JSON.parse(cached);
     return Date.now() - cache.timestamp;
-  } catch (error) {
+  } catch {
     return 0;
   }
 }

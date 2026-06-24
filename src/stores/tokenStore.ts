@@ -5,7 +5,7 @@
  */
 
 import { create } from 'zustand';
-import { Server, Asset } from 'soroban-client';
+import { Server } from 'soroban-client';
 
 /**
  * TradeFlow Token (TF) Configuration.
@@ -18,14 +18,7 @@ const PRO_MODE_THRESHOLD = 1000; // Minimum TF tokens required for Pro Mode
 /**
  * Representation of a Stellar asset balance.
  */
-interface TokenBalance {
-  /** The 1-12 character asset code */
-  code: string;
-  /** The public address of the asset issuer */
-  issuer: string;
-  /** The current balance as a string (to maintain precision) */
-  balance: string;
-}
+// TokenBalance interface removed (unused)
 
 /**
  * State and actions for the Token Store.
@@ -86,7 +79,7 @@ export const useTokenStore = create<TokenStore>((set, get) => ({
       try {
         // 1. Retrieve the account details
         const account: any = await server.getAccount(publicKey);
-        const tfAsset = new Asset(TF_TOKEN_CODE, TF_TOKEN_ISSUER);
+        // const tfAsset = new Asset(TF_TOKEN_CODE, TF_TOKEN_ISSUER); // unused helper
 
         // 2. Locate the TF token in the account's balances array
         const tfBalance = account.balances.find(
@@ -101,7 +94,7 @@ export const useTokenStore = create<TokenStore>((set, get) => ({
           tfTokenBalance: balance,
           isLoading: false,
         });
-      } catch (error) {
+      } catch {
         // Fallback: If account is not found or has no trustline, balance is 0
         set({
           tfTokenBalance: 0,
@@ -109,8 +102,8 @@ export const useTokenStore = create<TokenStore>((set, get) => ({
           error: 'Unable to fetch token balance',
         });
       }
-    } catch (error) {
-      console.error('[TokenStore] Critical error fetching balance:', error);
+    } catch (_error) {
+      console.error('[TokenStore] Critical error fetching balance:', _error);
       set({
         tfTokenBalance: 0,
         isLoading: false,

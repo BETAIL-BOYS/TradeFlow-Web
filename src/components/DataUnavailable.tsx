@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Database, RefreshCw, AlertCircle, Wifi, WifiOff } from 'lucide-react';
+import { Database, RefreshCw, AlertCircle, WifiOff } from 'lucide-react';
 import { useBackendHealth } from '../contexts/BackendHealthContext';
 import Icon from './ui/Icon';
 

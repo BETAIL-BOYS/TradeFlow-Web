@@ -36,14 +36,7 @@ export function BackendHealthProvider({ children }: BackendHealthProviderProps) 
     consecutiveFailures: 0,
   });
 
-  const updateStatus = useCallback((newStatus: BackendStatus, error?: string) => {
-    setHealthState((prev) => ({
-      ...prev,
-      status: newStatus,
-      lastError: error,
-      lastCheckTime: new Date(),
-    }));
-  }, []);
+  // updateStatus helper removed (not used). Use reportError/reportSuccess/resetHealth instead.
 
   const reportError = useCallback((error: Error | string, endpoint?: string) => {
     const errorMessage = typeof error === 'string' ? error : error.message;

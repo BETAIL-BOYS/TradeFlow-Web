@@ -148,7 +148,7 @@ function DashboardContent() {
 
     riskSocketRef.current?.syncInvoices(invoices.map((i) => i.id));
   }, [walletAddress, invoices]);
-  const toast = useTransactionToast();
+  const _toast = useTransactionToast();
 
   const handleInvoiceMint = (txStatus: string) => {
     console.log('Invoice minted, tx status:', txStatus);

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Droplets, TrendingUp, TrendingDown } from 'lucide-react';
+import { Droplets } from 'lucide-react';
 
 interface LiquidityPosition {
   poolName: string;

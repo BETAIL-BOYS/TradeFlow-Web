@@ -8,7 +8,7 @@ import RepayInvoiceButton from '../../../components/RepayInvoiceButton';
 import { useTokenStore } from '../../../stores/tokenStore';
 import { useTxWithToast } from '../../../hooks/useTxWithToast';
 import { useInvoice } from '../../../hooks/useInvoice';
-import { ArrowLeft, ExternalLink, Shield, TrendingUp } from 'lucide-react';
+import { ArrowLeft, ExternalLink, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import Icon from '../../../components/ui/Icon';
 

@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useWeb3Store } from '../stores/useWeb3Store';
-import { getNetworkConfig } from '../lib/networkConfig';
 import { createWalletConnector } from '../lib/walletConnector';
 
 export interface NetworkMismatchState {
@@ -29,7 +28,7 @@ export function useNetworkDetection() {
 
   const [isListening, setIsListening] = useState(false);
 
-  const { isConnected, walletType, network: appNetwork, switchNetwork } = useWeb3Store();
+  const { isConnected, walletType } = useWeb3Store();
 
   // Get the expected network from environment variable
   const getExpectedNetwork = useCallback(() => {

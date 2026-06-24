@@ -11,7 +11,7 @@ interface WatchlistTabProps {
 }
 
 export default function WatchlistTab({ className = '' }: WatchlistTabProps) {
-  const { watchlist, removeFromWatchlist, isInWatchlist } = useWatchlist();
+  const { watchlist: _watchlist, removeFromWatchlist, isInWatchlist } = useWatchlist();
 
   const watchlistTokens = allTokens.filter((token) => isInWatchlist(token));
 

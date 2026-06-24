@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronDown, Wallet, TrendingUp, RefreshCw, ExternalLink } from 'lucide-react';
+import { Wallet, TrendingUp, RefreshCw, ExternalLink } from 'lucide-react';
 import { useWeb3Store } from '../stores/useWeb3Store';
 import { useTokenStore, TF_TOKEN_INFO } from '../stores/tokenStore';
 

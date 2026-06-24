@@ -58,7 +58,7 @@ export async function getConnectedWallet(): Promise<WalletInfo | null> {
 
     const publicKey = await currentWalletConnector.getPublicKey();
     return { publicKey, walletType: currentWalletConnector.getWalletType() };
-  } catch (error) {
+  } catch {
     // Silently return null on error as it usually means no wallet is active
     return null;
   }
@@ -157,7 +157,7 @@ export async function addTrustline(
     .build();
 
   const xdr = transaction.toXDR();
-  const signedTxXdr = await connector.signTransaction(xdr, {
+  await connector.signTransaction(xdr, {
     networkPassphrase: NETWORK_PASSPHRASE,
   });
 

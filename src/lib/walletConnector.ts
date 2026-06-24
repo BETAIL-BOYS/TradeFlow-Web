@@ -6,7 +6,7 @@ import {
   XBULL_ID,
   ALBEDO_ID,
 } from '@creit.tech/stellar-wallets-kit';
-import { Server, TransactionBuilder, Asset, Operation, Networks } from 'soroban-client';
+// soroban-client imports not required in this module
 
 export type WalletType = string;
 
@@ -52,8 +52,6 @@ export interface WalletConnector {
   getWalletType(): WalletType;
 }
 
-// Default to Testnet for development
-const RPC_URL = 'https://soroban-testnet.stellar.org';
 const NETWORK_PASSPHRASE = Networks.TESTNET;
 
 // Initialize wallet kit instance (only in browser)

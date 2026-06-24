@@ -5,7 +5,7 @@
  */
 
 import { create } from 'zustand';
-import { Server, Asset } from 'soroban-client';
+import { Server } from 'soroban-client';
 import { FREIGHTER_ID, WalletType } from '../lib/stellar';
 import { createWalletConnector, getWalletDisplayName } from '../lib/walletConnector';
 import { getEffectiveNetwork, getNetworkConfig } from '../lib/networkConfig';
@@ -22,11 +22,7 @@ export const NETWORKS = {
 
 export type NetworkType = (typeof NETWORKS)[keyof typeof NETWORKS];
 
-// Stellar network endpoints
-const NETWORK_ENDPOINTS = {
-  [NETWORKS.TESTNET]: 'https://soroban-testnet.stellar.org',
-  [NETWORKS.MAINNET]: 'https://horizon.stellar.org',
-};
+// NETWORK_ENDPOINTS removed (unused in this module)
 
 /**
  * Internal state for the Web3 store.
