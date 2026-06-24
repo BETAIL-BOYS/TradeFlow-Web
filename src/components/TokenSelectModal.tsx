@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { X, AlertCircle } from 'lucide-react';
 import Icon from './ui/Icon';
+import { isValidStellarPublicKey } from '@/lib/validation';
 
 interface Token {
   symbol: string;
@@ -35,7 +36,7 @@ export const TokenSelectModal: React.FC<TokenSelectModalProps> = ({
     );
   }, [tokens, searchQuery]);
 
-  const isStellarAddress = searchQuery.length === 56;
+  const isStellarAddress = isValidStellarPublicKey(searchQuery);
   const showImportUI = isStellarAddress && filteredTokens.length === 0;
 
   if (!isOpen) return null;
