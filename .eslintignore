@@ -1,9 +1,0 @@
-# Ignore generated coverage and report artifacts
-coverage/
-coverage/**
-
-# Ignore Next.js build output
-.next/
-
-# Ignore node modules (ESLint ignores node_modules by default but keep explicit)
-node_modules/
