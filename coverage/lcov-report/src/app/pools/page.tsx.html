@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
@@ -172,19 +172,16 @@
 <a name='L107'></a><a href='#L107'>107</a>
 <a name='L108'></a><a href='#L108'>108</a>
 <a name='L109'></a><a href='#L109'>109</a>
-<a name='L110'></a><a href='#L110'>110</a>
-<a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L110'></a><a href='#L110'>110</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -196,6 +193,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -244,11 +242,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -289,11 +283,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use client';
 &nbsp;
-import React, { useState } from <span class="cstat-no" title="statement not covered" >'react';</span>
-import { Droplets, TrendingUp, Info } from <span class="cstat-no" title="statement not covered" >'lucide-react';</span>
-import Pagination from <span class="cstat-no" title="statement not covered" >'../../components/ui/Pagination';</span>
-import { formatCurrency } from <span class="cstat-no" title="statement not covered" >'../../lib/format';</span>
-import Footer from <span class="cstat-no" title="statement not covered" >'../../components/layout/Footer';</span>
+import React, { useState } from 'react';
+import { Droplets, TrendingUp, Info } from 'lucide-react';
+import Pagination from '../../components/ui/Pagination';
+import { formatCurrency } from '../../lib/format';
 &nbsp;
 // Mock data for pools
 const MOCK_POOLS = <span class="cstat-no" title="statement not covered" >[</span>
@@ -306,11 +299,11 @@ const MOCK_POOLS = <span class="cstat-no" title="statement not covered" >[</span
   { id: 7, name: 'XLM / yXLM', liquidity: 900000, volume24h: 32000, apr: 3.5 },
 ];
 &nbsp;
-export default function <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >PoolsPage() {</span></span>
+export default function <span class="fstat-no" title="function not covered" >PoolsPage(</span>) {
   const [currentPage, setCurrentPage] = <span class="cstat-no" title="statement not covered" >useState(1);</span>
-  const totalPages = <span class="cstat-no" title="statement not covered" >3; /</span>/ Mocking total pages
+  const totalPages = <span class="cstat-no" title="statement not covered" >3;</span> // Mocking total pages
 &nbsp;
-  return (
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;div className="min-h-screen bg-slate-900 text-white font-sans flex flex-col"&gt;
       {/* Header */}
       &lt;div className="p-8 border-b border-slate-800"&gt;
@@ -358,7 +351,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
               &lt;/thead&gt;
               &lt;tbody className="divide-y divide-slate-700/50"&gt;
                 {MOCK_POOLS.map(<span class="fstat-no" title="function not covered" >(p</span>ool) =&gt; (
-<span class="cstat-no" title="statement not covered" >                  &lt;tr key={pool.id} c</span>lassName="hover:bg-slate-700/30 transition-colors group"&gt;
+<span class="cstat-no" title="statement not covered" >                  &lt;tr key={pool.id} className="hover:bg-slate-700/30 transition-colors group"&gt;</span>
                     &lt;td className="px-6 py-5"&gt;
                       &lt;div className="font-bold text-white group-hover:text-blue-400 transition-colors"&gt;
                         {pool.name}
@@ -382,17 +375,15 @@ export default function <span class="cstat-no" title="statement not covered" ><s
             &lt;/table&gt;
           &lt;/div&gt;
 &nbsp;
-          {/* Pagination Component (Issue #77) */}
-          &lt;Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          /&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-&nbsp;
-      &lt;Footer /&gt;
+      {/* Pagination Component (Issue #77) */}
+      &lt;Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      /&gt;
     &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
   );
 }
 &nbsp;
@@ -406,7 +397,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T12:56:58.204Z
+                at 2026-07-13T11:50:01.206Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

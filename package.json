@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint .",
     "lint:a11y": "node ./node_modules/eslint/bin/eslint.js -c .eslintrc-a11y.json src --ext .ts,.tsx --report-unused-disable-directives",
@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@creit.tech/stellar-wallets-kit": "^1.2.0",
-    "@hookform/resolvers": "^5.2.2",
+    "@hookform/resolvers": "^3.9.0",
     "@pinata/sdk": "^2.1.0",
     "@sentry/nextjs": "^10.49.0",
     "@stellar/freighter-api": "^1.7.1",

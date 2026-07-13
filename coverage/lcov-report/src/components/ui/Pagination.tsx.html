@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -157,25 +157,25 @@
 <a name='L92'></a><a href='#L92'>92</a>
 <a name='L93'></a><a href='#L93'>93</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -249,8 +249,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use client';
 &nbsp;
-import React from <span class="cstat-no" title="statement not covered" >'react';</span>
-import { ChevronLeft, ChevronRight } from <span class="cstat-no" title="statement not covered" >'lucide-react';</span>
+import React from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 &nbsp;
 interface PaginationProps {
   currentPage: number;
@@ -258,27 +258,27 @@ interface PaginationProps {
   onPageChange: (page: number) =&gt; void;
 }
 &nbsp;
-export default function <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Pagination({</span></span> currentPage, totalPages, onPageChange }: PaginationProps) {
-  const getPageNumbers = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+export default function <span class="fstat-no" title="function not covered" >Pagination(</span>{ currentPage, totalPages, onPageChange }: PaginationProps) {
+  const getPageNumbers = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const pages = <span class="cstat-no" title="statement not covered" >[];</span>
-<span class="cstat-no" title="statement not covered" >    for (let i = <span class="cstat-no" title="statement not covered" >1; i</span> &lt;= totalPages; i++) {</span>
+<span class="cstat-no" title="statement not covered" >    for (let i = <span class="cstat-no" title="statement not covered" >1;</span> i &lt;= totalPages; i++) {</span>
 <span class="cstat-no" title="statement not covered" >      pages.push(i);</span>
     }
 <span class="cstat-no" title="statement not covered" >    return pages;</span>
   };
 &nbsp;
-  return (
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;div className="flex items-center justify-between px-6 py-4 bg-slate-800/50 border-t border-slate-700"&gt;
       &lt;div className="flex-1 flex justify-between sm:hidden"&gt;
         &lt;button
-          onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nPageChange(Math.max(currentPage - 1, 1))}</span>
+          onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onPageChange(Math.max(currentPage - 1, 1))}</span>
           disabled={currentPage === 1}
           className="relative inline-flex items-center px-4 py-2 border border-slate-600 text-sm font-medium rounded-md text-slate-300 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
         &gt;
           Previous
         &lt;/button&gt;
         &lt;button
-          onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nPageChange(Math.min(currentPage + 1, totalPages))}</span>
+          onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onPageChange(Math.min(currentPage + 1, totalPages))}</span>
           disabled={currentPage === totalPages}
           className="ml-3 relative inline-flex items-center px-4 py-2 border border-slate-600 text-sm font-medium rounded-md text-slate-300 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
         &gt;
@@ -298,7 +298,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
             aria-label="Pagination"
           &gt;
             &lt;button
-              onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nPageChange(Math.max(currentPage - 1, 1))}</span>
+              onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onPageChange(Math.max(currentPage - 1, 1))}</span>
               disabled={currentPage === 1}
               className="relative inline-flex items-center px-3 py-2 rounded-l-xl border border-slate-700 bg-slate-800 text-sm font-medium text-slate-400 hover:bg-slate-700 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             &gt;
@@ -309,7 +309,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
             {getPageNumbers().map(<span class="fstat-no" title="function not covered" >(p</span>age) =&gt; (
 <span class="cstat-no" title="statement not covered" >              &lt;button</span>
                 key={page}
-                onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nPageChange(page)}</span>
+                onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onPageChange(page)}</span>
                 aria-current={currentPage === page ? 'page' : undefined}
                 className={`relative inline-flex items-center px-4 py-2 border border-slate-700 text-sm font-medium transition-all ${
                   currentPage === page
@@ -322,7 +322,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
             ))}
 &nbsp;
             &lt;button
-              onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nPageChange(Math.min(currentPage + 1, totalPages))}</span>
+              onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onPageChange(Math.min(currentPage + 1, totalPages))}</span>
               disabled={currentPage === totalPages}
               className="relative inline-flex items-center px-3 py-2 rounded-r-xl border border-slate-700 bg-slate-800 text-sm font-medium text-slate-400 hover:bg-slate-700 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             &gt;
@@ -346,7 +346,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T12:56:58.204Z
+                at 2026-07-13T11:50:01.206Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

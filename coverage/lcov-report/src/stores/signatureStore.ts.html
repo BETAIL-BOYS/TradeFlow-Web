@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -133,7 +133,7 @@
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
 <a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -203,7 +203,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { create } from <span class="cstat-no" title="statement not covered" >'zustand';</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { create } from 'zustand';
 &nbsp;
 export interface SignatureState {
   // State
@@ -224,7 +224,7 @@ export interface SignatureState {
   setTransactionDetails: (details: SignatureState['transactionDetails']) =&gt; void;
 }
 &nbsp;
-export const <span class="cstat-no" title="statement not covered" >useSignatureStore = <span class="cstat-no" title="statement not covered" >c</span>reate&lt;SignatureState&gt;(<span class="fstat-no" title="function not covered" >(s</span>et) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+export const useSignatureStore = <span class="cstat-no" title="statement not covered" >create&lt;SignatureState&gt;(<span class="fstat-no" title="function not covered" >(s</span>et) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
   // Initial state
   isSigning: false,
   signingMessage: 'Please sign the transaction in your wallet.',
@@ -239,7 +239,7 @@ export const <span class="cstat-no" title="statement not covered" >useSignatureS
     });
   },
 &nbsp;
-  stopSigning: <span class="fstat-no" title="function not covered" >() =&gt; {</span>
+  stopSigning: <span class="fstat-no" title="function not covered" >()</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >    set({</span>
       isSigning: false,
       signingMessage: 'Please sign the transaction in your wallet.',
@@ -257,10 +257,10 @@ export const <span class="cstat-no" title="statement not covered" >useSignatureS
 }));
 &nbsp;
 // Selector hooks for common use cases
-export const <span class="cstat-no" title="statement not covered" >useIsSigning = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>) =&gt; <span class="cstat-no" title="statement not covered" >u</span>seSignatureStore(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >state.isSigning)</span>;</span></span>
-export const <span class="cstat-no" title="statement not covered" >useSigningMessage = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>) =&gt; <span class="cstat-no" title="statement not covered" >u</span>seSignatureStore(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >state.signingMessage)</span>;</span></span>
-export const <span class="cstat-no" title="statement not covered" >useTransactionDetails = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>) =&gt; <span class="cstat-no" title="statement not covered" >u</span>seSignatureStore(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >state.transactionDetails)</span>;</span></span>
-export const <span class="cstat-no" title="statement not covered" >useSigningActions = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>) =&gt; {</span></span>
+export const useIsSigning = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >useSignatureStore(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >state.isSigning)</span>;</span></span>
+export const useSigningMessage = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >useSignatureStore(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >state.signingMessage)</span>;</span></span>
+export const useTransactionDetails = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >useSignatureStore(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >state.transactionDetails)</span>;</span></span>
+export const useSigningActions = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const startSigning = <span class="cstat-no" title="statement not covered" >useSignatureStore(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >state.startSigning)</span>;</span>
   const stopSigning = <span class="cstat-no" title="statement not covered" >useSignatureStore(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >state.stopSigning)</span>;</span>
   const updateMessage = <span class="cstat-no" title="statement not covered" >useSignatureStore(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >state.updateMessage)</span>;</span>
@@ -280,7 +280,7 @@ export const <span class="cstat-no" title="statement not covered" >useSigningAct
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T12:56:58.204Z
+                at 2026-07-13T11:50:01.206Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

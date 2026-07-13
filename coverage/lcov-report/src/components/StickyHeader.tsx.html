@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
@@ -114,10 +114,6 @@
 <a name='L49'></a><a href='#L49'>49</a>
 <a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -125,13 +121,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -163,10 +163,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use client';
 &nbsp;
-import React from <span class="cstat-no" title="statement not covered" >'react';</span>
-import { usePathname } from <span class="cstat-no" title="statement not covered" >'next/navigation';</span>
-import { generateBreadcrumbs, getPageTitle } from <span class="cstat-no" title="statement not covered" >'../lib/breadcrumbs';</span>
-import Breadcrumbs from <span class="cstat-no" title="statement not covered" >'./Breadcrumbs';</span>
+import React from 'react';
+import { usePathname } from 'next/navigation';
+import { generateBreadcrumbs, getPageTitle } from '../lib/breadcrumbs';
+import Breadcrumbs from './Breadcrumbs';
 &nbsp;
 interface StickyHeaderProps {
   title?: string;
@@ -174,13 +174,13 @@ interface StickyHeaderProps {
   actions?: React.ReactNode;
 }
 &nbsp;
-export default function <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >StickyHeader({</span></span> title, subtitle, actions }: StickyHeaderProps) {
+export default function <span class="fstat-no" title="function not covered" >StickyHeader(</span>{ title, subtitle, actions }: StickyHeaderProps) {
   const pathname = <span class="cstat-no" title="statement not covered" >usePathname();</span>
   const breadcrumbs = <span class="cstat-no" title="statement not covered" >generateBreadcrumbs(pathname);</span>
   const generatedTitle = <span class="cstat-no" title="statement not covered" >getPageTitle(breadcrumbs);</span>
   const headerTitle = <span class="cstat-no" title="statement not covered" >title || generatedTitle;</span>
 &nbsp;
-  return (
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;header className="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-md border-b border-slate-700/50"&gt;
       &lt;div className="px-4 lg:px-8 py-4"&gt;
         &lt;div className="flex items-center justify-between"&gt;
@@ -194,13 +194,13 @@ export default function <span class="cstat-no" title="statement not covered" ><s
             &lt;div className="flex items-center gap-4"&gt;
               &lt;div className="flex-1 min-w-0"&gt;
                 &lt;h1 className="text-2xl font-bold text-white truncate"&gt;{headerTitle}&lt;/h1&gt;
-                {<span class="branch-0 cbranch-no" title="branch not covered" >subtitle &amp;&amp; &lt;</span>p className="text-slate-400 text-sm mt-1"&gt;{subtitle}&lt;/p&gt;}
+                {subtitle &amp;&amp; &lt;p className="text-slate-400 text-sm mt-1"&gt;{subtitle}&lt;/p&gt;}
               &lt;/div&gt;
             &lt;/div&gt;
           &lt;/div&gt;
 &nbsp;
           {/* Header Actions */}
-          {<span class="branch-0 cbranch-no" title="branch not covered" >actions &amp;&amp; &lt;</span>div className="flex items-center gap-4 ml-4"&gt;{actions}&lt;/div&gt;}
+          {actions &amp;&amp; &lt;div className="flex items-center gap-4 ml-4"&gt;{actions}&lt;/div&gt;}
         &lt;/div&gt;
       &lt;/div&gt;
     &lt;/header&gt;
@@ -217,7 +217,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T12:56:58.204Z
+                at 2026-07-13T11:50:01.206Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

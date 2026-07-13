@@ -11,9 +11,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { X, Upload, Calendar, DollarSign, Building, FileText, Info } from 'lucide-react';
-import { useSession } from 'next-auth/react';
 import Button from './ui/Button';
 import { useMintInvoice } from '@/hooks/useMintInvoice';
+import { useWalletConnection } from '../stores/useWeb3Store';
 import Icon from './ui/Icon';
 
 // Enhanced validation schema with sanitization
@@ -39,12 +39,12 @@ const invoiceSchema = z.object({
       today.setHours(0, 0, 0, 0);
       return selectedDate > today;
     }, 'Due date must be in the future'),
-  invoiceFile: z
-    .instanceof(File)
-    .refine((file) => file.type === 'application/pdf', 'Only PDF files are allowed')
-    .refine((file) => file.size <= 5 * 1024 * 1024, 'File size must be less than 5MB')
-    .optional(),
-  supportingDocumentUri: z.string().url('Must be a valid URL').optional().or(z.literal('')),
+  supportingDocumentUri: z
+    .string()
+    .url('Supporting document must be a valid URL')
+    .optional()
+    .or(z.literal('')),
+  invoiceFile: z.any().optional(),
 });
 
 /** TypeScript type inferred from the validation schema */
@@ -72,7 +72,7 @@ export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormP
     protocolFee: 0,
     totalFee: 0,
   });
-  const { data: session } = useSession();
+  const { walletAddress } = useWalletConnection();
   const { mint, loading: minting, error: mintError, txStatus } = useMintInvoice();
 
   // --- Form Initialization ---
@@ -128,15 +128,15 @@ export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormP
 
   // Format payload for Soroban smart contract
   const formatContractPayload = (data: InvoiceFormData) => {
-    const publicKey = (session?.user as any)?.publicKey;
+    const publicKey = walletAddress;
     const amountInStroops = BigInt(Math.round(data.amount * 10_000_000));
     const invoiceId = `INV-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
     return {
       invoiceId,
       amount: amountInStroops,
-      recipient: publicKey,
-      callerPublicKey: publicKey,
+      recipient: publicKey!,
+      callerPublicKey: publicKey!,
       metadata: {
         debtorName: data.debtorName,
         dueDate: data.dueDate,
@@ -147,7 +147,7 @@ export default function InvoiceMintForm({ onClose, onSuccess }: InvoiceMintFormP
   };
 
   const onFormSubmit = async (data: InvoiceFormData) => {
-    const publicKey = (session?.user as any)?.publicKey;
+    const publicKey = walletAddress;
     if (!publicKey) {
       alert('Please connect your Stellar wallet first.');
       return;

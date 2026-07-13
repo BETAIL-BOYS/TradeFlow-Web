@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, renderHook, act } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import ThemeToggle from '../components/ThemeToggle';
 import { ThemeProvider, useTheme } from '../lib/context/ThemeContext';
 

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Plus, Check, Loader2 } from 'lucide-react';
 import { addTrustline } from '../lib/stellar';
 import { dismissToast, showError, showLoading, showSuccess } from '../lib/toast';
+import { useWalletConnection } from '../stores/useWeb3Store';
 import Button from './ui/Button';
 import Icon from './ui/Icon';
 
@@ -21,6 +22,7 @@ interface AddTrustlineButtonProps {
  * A specialized button that handles the 'change_trust' operation flow.
  */
 export default function AddTrustlineButton({ assetCode, assetIssuer }: AddTrustlineButtonProps) {
+  const { walletAddress } = useWalletConnection();
   // --- Component State ---
   /** Current status of the asynchronous trustline operation */
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -31,6 +33,11 @@ export default function AddTrustlineButton({ assetCode, assetIssuer }: AddTrustl
   const handleAddTrustline = async () => {
     // Prevent redundant clicks
     if (status === 'loading' || status === 'success') return;
+
+    if (!walletAddress) {
+      showError('Please connect your wallet first.');
+      return;
+    }
 
     setStatus('loading');
     const toastId = showLoading(`Requesting ${assetCode} trustline...`);

@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -147,7 +147,7 @@
 <a name='L82'></a><a href='#L82'>82</a>
 <a name='L83'></a><a href='#L83'>83</a>
 <a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L85'></a><a href='#L85'>85</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -177,16 +177,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -195,6 +186,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -231,12 +231,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { NextRequest, NextResponse } from <span class="cstat-no" title="statement not covered" >'next/server';</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { NextRequest, NextResponse } from 'next/server';
 &nbsp;
 // Mock data generator for demonstration
 const generateMockInvoices = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(c</span>ount: number) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  return Array.from({ length: count }, <span class="fstat-no" title="function not covered" >(_</span>, index) =&gt; {</span>
-    const riskScore = <span class="cstat-no" title="statement not covered" >Math.floor(Math.random() * 40) + 60; /</span>/ 60-100
+    const riskScore = <span class="cstat-no" title="statement not covered" >Math.floor(Math.random() * 40) + 60;</span> // 60-100
     // Determine risk tier based on risk score
     let riskTier: 'A' | 'B' | 'C' | 'D';
 <span class="cstat-no" title="statement not covered" >    if (riskScore &gt;= 90) <span class="cstat-no" title="statement not covered" >riskTier = 'A';</span></span>
@@ -261,7 +261,7 @@ const generateMockInvoices = <span class="cstat-no" title="statement not covered
 // Generate 10,000 mock invoices
 const ALL_INVOICES = <span class="cstat-no" title="statement not covered" >generateMockInvoices(10000);</span>
 &nbsp;
-export async function <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >GET(r</span></span>equest: NextRequest) {
+export async function <span class="fstat-no" title="function not covered" >GET(</span>request: NextRequest) {
   const { searchParams } = <span class="cstat-no" title="statement not covered" >new URL(request.url);</span>
 &nbsp;
   // Parse pagination parameters
@@ -275,17 +275,17 @@ export async function <span class="cstat-no" title="statement not covered" ><spa
 &nbsp;
   // Validate parameters
   const validPage = <span class="cstat-no" title="statement not covered" >Math.max(1, page);</span>
-  const validLimit = <span class="cstat-no" title="statement not covered" >Math.min(100, Math.max(1, limit)); /</span>/ Max 100 items per page
+  const validLimit = <span class="cstat-no" title="statement not covered" >Math.min(100, Math.max(1, limit));</span> // Max 100 items per page
 &nbsp;
   // Apply filters
   let filteredInvoices = <span class="cstat-no" title="statement not covered" >ALL_INVOICES.filter(<span class="fstat-no" title="function not covered" >(i</span>nvoice) =&gt; {</span>
     // APY filter
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (invoice.apy &amp;&amp; (invoice.apy &lt; minApy || invoice.apy &gt; maxApy)) {</span>
+<span class="cstat-no" title="statement not covered" >    if (invoice.apy &amp;&amp; (invoice.apy &lt; minApy || invoice.apy &gt; maxApy)) {</span>
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }
 &nbsp;
     // Risk tier filter
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (tiers.length &gt; 0 &amp;&amp; invoice.riskTier &amp;&amp; !tiers.includes(invoice.riskTier)) {</span>
+<span class="cstat-no" title="statement not covered" >    if (tiers.length &gt; 0 &amp;&amp; invoice.riskTier &amp;&amp; !tiers.includes(invoice.riskTier)) {</span>
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }
 &nbsp;
@@ -322,7 +322,7 @@ export async function <span class="cstat-no" title="statement not covered" ><spa
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T12:56:58.204Z
+                at 2026-07-13T11:50:01.206Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

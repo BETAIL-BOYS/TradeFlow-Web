@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
@@ -207,25 +207,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -240,6 +221,25 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -260,7 +260,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -343,9 +343,9 @@
 &nbsp;
 'use client';
 &nbsp;
-import React, { useState, useRef, useEffect } from <span class="cstat-no" title="statement not covered" >'react';</span>
-import { ChevronDown, AlertTriangle, Globe, FlaskConical } from <span class="cstat-no" title="statement not covered" >'lucide-react';</span>
-import Icon from <span class="cstat-no" title="statement not covered" >'./ui/Icon';</span>
+import React, { useState, useRef, useEffect } from 'react';
+import { ChevronDown, AlertTriangle, Globe, FlaskConical } from 'lucide-react';
+import Icon from './ui/Icon';
 &nbsp;
 export type Network = 'mainnet' | 'testnet';
 &nbsp;
@@ -353,7 +353,7 @@ interface NetworkSelectorProps {
   onNetworkChange?: (network: Network) =&gt; void;
 }
 &nbsp;
-export default function <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >NetworkSelector({</span></span> onNetworkChange }: NetworkSelectorProps) {
+export default function <span class="fstat-no" title="function not covered" >NetworkSelector(</span>{ onNetworkChange }: NetworkSelectorProps) {
   const [selectedNetwork, setSelectedNetwork] = <span class="cstat-no" title="statement not covered" >useState&lt;Network&gt;('mainnet');</span>
   const [isOpen, setIsOpen] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const dropdownRef = <span class="cstat-no" title="statement not covered" >useRef&lt;HTMLDivElement&gt;(null);</span>
@@ -373,15 +373,15 @@ export default function <span class="cstat-no" title="statement not covered" ><s
     },
   ];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const handleClickOutside = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>vent: MouseEvent) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (dropdownRef.current &amp;&amp; !dropdownRef.current.contains(event.target as Node)) {</span>
+<span class="cstat-no" title="statement not covered" >      if (dropdownRef.current &amp;&amp; !dropdownRef.current.contains(event.target as Node)) {</span>
 <span class="cstat-no" title="statement not covered" >        setIsOpen(false);</span>
       }
     };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    document.addEventListener('mousedown', handleClickOutside);</span>
-<span class="cstat-no" title="statement not covered" >    return <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    return <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      document.removeEventListener('mousedown', handleClickOutside);</span>
     };
   }, []);
@@ -389,17 +389,17 @@ export default function <span class="cstat-no" title="statement not covered" ><s
   const handleNetworkSelect = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>etwork: Network) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setSelectedNetwork(network);</span>
 <span class="cstat-no" title="statement not covered" >    setIsOpen(false);</span>
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (onNetworkChange) {</span>
+<span class="cstat-no" title="statement not covered" >    if (onNetworkChange) {</span>
 <span class="cstat-no" title="statement not covered" >      onNetworkChange(network);</span>
     }
   };
 &nbsp;
-  const selectedNetworkData = <span class="cstat-no" title="statement not covered" >networks.find(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.id === selectedNetwork);</span></span>
+  const selectedNetworkData = <span class="cstat-no" title="statement not covered" >networks.find(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.id === selectedNetwork)</span>;</span>
 &nbsp;
-  return (
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;div className="relative" ref={dropdownRef}&gt;
       &lt;button
-        onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etIsOpen(!isOpen)}</span>
+        onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setIsOpen(!isOpen)}</span>
         className="flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 rounded-xl px-4 py-2 transition-all min-w-[160px] justify-between shadow-sm active:scale-[0.98]"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
@@ -420,14 +420,14 @@ export default function <span class="cstat-no" title="statement not covered" ><s
         /&gt;
       &lt;/button&gt;
 &nbsp;
-      {<span class="branch-0 cbranch-no" title="branch not covered" >selectedNetwork === 'testnet' &amp;&amp; (</span>
+      {selectedNetwork === 'testnet' &amp;&amp; (
         &lt;div className="absolute -top-2 -right-2 bg-yellow-500 text-slate-900 rounded-full px-2 py-1 text-xs font-bold flex items-center gap-1"&gt;
           &lt;Icon icon={AlertTriangle} dense /&gt;
           Testnet
         &lt;/div&gt;
       )}
 &nbsp;
-      {<span class="branch-0 cbranch-no" title="branch not covered" >isOpen &amp;&amp; (</span>
+      {isOpen &amp;&amp; (
         &lt;div
           className="absolute top-full right-0 mt-2 bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl z-50 overflow-hidden min-w-[220px] animate-in fade-in slide-in-from-top-2 duration-200"
           role="listbox"
@@ -436,7 +436,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
             {networks.map(<span class="fstat-no" title="function not covered" >(n</span>etwork) =&gt; (
 <span class="cstat-no" title="statement not covered" >              &lt;button</span>
                 key={network.id}
-                onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >h</span>andleNetworkSelect(network.id)}</span>
+                onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >handleNetworkSelect(network.id)}</span>
                 className={`w-full text-left px-3 py-2.5 rounded-xl transition-all ${
                   network.id === selectedNetwork
                     ? 'bg-blue-600/10 text-blue-400 border border-blue-500/20'
@@ -459,7 +459,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
                       {network.description}
                     &lt;/div&gt;
                   &lt;/div&gt;
-                  {<span class="branch-0 cbranch-no" title="branch not covered" >network.id === selectedNetwork &amp;&amp; (</span>
+                  {network.id === selectedNetwork &amp;&amp; (
                     &lt;div className="w-1.5 h-1.5 bg-blue-400 rounded-full shadow-[0_0_8px_rgba(96,165,250,0.5)]" /&gt;
                   )}
                 &lt;/div&gt;
@@ -478,7 +478,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T12:56:58.204Z
+                at 2026-07-13T11:50:01.206Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

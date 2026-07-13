@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -222,8 +222,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -375,16 +375,16 @@
  * including balances, pro-mode access levels, and connection status.
  */
 &nbsp;
-import { create } from <span class="cstat-no" title="statement not covered" >'zustand';</span>
-import { Server } from <span class="cstat-no" title="statement not covered" >'soroban-client';</span>
+import { create } from 'zustand';
+import { Server } from 'soroban-client';
 &nbsp;
 /**
  * TradeFlow Token (TF) Configuration.
  * These constants define the utility token used for premium features.
  */
 const TF_TOKEN_CODE = <span class="cstat-no" title="statement not covered" >'TF';</span>
-const TF_TOKEN_ISSUER = <span class="cstat-no" title="statement not covered" >'GBBHPLX4LBHS5JPC4FBDHD4YDZSZJZG7VQMIY6RDZT6HRJ5QJ5N6KFGH'; /</span>/ Example issuer address
-const PRO_MODE_THRESHOLD = <span class="cstat-no" title="statement not covered" >1000; /</span>/ Minimum TF tokens required for Pro Mode
+const TF_TOKEN_ISSUER = <span class="cstat-no" title="statement not covered" >'GBBHPLX4LBHS5JPC4FBDHD4YDZSZJZG7VQMIY6RDZT6HRJ5QJ5N6KFGH';</span> // Example issuer address
+const PRO_MODE_THRESHOLD = <span class="cstat-no" title="statement not covered" >1000;</span> // Minimum TF tokens required for Pro Mode
 &nbsp;
 /**
  * Representation of a Stellar asset balance.
@@ -429,7 +429,7 @@ interface TokenStore {
 /**
  * Zustand store for managing TradeFlow token state.
  */
-export const <span class="cstat-no" title="statement not covered" >useTokenStore = <span class="cstat-no" title="statement not covered" >c</span>reate&lt;TokenStore&gt;(<span class="fstat-no" title="function not covered" >(s</span>et, get) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+export const useTokenStore = <span class="cstat-no" title="statement not covered" >create&lt;TokenStore&gt;(<span class="fstat-no" title="function not covered" >(s</span>et, get) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
   // Initial state values
   tfTokenBalance: 0,
   isConnected: false,
@@ -440,7 +440,7 @@ export const <span class="cstat-no" title="statement not covered" >useTokenStore
   /**
    * Asynchronously retrieves the TF token balance from the Horizon server.
    */
-  fetchTokenBalance: <span class="fstat-no" title="function not covered" >async (p</span>ublicKey: string) =&gt; {
+  fetchTokenBalance: <span class="fstat-no" title="function not covered" >as</span>ync (publicKey: string) =&gt; {
 <span class="cstat-no" title="statement not covered" >    set({ isLoading: true, error: null });</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    try {</span>
@@ -505,7 +505,7 @@ export const <span class="cstat-no" title="statement not covered" >useTokenStore
   /**
    * Logic for determining premium access.
    */
-  hasProModeAccess: <span class="fstat-no" title="function not covered" >() =&gt; {</span>
+  hasProModeAccess: <span class="fstat-no" title="function not covered" >()</span> =&gt; {
     const { tfTokenBalance, isConnected } = <span class="cstat-no" title="statement not covered" >get();</span>
 <span class="cstat-no" title="statement not covered" >    return isConnected &amp;&amp; tfTokenBalance &gt;= PRO_MODE_THRESHOLD;</span>
   },
@@ -514,8 +514,8 @@ export const <span class="cstat-no" title="statement not covered" >useTokenStore
 /**
  * Re-export constants for use in UI components.
  */
-export const <span class="cstat-no" title="statement not covered" >PRO_MODE_THRESHOLD_AMOUNT = <span class="cstat-no" title="statement not covered" >P</span>RO_MODE_THRESHOLD;</span>
-export const <span class="cstat-no" title="statement not covered" >TF_TOKEN_INFO = <span class="cstat-no" title="statement not covered" >{</span></span>
+export const PRO_MODE_THRESHOLD_AMOUNT = <span class="cstat-no" title="statement not covered" >PRO_MODE_THRESHOLD;</span>
+export const TF_TOKEN_INFO = <span class="cstat-no" title="statement not covered" >{</span>
   code: TF_TOKEN_CODE,
   issuer: TF_TOKEN_ISSUER,
   name: 'TradeFlow Token',
@@ -529,7 +529,7 @@ export const <span class="cstat-no" title="statement not covered" >TF_TOKEN_INFO
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T12:56:58.204Z
+                at 2026-07-13T11:50:01.206Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

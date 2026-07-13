@@ -1,17 +1,15 @@
-import nextJest from 'next/jest.js';
-
-const createJestConfig = nextJest({
-  dir: './',
-});
-
 /** @type {import('jest').Config} */
 const customJestConfig = {
   testEnvironment: 'jest-environment-jsdom',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
   },
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
+  transform: {
+    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
+  },
 
   collectCoverage: true,
   collectCoverageFrom: [
@@ -35,13 +33,7 @@ const customJestConfig = {
       lines: 0,
       statements: 0,
     },
-    './src/lib/parser.ts': {
-      branches: 0,
-      functions: 0,
-      lines: 0,
-      statements: 0,
-    },
   },
 };
 
-export default createJestConfig(customJestConfig);
+export default customJestConfig;

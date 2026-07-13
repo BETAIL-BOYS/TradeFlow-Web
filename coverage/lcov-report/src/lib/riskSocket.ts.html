@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">69.82% </span>
+                <span class="strong">69.29% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>81/116</span>
+                <span class='fraction'>79/114</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">37.83% </span>
+                <span class="strong">49.09% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>14/37</span>
+                <span class='fraction'>27/55</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">76.23% </span>
+                <span class="strong">75.75% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>77/101</span>
+                <span class='fraction'>75/99</span>
             </div>
         
             
@@ -303,7 +303,7 @@
 <a name='L238'></a><a href='#L238'>238</a>
 <a name='L239'></a><a href='#L239'>239</a>
 <a name='L240'></a><a href='#L240'>240</a>
-<a name='L241'></a><a href='#L241'>241</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L241'></a><a href='#L241'>241</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -322,7 +322,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
@@ -584,7 +584,7 @@ export class RiskSocketClient {
    */
   on(listener: Listener): () =&gt; void {
     this.listeners.add(listener);
-    return <span class="fstat-no" title="function not covered" >() =&gt; {</span>
+    return <span class="fstat-no" title="function not covered" >()</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >      this.listeners.delete(listener);</span>
     };
   }
@@ -598,7 +598,7 @@ export class RiskSocketClient {
     <span class="missing-if-branch" title="if path not taken" >I</span>if (!this.wsBaseUrl) <span class="cstat-no" title="statement not covered" >return;</span>
     <span class="missing-if-branch" title="if path not taken" >I</span>if (
       this.ws &amp;&amp;
-      (<span class="branch-1 cbranch-no" title="branch not covered" >this.ws.readyState === WebSocket.OPEN </span>|| <span class="branch-2 cbranch-no" title="branch not covered" >this.ws.readyState === WebSocket.CONNECTING</span>)
+      (<span class="branch-1 cbranch-no" title="branch not covered" >this.ws.readyState === WebSocket.OPEN </span>|| <span class="branch-2 cbranch-no" title="branch not covered" >this.ws.readyState === WebSocket.CONNECTING)</span>
     ) {
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
@@ -627,12 +627,12 @@ export class RiskSocketClient {
       const parsed = this.parseMessage(msg.data);
       <span class="missing-if-branch" title="if path not taken" >I</span>if (!parsed) <span class="cstat-no" title="statement not covered" >return;</span>
 &nbsp;
-      if (parsed.event === 'risk_update') {
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (parsed.event === 'risk_update') {
         this.emit(parsed);
       }
     };
 &nbsp;
-    ws.onerror = <span class="fstat-no" title="function not covered" >() =&gt; {</span>
+    ws.onerror = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >      return;</span>
     };
 &nbsp;
@@ -664,7 +664,7 @@ export class RiskSocketClient {
    * Enables or disables the generic risk feed subscription.
    * @param enabled - True to subscribe, false to unsubscribe.
    */
-<span class="fstat-no" title="function not covered" >  enableRiskFeed(e</span>nabled: boolean): void {
+<span class="fstat-no" title="function not covered" >  en</span>ableRiskFeed(enabled: boolean): void {
 <span class="cstat-no" title="statement not covered" >    this.riskFeedEnabled = enabled;</span>
 <span class="cstat-no" title="statement not covered" >    if (enabled) <span class="cstat-no" title="statement not covered" >this.safeSend({ type: 'subscribe', payload: { room: 'risk:feed' } });</span></span>
     else <span class="cstat-no" title="statement not covered" >this.safeSend({ type: 'unsubscribe', payload: { room: 'risk:feed' } });</span>
@@ -685,9 +685,9 @@ export class RiskSocketClient {
    * Unsubscribes from real-time risk updates for a specific invoice.
    * @param invoiceId - The invoice to unsubscribe from.
    */
-<span class="fstat-no" title="function not covered" >  unsubscribeInvoice(i</span>nvoiceId: string): void {
+<span class="fstat-no" title="function not covered" >  un</span>subscribeInvoice(invoiceId: string): void {
     const room = <span class="cstat-no" title="statement not covered" >`invoice:${invoiceId}`;</span>
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!this.invoiceRooms.has(room)) <span class="cstat-no" title="statement not covered" >return;</span></span>
+<span class="cstat-no" title="statement not covered" >    if (!this.invoiceRooms.has(room)) <span class="cstat-no" title="statement not covered" >return;</span></span>
 <span class="cstat-no" title="statement not covered" >    this.invoiceRooms.delete(room);</span>
 <span class="cstat-no" title="statement not covered" >    this.safeSend({ type: 'unsubscribe', payload: { room, invoiceId } });</span>
   }
@@ -697,11 +697,11 @@ export class RiskSocketClient {
    * Unsubscribes removed invoices and subscribes new ones.
    * @param invoiceIds - The full set of invoice IDs to subscribe to.
    */
-<span class="fstat-no" title="function not covered" >  syncInvoices(i</span>nvoiceIds: string[]): void {
+<span class="fstat-no" title="function not covered" >  sy</span>ncInvoices(invoiceIds: string[]): void {
     const desired = <span class="cstat-no" title="statement not covered" >new Set(invoiceIds.map(<span class="fstat-no" title="function not covered" >(i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >`invoice:${id}`)</span>);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    for (const existing of Array.from(this.invoiceRooms)) {</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!desired.has(existing)) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!desired.has(existing)) {</span>
         const invoiceId = <span class="cstat-no" title="statement not covered" >existing.slice('invoice:'.length);</span>
 <span class="cstat-no" title="statement not covered" >        this.unsubscribeInvoice(invoiceId);</span>
       }
@@ -740,9 +740,9 @@ export class RiskSocketClient {
     }
 &nbsp;
     const eventName = obj?.event || <span class="branch-1 cbranch-no" title="branch not covered" >obj?.type;</span>
-    const payload = obj?.data ?? <span class="branch-1 cbranch-no" title="branch not covered" >obj?.payload ?? <span class="branch-2 cbranch-no" title="branch not covered" >o</span>bj;</span>
+    const payload = obj?.data ?? <span class="branch-1 cbranch-no" title="branch not covered" >obj?.payload </span>?? <span class="branch-2 cbranch-no" title="branch not covered" >obj;</span>
 &nbsp;
-    if (eventName === 'risk_update') {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (eventName === 'risk_update') {
       const invoiceId = payload?.invoiceId;
       const riskScore = payload?.riskScore;
       <span class="missing-if-branch" title="if path not taken" >I</span>if (typeof invoiceId !== 'string' || typeof riskScore !== 'number') <span class="cstat-no" title="statement not covered" >return null;</span>
@@ -750,7 +750,7 @@ export class RiskSocketClient {
       return { event: 'risk_update', data: { invoiceId, riskScore, updatedAt } };
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (typeof payload?.invoiceId === 'string' &amp;&amp; typeof payload?.riskScore === 'number') {</span>
+<span class="cstat-no" title="statement not covered" >    if (typeof payload?.invoiceId === 'string' &amp;&amp; typeof payload?.riskScore === 'number') {</span>
 <span class="cstat-no" title="statement not covered" >      return {</span>
         event: 'risk_update',
         data: {
@@ -790,7 +790,7 @@ export class RiskSocketClient {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T12:56:58.204Z
+                at 2026-07-13T11:50:01.206Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

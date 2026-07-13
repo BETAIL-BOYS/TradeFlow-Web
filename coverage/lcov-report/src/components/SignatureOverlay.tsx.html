@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -189,26 +189,26 @@
 <a name='L124'></a><a href='#L124'>124</a>
 <a name='L125'></a><a href='#L125'>125</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -313,26 +313,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use client';
 &nbsp;
-import React from <span class="cstat-no" title="statement not covered" >'react';</span>
-import { Loader2, Wallet, X } from <span class="cstat-no" title="statement not covered" >'lucide-react';</span>
+import React from 'react';
+import { Loader2, Wallet, X } from 'lucide-react';
 import {
   useIsSigning,
   useSigningMessage,
   useTransactionDetails,
   useSigningActions,
-} from <span class="cstat-no" title="statement not covered" >'../stores/signatureStore';</span>
-import Icon from <span class="cstat-no" title="statement not covered" >'./ui/Icon';</span>
+} from '../stores/signatureStore';
+import Icon from './ui/Icon';
 &nbsp;
-export default function <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >SignatureOverlay() {</span></span>
+export default function <span class="fstat-no" title="function not covered" >SignatureOverlay(</span>) {
   const isSigning = <span class="cstat-no" title="statement not covered" >useIsSigning();</span>
   const signingMessage = <span class="cstat-no" title="statement not covered" >useSigningMessage();</span>
   const transactionDetails = <span class="cstat-no" title="statement not covered" >useTransactionDetails();</span>
   const { stopSigning } = <span class="cstat-no" title="statement not covered" >useSigningActions();</span>
 &nbsp;
   // Don't render if not signing
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (!isSigning) <span class="cstat-no" title="statement not covered" >return null;</span></span>
+<span class="cstat-no" title="statement not covered" >  if (!isSigning) <span class="cstat-no" title="statement not covered" >return null;</span></span>
 &nbsp;
-  return (
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center"&gt;
       &lt;div className="bg-slate-900/95 border border-slate-700/50 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl"&gt;
         {/* Close button for emergency cancel */}
@@ -364,11 +364,11 @@ export default function <span class="cstat-no" title="statement not covered" ><s
           &lt;/div&gt;
 &nbsp;
           {/* Transaction Details */}
-          {<span class="branch-0 cbranch-no" title="branch not covered" >transactionDetails &amp;&amp; (</span>
+          {transactionDetails &amp;&amp; (
             &lt;div className="bg-slate-800/50 rounded-lg p-4 space-y-3 border border-slate-700/50"&gt;
               &lt;h3 className="text-sm font-medium text-slate-400 mb-2"&gt;Transaction Details&lt;/h3&gt;
 &nbsp;
-              {<span class="branch-0 cbranch-no" title="branch not covered" >transactionDetails.amount </span>&amp;&amp; (
+              {transactionDetails.amount &amp;&amp; (
                 &lt;div className="flex justify-between text-sm"&gt;
                   &lt;span className="text-slate-400"&gt;Amount:&lt;/span&gt;
                   &lt;span className="text-white font-medium"&gt;
@@ -386,7 +386,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
                 &lt;/div&gt;
               )}
 &nbsp;
-              {<span class="branch-0 cbranch-no" title="branch not covered" >transactionDetails.networkFee </span>&amp;&amp; (
+              {transactionDetails.networkFee &amp;&amp; (
                 &lt;div className="flex justify-between text-sm"&gt;
                   &lt;span className="text-slate-400"&gt;Network Fee:&lt;/span&gt;
                   &lt;span className="text-white font-medium"&gt;
@@ -395,7 +395,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
                 &lt;/div&gt;
               )}
 &nbsp;
-              {<span class="branch-0 cbranch-no" title="branch not covered" >transactionDetails.contractAddress </span>&amp;&amp; (
+              {transactionDetails.contractAddress &amp;&amp; (
                 &lt;div className="flex justify-between text-sm"&gt;
                   &lt;span className="text-slate-400"&gt;Contract:&lt;/span&gt;
                   &lt;span className="text-white font-mono text-xs"&gt;
@@ -442,7 +442,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T12:56:58.204Z
+                at 2026-07-13T11:50:01.206Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

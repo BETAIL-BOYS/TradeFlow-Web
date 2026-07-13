@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -186,22 +186,23 @@
 <a name='L121'></a><a href='#L121'>121</a>
 <a name='L122'></a><a href='#L122'>122</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -226,8 +227,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -307,9 +307,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use client';
 &nbsp;
-import React from <span class="cstat-no" title="statement not covered" >'react';</span>
-import { useWatchlist } from <span class="cstat-no" title="statement not covered" >'../hooks/useWatchlist';</span>
-import StarIcon from <span class="cstat-no" title="statement not covered" >'./StarIcon';</span>
+import React from 'react';
+import { useWatchlist } from '../hooks/useWatchlist';
+import StarIcon from './StarIcon';
 &nbsp;
 const allTokens = <span class="cstat-no" title="statement not covered" >['XLM', 'USDC', 'yXLM', 'ETH', 'EURC'];</span>
 &nbsp;
@@ -317,13 +317,13 @@ interface WatchlistTabProps {
   className?: string;
 }
 &nbsp;
-export default function <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >WatchlistTab({</span></span> className = <span class="branch-0 cbranch-no" title="branch not covered" >'' </span>}: WatchlistTabProps) {
+export default function <span class="fstat-no" title="function not covered" >WatchlistTab(</span>{ className = <span class="branch-0 cbranch-no" title="branch not covered" >'' </span>}: WatchlistTabProps) {
   const { watchlist: _watchlist, removeFromWatchlist, isInWatchlist } = <span class="cstat-no" title="statement not covered" >useWatchlist();</span>
 &nbsp;
-  const watchlistTokens = <span class="cstat-no" title="statement not covered" >allTokens.filter(<span class="fstat-no" title="function not covered" >(t</span>oken) =&gt; <span class="cstat-no" title="statement not covered" >isInWatchlist(token));</span></span>
+  const watchlistTokens = <span class="cstat-no" title="statement not covered" >allTokens.filter(<span class="fstat-no" title="function not covered" >(t</span>oken) =&gt; <span class="cstat-no" title="statement not covered" >isInWatchlist(token))</span>;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (watchlistTokens.length === 0) {</span>
-    return (
+<span class="cstat-no" title="statement not covered" >  if (watchlistTokens.length === 0) {</span>
+<span class="cstat-no" title="statement not covered" >    return (</span>
       &lt;div className={`text-center py-12 ${className}`}&gt;
         &lt;div className="text-tradeflow-muted mb-4"&gt;
           &lt;svg
@@ -348,7 +348,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
     );
   }
 &nbsp;
-  return (
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;div className={className}&gt;
       &lt;div className="mb-6"&gt;
         &lt;h2 className="text-xl font-semibold text-white mb-2"&gt;My Watchlist&lt;/h2&gt;
@@ -373,7 +373,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
                   &lt;p className="text-tradeflow-muted text-xs"&gt;Stellar Asset&lt;/p&gt;
                 &lt;/div&gt;
               &lt;/div&gt;
-              &lt;StarIcon isStarred={true} onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >r</span>emoveFromWatchlist(token)} /&gt;</span>
+              &lt;StarIcon isStarred={true} onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >removeFromWatchlist(token)}</span> /&gt;
             &lt;/div&gt;
 &nbsp;
             &lt;div className="space-y-2"&gt;
@@ -433,7 +433,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T12:56:58.204Z
+                at 2026-07-13T11:50:01.206Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

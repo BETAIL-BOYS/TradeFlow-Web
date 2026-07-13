@@ -47,7 +47,7 @@ export default function Footer() {
               </h4>
               <nav className="flex flex-col gap-3">
                 <a
-                  href="https://docs.tradeflow.example"
+                  href="https://github.com/BETAIL-BOYS/TradeFlow-Web"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-slate-500 hover:text-blue-400 transition-colors text-sm font-medium inline-flex items-center gap-1"
@@ -99,7 +99,7 @@ export default function Footer() {
                   <Twitter size={18} />
                 </a>
                 <a
-                  href="https://github.com"
+                  href="https://github.com/BETAIL-BOYS/TradeFlow-Web"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 bg-slate-800 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-all"

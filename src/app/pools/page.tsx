@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { Droplets, TrendingUp, Info } from 'lucide-react';
 import Pagination from '../../components/ui/Pagination';
 import { formatCurrency } from '../../lib/format';
-import Footer from '../../components/layout/Footer';
 
 // Mock data for pools
 const MOCK_POOLS = [
@@ -101,8 +100,6 @@ export default function PoolsPage() {
           />
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 }

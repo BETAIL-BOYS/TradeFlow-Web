@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -116,20 +116,20 @@
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -139,7 +139,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -167,21 +167,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use client';
 &nbsp;
-import React, { useState } from <span class="cstat-no" title="statement not covered" >'react';</span>
-import { connectWallet, WalletType } from <span class="cstat-no" title="statement not covered" >'@/lib/stellar';</span>
-import Navbar from <span class="cstat-no" title="statement not covered" >'@/components/Navbar';</span>
-import WalletModal from <span class="cstat-no" title="statement not covered" >'@/components/WalletModal';</span>
-import { SwapCard } from <span class="cstat-no" title="statement not covered" >'@/components/SwapCard';</span>
-import WalletNotConnected from <span class="cstat-no" title="statement not covered" >'@/components/WalletNotConnected';</span>
+import React, { useState } from 'react';
+import { connectWallet, WalletType } from '@/lib/stellar';
+import Navbar from '@/components/Navbar';
+import WalletModal from '@/components/WalletModal';
+import { SwapCard } from '@/components/SwapCard';
+import WalletNotConnected from '@/components/WalletNotConnected';
 &nbsp;
-export default function <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >SwapPage() {</span></span>
+export default function <span class="fstat-no" title="function not covered" >SwapPage(</span>) {
   const [address, setAddress] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const [isModalOpen, setIsModalOpen] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
 &nbsp;
-  const handleConnectWallet = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async (w</span>alletType: WalletType) =&gt; {</span>
+  const handleConnectWallet = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (walletType: WalletType) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const userInfo = <span class="cstat-no" title="statement not covered" >await connectWallet(walletType);</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (userInfo &amp;&amp; userInfo.publicKey) {</span>
+<span class="cstat-no" title="statement not covered" >      if (userInfo &amp;&amp; userInfo.publicKey) {</span>
 <span class="cstat-no" title="statement not covered" >        setAddress(userInfo.publicKey);</span>
       }
     } catch (e: any) {
@@ -190,13 +190,13 @@ export default function <span class="cstat-no" title="statement not covered" ><s
     }
   };
 &nbsp;
-  return (
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;div className="min-h-screen bg-tradeflow-dark text-white font-sans flex flex-col"&gt;
-      &lt;Navbar address={address} onConnect={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etIsModalOpen(true)} /&gt;</span>
+      &lt;Navbar address={address} onConnect={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setIsModalOpen(true)}</span> /&gt;
 &nbsp;
       &lt;div className="flex-1 px-8"&gt;
         {!address ? (
-<span class="branch-0 cbranch-no" title="branch not covered" >          &lt;WalletNotConnected onConnect={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etIsModalOpen(true)} /&gt;</span></span>
+          &lt;WalletNotConnected onConnect={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setIsModalOpen(true)}</span> /&gt;
         ) : (
           &lt;div className="flex items-center justify-center py-12"&gt;
             &lt;SwapCard /&gt;
@@ -206,7 +206,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
 &nbsp;
       &lt;WalletModal
         isOpen={isModalOpen}
-        onClose={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etIsModalOpen(false)}</span>
+        onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setIsModalOpen(false)}</span>
         onConnect={handleConnectWallet}
       /&gt;
     &lt;/div&gt;
@@ -223,7 +223,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T12:56:58.204Z
+                at 2026-07-13T11:50:01.206Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

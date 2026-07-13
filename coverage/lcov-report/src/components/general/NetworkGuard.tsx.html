@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -112,6 +112,11 @@
 <a name='L47'></a><a href='#L47'>47</a>
 <a name='L48'></a><a href='#L48'>48</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -120,11 +125,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -148,10 +148,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -159,20 +159,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use client';
 &nbsp;
-import React, { useEffect, useState } from <span class="cstat-no" title="statement not covered" >'react';</span>
-import { getNetwork, isAllowed } from <span class="cstat-no" title="statement not covered" >'@stellar/freighter-api';</span>
-import UnsupportedNetwork from <span class="cstat-no" title="statement not covered" >'../UnsupportedNetwork';</span>
+import React, { useEffect, useState } from 'react';
+import { getNetwork, isAllowed } from '@stellar/freighter-api';
+import UnsupportedNetwork from '../UnsupportedNetwork';
 &nbsp;
-export default function <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >NetworkGuard({</span></span> children }: { children: React.ReactNode }) {
+export default function <span class="fstat-no" title="function not covered" >NetworkGuard(</span>{ children }: { children: React.ReactNode }) {
   const [currentNetwork, setCurrentNetwork] = <span class="cstat-no" title="statement not covered" >useState&lt;string | null&gt;(null);</span>
   const [isWrongNetwork, setIsWrongNetwork] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
-  const expectedNetwork = <span class="cstat-no" title="statement not covered" >'TESTNET'; /</span>/ Can be pulled from env later
+  const expectedNetwork = <span class="cstat-no" title="statement not covered" >'TESTNET';</span> // Can be pulled from env later
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-    const checkNetwork = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async () =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const checkNetwork = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      try {</span>
         const allowed = <span class="cstat-no" title="statement not covered" >await isAllowed();</span>
-<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (allowed) {</span>
+<span class="cstat-no" title="statement not covered" >        if (allowed) {</span>
           const network = <span class="cstat-no" title="statement not covered" >await getNetwork();</span>
 <span class="cstat-no" title="statement not covered" >          setCurrentNetwork(network);</span>
 &nbsp;
@@ -191,14 +191,14 @@ export default function <span class="cstat-no" title="statement not covered" ><s
 &nbsp;
     // Optional: Poll for network changes if Freighter doesn't provide an event listener
     const interval = <span class="cstat-no" title="statement not covered" >setInterval(checkNetwork, 5000);</span>
-<span class="cstat-no" title="statement not covered" >    return <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >c</span>learInterval(interval);</span></span>
+<span class="cstat-no" title="statement not covered" >    return <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >clearInterval(interval);</span></span>
   }, []);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (isWrongNetwork &amp;&amp; currentNetwork) {</span>
-    return &lt;UnsupportedNetwork currentNetwork={currentNetwork} expectedNetwork={expectedNetwork} /&gt;;
+<span class="cstat-no" title="statement not covered" >  if (isWrongNetwork &amp;&amp; currentNetwork) {</span>
+<span class="cstat-no" title="statement not covered" >    return &lt;UnsupportedNetwork currentNetwork={currentNetwork} expectedNetwork={expectedNetwork} /&gt;;</span>
   }
 &nbsp;
-  return &lt;&gt;{children}&lt;/&gt;;
+<span class="cstat-no" title="statement not covered" >  return &lt;&gt;{children}&lt;/&gt;;</span>
 }
 &nbsp;
 // Inconsequential change for repo health
@@ -211,7 +211,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T12:56:58.204Z
+                at 2026-07-13T11:50:01.206Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

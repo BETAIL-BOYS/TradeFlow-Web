@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -279,11 +279,12 @@
 <a name='L214'></a><a href='#L214'>214</a>
 <a name='L215'></a><a href='#L215'>215</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -293,7 +294,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -337,7 +337,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -493,26 +493,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use client';
 &nbsp;
-import React, { useState, useEffect } from <span class="cstat-no" title="statement not covered" >'react';</span>
-import { Wallet, Download, Shield, ExternalLink, Loader2 } from <span class="cstat-no" title="statement not covered" >'lucide-react';</span>
-import { useWalletConnection } from <span class="cstat-no" title="statement not covered" >'../stores/useWeb3Store';</span>
-import { FREIGHTER_ID } from <span class="cstat-no" title="statement not covered" >'../lib/stellar';</span>
-import toast from <span class="cstat-no" title="statement not covered" >'react-hot-toast';</span>
+import React, { useState, useEffect } from 'react';
+import { Wallet, Download, Shield, ExternalLink, Loader2 } from 'lucide-react';
+import { useWalletConnection } from '../stores/useWeb3Store';
+import { FREIGHTER_ID } from '../lib/stellar';
+import toast from 'react-hot-toast';
 &nbsp;
 interface FreighterConnectModalProps {
   isOpen: boolean;
   onClose: () =&gt; void;
 }
 &nbsp;
-export default function <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >FreighterConnectModal({</span></span> isOpen, onClose }: FreighterConnectModalProps) {
+export default function <span class="fstat-no" title="function not covered" >FreighterConnectModal(</span>{ isOpen, onClose }: FreighterConnectModalProps) {
   const { connectWallet, isConnecting, error } = <span class="cstat-no" title="statement not covered" >useWalletConnection();</span>
   const [isFreighterInstalled, setIsFreighterInstalled] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean | null&gt;(null);</span>
   const [isChecking, setIsChecking] = <span class="cstat-no" title="statement not covered" >useState(true);</span>
 &nbsp;
   // Check if Freighter is installed
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-    const checkFreighterInstallation = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async () =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!isOpen) <span class="cstat-no" title="statement not covered" >return;</span></span>
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const checkFreighterInstallation = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      if (!isOpen) <span class="cstat-no" title="statement not covered" >return;</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      setIsChecking(true);</span>
 &nbsp;
@@ -533,7 +533,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
   }, [isOpen]);
 &nbsp;
   // Handle wallet connection
-  const handleConnect = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async () =&gt; {</span></span>
+  const handleConnect = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
 <span class="cstat-no" title="statement not covered" >      await connectWallet(FREIGHTER_ID);</span>
 <span class="cstat-no" title="statement not covered" >      toast.success('Wallet connected successfully!');</span>
@@ -545,13 +545,13 @@ export default function <span class="cstat-no" title="statement not covered" ><s
   };
 &nbsp;
   // Handle download Freighter
-  const handleDownloadFreighter = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+  const handleDownloadFreighter = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    window.open('https://www.freighter.app/', '_blank');</span>
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (!isOpen) <span class="cstat-no" title="statement not covered" >return null;</span></span>
+<span class="cstat-no" title="statement not covered" >  if (!isOpen) <span class="cstat-no" title="statement not covered" >return null;</span></span>
 &nbsp;
-  return (
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"&gt;
       &lt;div className="bg-slate-800 rounded-2xl border border-slate-700 p-6 max-w-md w-full"&gt;
         {/* Header */}
@@ -585,12 +585,12 @@ export default function <span class="cstat-no" title="statement not covered" ><s
         {/* Content */}
         &lt;div className="space-y-6"&gt;
           {isChecking ? (
-<span class="branch-0 cbranch-no" title="branch not covered" >            &lt;div className="flex flex-col items-center justify-center py-8"&gt;</span>
+            &lt;div className="flex flex-col items-center justify-center py-8"&gt;
               &lt;Loader2 className="w-8 h-8 text-blue-400 animate-spin mb-4" /&gt;
               &lt;p className="text-slate-400"&gt;Checking for Freighter wallet...&lt;/p&gt;
             &lt;/div&gt;
           ) : isFreighterInstalled ? (
-<span class="branch-0 cbranch-no" title="branch not covered" >            &lt;div className="space-y-4"&gt;</span>
+            &lt;div className="space-y-4"&gt;
               {/* Freighter detected state */}
               &lt;div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4"&gt;
                 &lt;div className="flex items-center gap-3"&gt;
@@ -611,7 +611,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
                 className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:opacity-50 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
               &gt;
                 {isConnecting ? (
-<span class="branch-0 cbranch-no" title="branch not covered" >                  &lt;&gt;</span>
+                  &lt;&gt;
                     &lt;Loader2 className="w-4 h-4 animate-spin" /&gt;
                     Connecting...
                   &lt;/&gt;
@@ -624,7 +624,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
               &lt;/button&gt;
 &nbsp;
               {/* Error display */}
-              {<span class="branch-0 cbranch-no" title="branch not covered" >error &amp;&amp; (</span>
+              {error &amp;&amp; (
                 &lt;div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3"&gt;
                   &lt;p className="text-red-400 text-sm"&gt;{error}&lt;/p&gt;
                 &lt;/div&gt;
@@ -712,7 +712,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T12:56:58.204Z
+                at 2026-07-13T11:50:01.206Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

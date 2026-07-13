@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -265,7 +265,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -351,10 +351,10 @@
  * @param isRaw - If true, divides by 10^7 (standard for USDC on Stellar)
  * @returns Formatted USD string
  */
-export const <span class="cstat-no" title="statement not covered" >formatCurrency = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>a</span>mount: number | string, isRaw: boolean = <span class="branch-0 cbranch-no" title="branch not covered" >true)</span>: string =&gt; {</span>
+export const formatCurrency = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(a</span>mount: number | string, isRaw: boolean = <span class="branch-0 cbranch-no" title="branch not covered" >true)</span>: string =&gt; {</span>
   const numAmount = <span class="cstat-no" title="statement not covered" >typeof amount === 'string' ? parseFloat(amount) : amount;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (isNaN(numAmount)) {</span>
+<span class="cstat-no" title="statement not covered" >  if (isNaN(numAmount)) {</span>
 <span class="cstat-no" title="statement not covered" >    return '$0.00';</span>
   }
 &nbsp;
@@ -378,9 +378,9 @@ export const <span class="cstat-no" title="statement not covered" >formatCurrenc
  * @param {number} [decimals=7] - Number of decimal places for the asset.
  * @returns {string} The formatted number string.
  */
-export const <span class="cstat-no" title="statement not covered" >formatTokenAmount = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>a</span>mount: number | string, decimals: number = <span class="branch-0 cbranch-no" title="branch not covered" >7)</span>: string =&gt; {</span>
+export const formatTokenAmount = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(a</span>mount: number | string, decimals: number = <span class="branch-0 cbranch-no" title="branch not covered" >7)</span>: string =&gt; {</span>
   const numAmount = <span class="cstat-no" title="statement not covered" >typeof amount === 'string' ? parseFloat(amount) : amount;</span>
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (isNaN(numAmount)) <span class="cstat-no" title="statement not covered" >return '0';</span></span>
+<span class="cstat-no" title="statement not covered" >  if (isNaN(numAmount)) <span class="cstat-no" title="statement not covered" >return '0';</span></span>
 &nbsp;
   const value = <span class="cstat-no" title="statement not covered" >numAmount / Math.pow(10, decimals);</span>
 <span class="cstat-no" title="statement not covered" >  return value.toLocaleString('en-US', {</span>
@@ -396,24 +396,24 @@ export const <span class="cstat-no" title="statement not covered" >formatTokenAm
  * @param {number | string} timestamp - The Unix timestamp to format.
  * @returns {string} Formatted date (e.g., "Oct 24, 2024") or "Invalid Date".
  */
-export const <span class="cstat-no" title="statement not covered" >formatDate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>t</span>imestamp: number | string): string =&gt; {</span>
+export const formatDate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(t</span>imestamp: number | string): string =&gt; {</span>
   // 1. Ensure we have a numeric value
   const numTimestamp = <span class="cstat-no" title="statement not covered" >typeof timestamp === 'string' ? parseInt(timestamp) : timestamp;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (isNaN(numTimestamp)) {</span>
+<span class="cstat-no" title="statement not covered" >  if (isNaN(numTimestamp)) {</span>
 <span class="cstat-no" title="statement not covered" >    return 'Invalid Date';</span>
   }
 &nbsp;
   // 2. Detect format based on digit count
   // Unix seconds = 10 digits, Milliseconds = 13 digits
-  const date = new Date(
+  const date = <span class="cstat-no" title="statement not covered" >new Date(</span>
     numTimestamp.toString().length === 10
       ? numTimestamp * 1000 // Convert seconds to milliseconds
       : numTimestamp // Already in milliseconds
   );
 &nbsp;
   // 3. Check for invalid date objects
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (isNaN(date.getTime())) {</span>
+<span class="cstat-no" title="statement not covered" >  if (isNaN(date.getTime())) {</span>
 <span class="cstat-no" title="statement not covered" >    return 'Invalid Date';</span>
   }
 &nbsp;
@@ -432,16 +432,16 @@ export const <span class="cstat-no" title="statement not covered" >formatDate = 
  * @param {number | string} timestamp - The Unix timestamp to format.
  * @returns {string} Formatted date-time (e.g., "Oct 24, 2024, 2:30 PM").
  */
-export const <span class="cstat-no" title="statement not covered" >formatDateTime = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>t</span>imestamp: number | string): string =&gt; {</span>
+export const formatDateTime = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(t</span>imestamp: number | string): string =&gt; {</span>
   const numTimestamp = <span class="cstat-no" title="statement not covered" >typeof timestamp === 'string' ? parseInt(timestamp) : timestamp;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (isNaN(numTimestamp)) {</span>
+<span class="cstat-no" title="statement not covered" >  if (isNaN(numTimestamp)) {</span>
 <span class="cstat-no" title="statement not covered" >    return 'Invalid Date';</span>
   }
 &nbsp;
   const date = <span class="cstat-no" title="statement not covered" >new Date(numTimestamp.toString().length === 10 ? numTimestamp * 1000 : numTimestamp);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (isNaN(date.getTime())) {</span>
+<span class="cstat-no" title="statement not covered" >  if (isNaN(date.getTime())) {</span>
 <span class="cstat-no" title="statement not covered" >    return 'Invalid Date';</span>
   }
 &nbsp;
@@ -462,8 +462,8 @@ export const <span class="cstat-no" title="statement not covered" >formatDateTim
  * @param {string} address - The full wallet address string.
  * @returns {string} The truncated address (e.g., "GBBD67...OC6S").
  */
-export const <span class="cstat-no" title="statement not covered" >formatAddress = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>a</span>ddress: string): string =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (!address || address.length &lt; 12) {</span>
+export const formatAddress = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(a</span>ddress: string): string =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  if (!address || address.length &lt; 12) {</span>
 <span class="cstat-no" title="statement not covered" >    return address;</span>
   }
 &nbsp;
@@ -477,10 +477,10 @@ export const <span class="cstat-no" title="statement not covered" >formatAddress
  * @param {number} [decimals=1] - Precision of the output.
  * @returns {string} Formatted percentage (e.g., "5.5%").
  */
-export const <span class="cstat-no" title="statement not covered" >formatPercentage = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>v</span>alue: number | string, decimals: number = <span class="branch-0 cbranch-no" title="branch not covered" >1)</span>: string =&gt; {</span>
+export const formatPercentage = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(v</span>alue: number | string, decimals: number = <span class="branch-0 cbranch-no" title="branch not covered" >1)</span>: string =&gt; {</span>
   const numValue = <span class="cstat-no" title="statement not covered" >typeof value === 'string' ? parseFloat(value) : value;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (isNaN(numValue)) {</span>
+<span class="cstat-no" title="statement not covered" >  if (isNaN(numValue)) {</span>
 <span class="cstat-no" title="statement not covered" >    return '0%';</span>
   }
 &nbsp;
@@ -493,7 +493,7 @@ export const <span class="cstat-no" title="statement not covered" >formatPercent
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T12:56:58.204Z
+                at 2026-07-13T11:50:01.206Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

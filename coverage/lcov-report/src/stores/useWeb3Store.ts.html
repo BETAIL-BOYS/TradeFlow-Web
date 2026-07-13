@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">18.94% </span>
+                <span class="strong">8.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>18/95</span>
+                <span class='fraction'>7/84</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12.94% </span>
+                <span class="strong">7.5% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>11/85</span>
+                <span class='fraction'>6/80</span>
             </div>
         
             
@@ -410,11 +410,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -855,10 +855,10 @@ export const useWeb3Store = create&lt;Web3Store&gt;((set, get) =&gt; ({
   error: null,
 &nbsp;
   // Connect wallet using unified wallet connector
-  connectWallet: <span class="fstat-no" title="function not covered" >async (w</span>alletType: WalletType = <span class="branch-0 cbranch-no" title="branch not covered" >FREIGHTER_ID)</span> =&gt; {
+  connectWallet: <span class="fstat-no" title="function not covered" >as</span>ync (walletType: WalletType = <span class="branch-0 cbranch-no" title="branch not covered" >FREIGHTER_ID)</span> =&gt; {
     const { isConnected } = <span class="cstat-no" title="statement not covered" >get();</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (isConnected) {</span>
+<span class="cstat-no" title="statement not covered" >    if (isConnected) {</span>
 <span class="cstat-no" title="statement not covered" >      set({ error: 'Wallet is already connected' });</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
@@ -871,13 +871,13 @@ export const useWeb3Store = create&lt;Web3Store&gt;((set, get) =&gt; ({
       // Connect to wallet
       const walletInfo = <span class="cstat-no" title="statement not covered" >await walletConnector.connect();</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!walletInfo.publicKey) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!walletInfo.publicKey) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error('Unable to retrieve public key.');</span>
       }
 &nbsp;
       // Verify correct network (Testnet)
       const network = <span class="cstat-no" title="statement not covered" >await walletConnector.getNetwork();</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (network !== 'TESTNET' &amp;&amp; !network.includes('Test SDF Network')) {</span>
+<span class="cstat-no" title="statement not covered" >      if (network !== 'TESTNET' &amp;&amp; !network.includes('Test SDF Network')) {</span>
         const walletName = <span class="cstat-no" title="statement not covered" >getWalletDisplayName(walletType);</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error(</span>
           `Invalid network: ${network}. Please switch to TESTNET in ${walletName} settings.`
@@ -905,11 +905,11 @@ export const useWeb3Store = create&lt;Web3Store&gt;((set, get) =&gt; ({
   },
 &nbsp;
   // Disconnect wallet
-  disconnectWallet: <span class="fstat-no" title="function not covered" >async () =&gt; {</span>
+  disconnectWallet: <span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {
     const { walletType } = <span class="cstat-no" title="statement not covered" >get();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (walletType) {</span>
+<span class="cstat-no" title="statement not covered" >      if (walletType) {</span>
         const walletConnector = <span class="cstat-no" title="statement not covered" >createWalletConnector(walletType);</span>
 <span class="cstat-no" title="statement not covered" >        await walletConnector.disconnect();</span>
       }
@@ -928,11 +928,11 @@ export const useWeb3Store = create&lt;Web3Store&gt;((set, get) =&gt; ({
   },
 &nbsp;
   // Switch network
-  switchNetwork: <span class="fstat-no" title="function not covered" >async (n</span>etwork: NetworkType) =&gt; {
+  switchNetwork: <span class="fstat-no" title="function not covered" >as</span>ync (network: NetworkType) =&gt; {
     const { isConnected, network: currentNetwork } = <span class="cstat-no" title="statement not covered" >get();</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (currentNetwork === network) {</span>
-<span class="cstat-no" title="statement not covered" >      return; /</span>/ Already on this network
+<span class="cstat-no" title="statement not covered" >    if (currentNetwork === network) {</span>
+<span class="cstat-no" title="statement not covered" >      return; </span>// Already on this network
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    set({ isLoading: true, error: null });</span>
@@ -947,7 +947,7 @@ export const useWeb3Store = create&lt;Web3Store&gt;((set, get) =&gt; ({
       });
 &nbsp;
       // If wallet is connected, fetch balances for new network
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (isConnected) {</span>
+<span class="cstat-no" title="statement not covered" >      if (isConnected) {</span>
 <span class="cstat-no" title="statement not covered" >        await get().updateBalances();</span>
       }
     } catch (error) {
@@ -960,10 +960,10 @@ export const useWeb3Store = create&lt;Web3Store&gt;((set, get) =&gt; ({
   },
 &nbsp;
   // Update all token balances
-  updateBalances: <span class="fstat-no" title="function not covered" >async () =&gt; {</span>
+  updateBalances: <span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {
     const { walletAddress } = <span class="cstat-no" title="statement not covered" >get();</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!walletAddress) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!walletAddress) {</span>
 <span class="cstat-no" title="statement not covered" >      set({ error: 'No wallet connected' });</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
@@ -980,8 +980,8 @@ export const useWeb3Store = create&lt;Web3Store&gt;((set, get) =&gt; ({
       const newBalances: Record&lt;string, number&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
 &nbsp;
       // Process native XLM balance
-      const xlmBalance = <span class="cstat-no" title="statement not covered" >account.balances.find(<span class="fstat-no" title="function not covered" >(b</span>alance: any) =&gt; <span class="cstat-no" title="statement not covered" >balance.asset_type === 'native');</span></span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (xlmBalance) {</span>
+      const xlmBalance = <span class="cstat-no" title="statement not covered" >account.balances.find(<span class="fstat-no" title="function not covered" >(b</span>alance: any) =&gt; <span class="cstat-no" title="statement not covered" >balance.asset_type === 'native')</span>;</span>
+<span class="cstat-no" title="statement not covered" >      if (xlmBalance) {</span>
 <span class="cstat-no" title="statement not covered" >        newBalances['XLM'] = parseFloat(xlmBalance.balance);</span>
       }
 &nbsp;
@@ -994,16 +994,16 @@ export const useWeb3Store = create&lt;Web3Store&gt;((set, get) =&gt; ({
 &nbsp;
       // Process token balances with ecosystem token prioritization
 <span class="cstat-no" title="statement not covered" >      account.balances.forEach(<span class="fstat-no" title="function not covered" >(b</span>alance: any) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (balance.asset_type !== 'native' &amp;&amp; balance.asset_code) {</span>
+<span class="cstat-no" title="statement not covered" >        if (balance.asset_type !== 'native' &amp;&amp; balance.asset_code) {</span>
           const tokenCode = <span class="cstat-no" title="statement not covered" >balance.asset_code.toUpperCase();</span>
           const balanceValue = <span class="cstat-no" title="statement not covered" >parseFloat(balance.balance);</span>
 &nbsp;
           // Only include tokens with positive balance
-<span class="cstat-no" title="statement not covered" >          <span class="missing-if-branch" title="if path not taken" >I</span>if (balanceValue &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >          if (balanceValue &gt; 0) {</span>
             // Check if it's an ecosystem token and verify issuer
 <span class="cstat-no" title="statement not covered" >            if (ecosystemTokens[tokenCode as keyof typeof ecosystemTokens]) {</span>
               const expectedIssuer = <span class="cstat-no" title="statement not covered" >ecosystemTokens[tokenCode as keyof typeof ecosystemTokens];</span>
-<span class="cstat-no" title="statement not covered" >              <span class="missing-if-branch" title="if path not taken" >I</span>if (balance.asset_issuer === expectedIssuer) {</span>
+<span class="cstat-no" title="statement not covered" >              if (balance.asset_issuer === expectedIssuer) {</span>
 <span class="cstat-no" title="statement not covered" >                newBalances[tokenCode] = balanceValue;</span>
               }
             } else {
@@ -1039,7 +1039,7 @@ export const useWeb3Store = create&lt;Web3Store&gt;((set, get) =&gt; ({
   },
 &nbsp;
   // Clear error
-  clearError: <span class="fstat-no" title="function not covered" >() =&gt; {</span>
+  clearError: <span class="fstat-no" title="function not covered" >()</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >    set({ error: null });</span>
   },
 &nbsp;
@@ -1050,7 +1050,7 @@ export const useWeb3Store = create&lt;Web3Store&gt;((set, get) =&gt; ({
 }));
 &nbsp;
 // Selectors for common use cases
-export const useWalletConnection = <span class="fstat-no" title="function not covered" >() =&gt; {</span>
+export const useWalletConnection = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
   const {
     isConnected,
     walletAddress,
@@ -1071,12 +1071,12 @@ export const useWalletConnection = <span class="fstat-no" title="function not co
   };
 };
 &nbsp;
-export const useNetwork = <span class="fstat-no" title="function not covered" >() =&gt; {</span>
+export const useNetwork = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
   const { network, switchNetwork } = <span class="cstat-no" title="statement not covered" >useWeb3Store();</span>
 <span class="cstat-no" title="statement not covered" >  return { network, switchNetwork };</span>
 };
 &nbsp;
-export const useBalances = <span class="fstat-no" title="function not covered" >() =&gt; {</span>
+export const useBalances = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
   const { balances, updateBalances, isLoading, error } = <span class="cstat-no" title="statement not covered" >useWeb3Store();</span>
 <span class="cstat-no" title="statement not covered" >  return { balances, updateBalances, isLoading, error };</span>
 };
@@ -1093,7 +1093,7 @@ export const useTokenBalance = <span class="fstat-no" title="function not covere
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T12:56:58.204Z
+                at 2026-07-13T11:50:01.206Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

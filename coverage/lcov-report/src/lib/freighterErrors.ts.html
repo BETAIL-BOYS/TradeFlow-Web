@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -248,7 +248,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -309,7 +309,7 @@
  * Issue #181 - BETAIL-BOYS/TradeFlow-Web
  */
 &nbsp;
-export const <span class="cstat-no" title="statement not covered" >ERROR_TYPE = <span class="cstat-no" title="statement not covered" >{</span></span>
+export const ERROR_TYPE = <span class="cstat-no" title="statement not covered" >{</span>
   USER_REJECTED: 'USER_REJECTED',
   NETWORK_ERROR: 'NETWORK_ERROR',
   CONTRACT_ERROR: 'CONTRACT_ERROR',
@@ -352,10 +352,10 @@ const SOROBAN_CODE_MAP: Record&lt;number, string&gt; = <span class="cstat-no" ti
  * Extracts a human-readable message from an unknown error value.
  * Handles strings, Error objects, and generic objects.
  */
-function <span class="fstat-no" title="function not covered" >extractMessage(e</span>rror: unknown): string {
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (typeof error === 'string') <span class="cstat-no" title="statement not covered" >return error;</span></span>
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (error instanceof Error) <span class="cstat-no" title="statement not covered" >return error.message ?? '';</span></span>
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (error !== null &amp;&amp; typeof error === 'object') {</span>
+function <span class="fstat-no" title="function not covered" >extractMessage(</span>error: unknown): string {
+<span class="cstat-no" title="statement not covered" >  if (typeof error === 'string') <span class="cstat-no" title="statement not covered" >return error;</span></span>
+<span class="cstat-no" title="statement not covered" >  if (error instanceof Error) <span class="cstat-no" title="statement not covered" >return error.message ?? '';</span></span>
+<span class="cstat-no" title="statement not covered" >  if (error !== null &amp;&amp; typeof error === 'object') {</span>
     const e = <span class="cstat-no" title="statement not covered" >error as Record&lt;string, unknown&gt;;</span>
 <span class="cstat-no" title="statement not covered" >    return String(e['message'] ?? e['error'] ?? e['detail'] ?? JSON.stringify(error));</span>
   }
@@ -368,12 +368,12 @@ function <span class="fstat-no" title="function not covered" >extractMessage(e</
  * @param error - The raw error from a wallet or contract interaction.
  * @returns A ParsedTxError with type and human-readable message.
  */
-export function <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >parseFreighterError(e</span></span>rror: unknown): ParsedTxError {
+export function <span class="fstat-no" title="function not covered" >parseFreighterError(</span>error: unknown): ParsedTxError {
   const raw = <span class="cstat-no" title="statement not covered" >extractMessage(error);</span>
   const lower = <span class="cstat-no" title="statement not covered" >raw.toLowerCase();</span>
 &nbsp;
-  const isRejected = <span class="cstat-no" title="statement not covered" >USER_REJECTED_PATTERNS.some(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >lower.includes(p));</span></span>
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (isRejected) {</span>
+  const isRejected = <span class="cstat-no" title="statement not covered" >USER_REJECTED_PATTERNS.some(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >lower.includes(p))</span>;</span>
+<span class="cstat-no" title="statement not covered" >  if (isRejected) {</span>
 <span class="cstat-no" title="statement not covered" >    return {</span>
       type: ERROR_TYPE.USER_REJECTED,
       message: 'You cancelled the transaction. No funds were moved.',
@@ -381,10 +381,10 @@ export function <span class="cstat-no" title="statement not covered" ><span clas
   }
 &nbsp;
   const codeMatch = <span class="cstat-no" title="statement not covered" >raw.match(/\b(\d+)\b/);</span>
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (codeMatch) {</span>
+<span class="cstat-no" title="statement not covered" >  if (codeMatch) {</span>
     const code = <span class="cstat-no" title="statement not covered" >parseInt(codeMatch[1], 10);</span>
     const mapped = <span class="cstat-no" title="statement not covered" >SOROBAN_CODE_MAP[code];</span>
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (mapped) {</span>
+<span class="cstat-no" title="statement not covered" >    if (mapped) {</span>
 <span class="cstat-no" title="statement not covered" >      return {</span>
         type: code &gt;= 20 ? ERROR_TYPE.NETWORK_ERROR : ERROR_TYPE.CONTRACT_ERROR,
         message: mapped,
@@ -392,7 +392,7 @@ export function <span class="cstat-no" title="statement not covered" ><span clas
     }
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (</span>
+<span class="cstat-no" title="statement not covered" >  if (</span>
     lower.includes('network') ||
     lower.includes('timeout') ||
     lower.includes('connection') ||
@@ -405,7 +405,7 @@ export function <span class="cstat-no" title="statement not covered" ><span clas
     };
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (</span>
+<span class="cstat-no" title="statement not covered" >  if (</span>
     lower.includes('contract') ||
     lower.includes('invoke') ||
     lower.includes('wasm') ||
@@ -430,7 +430,7 @@ export function <span class="cstat-no" title="statement not covered" ><span clas
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T12:56:58.204Z
+                at 2026-07-13T11:50:01.206Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

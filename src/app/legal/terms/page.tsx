@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Navbar from '../../../components/Navbar';
-import Footer from '../../../components/layout/Footer';
 
 /**
  * Static page for Terms of Service and Risk Disclaimers.
@@ -79,8 +78,6 @@ export default function TermsPage() {
           </section>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 }

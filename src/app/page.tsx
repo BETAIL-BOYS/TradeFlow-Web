@@ -68,9 +68,13 @@ function DashboardContent() {
     if (filters.tiers.length > 0) params.set('tiers', filters.tiers.join(','));
 
     const queryString = params.toString();
-    const newUrl = queryString ? `/?${queryString}` : '/';
-    router.replace(newUrl);
-  }, [filters, router]);
+    const currentQueryString = searchParams.toString();
+
+    if (queryString !== currentQueryString) {
+      const newUrl = queryString ? `/?${queryString}` : '/';
+      router.replace(newUrl);
+    }
+  }, [filters, router, searchParams]);
 
   // 1. Connect Stellar Wallet (supports Freighter, Albedo, xBull)
   const handleConnectWallet = async (walletType: WalletType) => {
@@ -96,13 +100,16 @@ function DashboardContent() {
       setLoading(true);
       try {
         const res = await api.getInvoices({ signal: controller.signal });
+        if (controller.signal.aborted) return;
         if (res.ok) {
           setInvoices(res.data.data);
         } else {
           console.error('Failed to fetch invoices:', res.error.message);
         }
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     };
 

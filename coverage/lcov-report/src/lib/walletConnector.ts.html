@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/81</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/73</span>
+                <span class='fraction'>0/64</span>
             </div>
         
             
@@ -319,7 +319,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -377,10 +377,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -484,7 +484,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -493,7 +493,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -511,7 +511,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -529,7 +529,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -547,7 +547,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -560,7 +560,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {
   StellarWalletsKit,
   WalletNetwork,
@@ -568,8 +568,8 @@
   FREIGHTER_ID,
   XBULL_ID,
   ALBEDO_ID,
-} from <span class="cstat-no" title="statement not covered" >'@creit.tech/stellar-wallets-kit';</span>
-// soroban-client imports not required in this module
+} from '@creit.tech/stellar-wallets-kit';
+import { Networks } from 'soroban-client';
 &nbsp;
 export type WalletType = string;
 &nbsp;
@@ -626,11 +626,11 @@ const walletKit =
       })
     : (null as unknown as StellarWalletsKit);
 &nbsp;
-export class <span class="cstat-no" title="statement not covered" >StellarWalletConnector implements WalletConnector {</span>
-<span class="fstat-no" title="function not covered" >  constructor(p</span>rivate <span class="cstat-no" title="statement not covered" >walletType: WalletType)</span> {}
+export class StellarWalletConnector implements WalletConnector {
+<span class="fstat-no" title="function not covered" >  co</span>nstructor(private walletType: WalletType) {}
 &nbsp;
-<span class="fstat-no" title="function not covered" >  async c</span>onnect(): Promise&lt;WalletInfo&gt; {
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!walletKit) <span class="cstat-no" title="statement not covered" >throw new Error('Wallet kit is not available in this environment.');</span></span>
+<span class="fstat-no" title="function not covered" >  as</span>ync connect(): Promise&lt;WalletInfo&gt; {
+<span class="cstat-no" title="statement not covered" >    if (!walletKit) <span class="cstat-no" title="statement not covered" >throw new Error('Wallet kit is not available in this environment.');</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    try {</span>
       // Set the wallet type
@@ -639,14 +639,14 @@ export class <span class="cstat-no" title="statement not covered" >StellarWallet
       // Get public key / address
       const { address } = <span class="cstat-no" title="statement not covered" >await walletKit.getAddress();</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!address) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!address) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error('Unable to retrieve public key.');</span>
       }
 &nbsp;
       // Verify correct network (Testnet)
       const { network } = <span class="cstat-no" title="statement not covered" >await walletKit.getNetwork();</span>
       // The kit might return "TESTNET" or the passphrase
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (network !== 'TESTNET' &amp;&amp; network !== WalletNetwork.TESTNET) {</span>
+<span class="cstat-no" title="statement not covered" >      if (network !== 'TESTNET' &amp;&amp; network !== WalletNetwork.TESTNET) {</span>
         const walletName = <span class="cstat-no" title="statement not covered" >this.getWalletName();</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error(`Invalid network. Please switch to TESTNET in ${walletName} settings.`);</span>
       }
@@ -658,11 +658,11 @@ export class <span class="cstat-no" title="statement not covered" >StellarWallet
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  async d</span>isconnect(): Promise&lt;void&gt; {
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!walletKit) <span class="cstat-no" title="statement not covered" >return;</span></span>
+<span class="fstat-no" title="function not covered" >  as</span>ync disconnect(): Promise&lt;void&gt; {
+<span class="cstat-no" title="statement not covered" >    if (!walletKit) <span class="cstat-no" title="statement not covered" >return;</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (walletKit.disconnect) {</span>
+<span class="cstat-no" title="statement not covered" >      if (walletKit.disconnect) {</span>
 <span class="cstat-no" title="statement not covered" >        await walletKit.disconnect();</span>
       }
     } catch (error) {
@@ -670,18 +670,18 @@ export class <span class="cstat-no" title="statement not covered" >StellarWallet
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  async g</span>etPublicKey(): Promise&lt;string&gt; {
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!walletKit) <span class="cstat-no" title="statement not covered" >throw new Error('Wallet kit is not available in this environment.');</span></span>
+<span class="fstat-no" title="function not covered" >  as</span>ync getPublicKey(): Promise&lt;string&gt; {
+<span class="cstat-no" title="statement not covered" >    if (!walletKit) <span class="cstat-no" title="statement not covered" >throw new Error('Wallet kit is not available in this environment.');</span></span>
 &nbsp;
     const { address } = <span class="cstat-no" title="statement not covered" >await walletKit.getAddress();</span>
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!address) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!address) {</span>
 <span class="cstat-no" title="statement not covered" >      throw new Error('Unable to retrieve public key.');</span>
     }
 <span class="cstat-no" title="statement not covered" >    return address;</span>
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  async s</span>ignTransaction(xdr: string, options?: any): Promise&lt;string&gt; {
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!walletKit) <span class="cstat-no" title="statement not covered" >throw new Error('Wallet kit is not available in this environment.');</span></span>
+<span class="fstat-no" title="function not covered" >  as</span>ync signTransaction(xdr: string, options?: any): Promise&lt;string&gt; {
+<span class="cstat-no" title="statement not covered" >    if (!walletKit) <span class="cstat-no" title="statement not covered" >throw new Error('Wallet kit is not available in this environment.');</span></span>
 &nbsp;
     const { address: publicKey } = <span class="cstat-no" title="statement not covered" >await walletKit.getAddress();</span>
     const { signedTxXdr } = <span class="cstat-no" title="statement not covered" >await walletKit.signTransaction(xdr, {</span>
@@ -692,15 +692,15 @@ export class <span class="cstat-no" title="statement not covered" >StellarWallet
 <span class="cstat-no" title="statement not covered" >    return signedTxXdr;</span>
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  async g</span>etNetwork(): Promise&lt;string&gt; {
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!walletKit) <span class="cstat-no" title="statement not covered" >throw new Error('Wallet kit is not available in this environment.');</span></span>
+<span class="fstat-no" title="function not covered" >  as</span>ync getNetwork(): Promise&lt;string&gt; {
+<span class="cstat-no" title="statement not covered" >    if (!walletKit) <span class="cstat-no" title="statement not covered" >throw new Error('Wallet kit is not available in this environment.');</span></span>
 &nbsp;
     const { network } = <span class="cstat-no" title="statement not covered" >await walletKit.getNetwork();</span>
 <span class="cstat-no" title="statement not covered" >    return network;</span>
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  async i</span>sConnected(): Promise&lt;boolean&gt; {
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!walletKit) <span class="cstat-no" title="statement not covered" >return false;</span></span>
+<span class="fstat-no" title="function not covered" >  as</span>ync isConnected(): Promise&lt;boolean&gt; {
+<span class="cstat-no" title="statement not covered" >    if (!walletKit) <span class="cstat-no" title="statement not covered" >return false;</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const { address } = <span class="cstat-no" title="statement not covered" >await walletKit.getAddress({ skipRequestAccess: true });</span>
@@ -710,11 +710,11 @@ export class <span class="cstat-no" title="statement not covered" >StellarWallet
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  getWalletType(): WalletType {</span>
+<span class="fstat-no" title="function not covered" >  ge</span>tWalletType(): WalletType {
 <span class="cstat-no" title="statement not covered" >    return this.walletType;</span>
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >getWalletName(): string {</span>
+<span class="fstat-no" title="function not covered" >  pr</span>ivate getWalletName(): string {
 <span class="cstat-no" title="statement not covered" >    switch (this.walletType) {</span>
       case FREIGHTER_ID:
 <span class="cstat-no" title="statement not covered" >        return 'Freighter';</span>
@@ -733,7 +733,7 @@ export class <span class="cstat-no" title="statement not covered" >StellarWallet
  * @param walletType - The wallet provider identifier.
  * @returns A WalletConnector instance.
  */
-export function <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >createWalletConnector(w</span></span>alletType: WalletType): WalletConnector {
+export function <span class="fstat-no" title="function not covered" >createWalletConnector(</span>walletType: WalletType): WalletConnector {
 <span class="cstat-no" title="statement not covered" >  return new StellarWalletConnector(walletType);</span>
 }
 &nbsp;
@@ -742,7 +742,7 @@ export function <span class="cstat-no" title="statement not covered" ><span clas
  * @param walletType - The wallet provider identifier.
  * @returns The wallet display name.
  */
-export function <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >getWalletDisplayName(w</span></span>alletType: WalletType): string {
+export function <span class="fstat-no" title="function not covered" >getWalletDisplayName(</span>walletType: WalletType): string {
 <span class="cstat-no" title="statement not covered" >  switch (walletType) {</span>
     case FREIGHTER_ID:
 <span class="cstat-no" title="statement not covered" >      return 'Freighter';</span>
@@ -760,7 +760,7 @@ export function <span class="cstat-no" title="statement not covered" ><span clas
  * @param walletType - The wallet provider identifier.
  * @returns The wallet description.
  */
-export function <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >getWalletDescription(w</span></span>alletType: WalletType): string {
+export function <span class="fstat-no" title="function not covered" >getWalletDescription(</span>walletType: WalletType): string {
 <span class="cstat-no" title="statement not covered" >  switch (walletType) {</span>
     case FREIGHTER_ID:
 <span class="cstat-no" title="statement not covered" >      return 'Popular browser extension wallet';</span>
@@ -778,7 +778,7 @@ export function <span class="cstat-no" title="statement not covered" ><span clas
  * @param walletType - The wallet provider identifier.
  * @returns An SVG path string.
  */
-export function <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >getWalletIcon(w</span></span>alletType: WalletType): string {
+export function <span class="fstat-no" title="function not covered" >getWalletIcon(</span>walletType: WalletType): string {
 <span class="cstat-no" title="statement not covered" >  switch (walletType) {</span>
     case FREIGHTER_ID:
 <span class="cstat-no" title="statement not covered" >      return 'M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z';</span>
@@ -796,7 +796,7 @@ export function <span class="cstat-no" title="statement not covered" ><span clas
  * @param walletType - The wallet provider identifier.
  * @returns A Tailwind CSS class string.
  */
-export function <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >getWalletBgColor(w</span></span>alletType: WalletType): string {
+export function <span class="fstat-no" title="function not covered" >getWalletBgColor(</span>walletType: WalletType): string {
 <span class="cstat-no" title="statement not covered" >  switch (walletType) {</span>
     case FREIGHTER_ID:
 <span class="cstat-no" title="statement not covered" >      return 'bg-blue-500';</span>
@@ -809,7 +809,7 @@ export function <span class="cstat-no" title="statement not covered" ><span clas
   }
 }
 &nbsp;
-export { <span class="cstat-no" title="statement not covered" >FREIGHTER_ID, <span class="cstat-no" title="statement not covered" >X</span>BULL_ID, <span class="cstat-no" title="statement not covered" >A</span>LBEDO_ID };</span>
+export { FREIGHTER_ID, XBULL_ID, ALBEDO_ID };
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -817,7 +817,7 @@ export { <span class="cstat-no" title="statement not covered" >FREIGHTER_ID, <sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T12:56:58.204Z
+                at 2026-07-13T11:50:01.206Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

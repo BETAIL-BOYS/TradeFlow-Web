@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -120,18 +120,18 @@
 <a name='L55'></a><a href='#L55'>55</a>
 <a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -175,18 +175,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use client';
 &nbsp;
-import React from <span class="cstat-no" title="statement not covered" >'react';</span>
-import Link from <span class="cstat-no" title="statement not covered" >'next/link';</span>
-import { usePathname } from <span class="cstat-no" title="statement not covered" >'next/navigation';</span>
-import { ChevronRight, Home } from <span class="cstat-no" title="statement not covered" >'lucide-react';</span>
-import { generateBreadcrumbs } from <span class="cstat-no" title="statement not covered" >'../lib/breadcrumbs';</span>
-import Icon from <span class="cstat-no" title="statement not covered" >'./ui/Icon';</span>
+import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { ChevronRight, Home } from 'lucide-react';
+import { generateBreadcrumbs } from '../lib/breadcrumbs';
+import Icon from './ui/Icon';
 &nbsp;
-export default function <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Breadcrumbs() {</span></span>
+export default function <span class="fstat-no" title="function not covered" >Breadcrumbs(</span>) {
   const pathname = <span class="cstat-no" title="statement not covered" >usePathname();</span>
   const breadcrumbs = <span class="cstat-no" title="statement not covered" >generateBreadcrumbs(pathname);</span>
 &nbsp;
-  return (
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;nav className="flex items-center space-x-2 text-sm"&gt;
       {breadcrumbs.map(<span class="fstat-no" title="function not covered" >(b</span>readcrumb, index) =&gt; {
         const isFirst = <span class="cstat-no" title="statement not covered" >index === 0;</span>
@@ -194,10 +194,10 @@ export default function <span class="cstat-no" title="statement not covered" ><s
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        return (</span>
           &lt;React.Fragment key={breadcrumb.href}&gt;
-            {<span class="branch-0 cbranch-no" title="branch not covered" >index &gt; 0 &amp;&amp; &lt;</span>Icon icon={ChevronRight} dense className="text-slate-600 shrink-0" /&gt;}
+            {index &gt; 0 &amp;&amp; &lt;Icon icon={ChevronRight} dense className="text-slate-600 shrink-0" /&gt;}
 &nbsp;
             &lt;div className="flex items-center gap-1"&gt;
-              {<span class="branch-0 cbranch-no" title="branch not covered" >isFirst &amp;&amp; (</span>
+              {isFirst &amp;&amp; (
                 &lt;Icon
                   icon={Home}
                   dense
@@ -208,7 +208,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
               )}
 &nbsp;
               {isLast ? (
-<span class="branch-0 cbranch-no" title="branch not covered" >                &lt;span className="text-blue-400 font-medium"&gt;{breadcrumb.label}&lt;/span&gt;</span>
+                &lt;span className="text-blue-400 font-medium"&gt;{breadcrumb.label}&lt;/span&gt;
               ) : (
                 &lt;Link
                   href={breadcrumb.href}
@@ -235,7 +235,7 @@ export default function <span class="cstat-no" title="statement not covered" ><s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T12:56:58.204Z
+                at 2026-07-13T11:50:01.206Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

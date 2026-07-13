@@ -6,7 +6,7 @@ import {
   XBULL_ID,
   ALBEDO_ID,
 } from '@creit.tech/stellar-wallets-kit';
-// soroban-client imports not required in this module
+import { Networks } from 'soroban-client';
 
 export type WalletType = string;
 

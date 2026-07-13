@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: { ignoreBuildErrors: true },
-  turbopack: {},
   webpack: (config, { isServer }) => {
+    config.optimization.minimize = false;
+
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
