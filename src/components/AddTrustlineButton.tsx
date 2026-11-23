@@ -53,14 +53,15 @@ export default function AddTrustlineButton({ assetCode, assetIssuer }: AddTrustl
       // Revert to idle after 5 seconds
       setTimeout(() => setStatus('idle'), 5000);
       console.log(`[AddTrustline] Successfully added ${assetCode} from ${assetIssuer}`);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(`[AddTrustline] Failed to add ${assetCode}:`, error);
       setStatus('error');
 
       // Handle rejection vs generic error
-      const errorMsg = error.message?.includes('denied')
-        ? 'Access Denied by User'
-        : `Failed to add ${assetCode}`;
+      const errorMsg =
+        error instanceof Error && error.message.includes('denied')
+          ? 'Access Denied by User'
+          : `Failed to add ${assetCode}`;
 
       dismissToast(toastId);
       showError(errorMsg);

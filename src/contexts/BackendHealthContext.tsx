@@ -115,15 +115,18 @@ export function BackendHealthProvider({ children }: BackendHealthProviderProps) 
   const isDegraded = healthState.status === 'degraded';
   const isOffline = healthState.status === 'offline';
 
-  const value: BackendHealthContextType = {
-    healthState,
-    reportError,
-    reportSuccess,
-    resetHealth,
-    isHealthy,
-    isDegraded,
-    isOffline,
-  };
+  const value: BackendHealthContextType = React.useMemo(
+    () => ({
+      healthState,
+      reportError,
+      reportSuccess,
+      resetHealth,
+      isHealthy,
+      isDegraded,
+      isOffline,
+    }),
+    [healthState, reportError, reportSuccess, resetHealth, isHealthy, isDegraded, isOffline]
+  );
 
   return <BackendHealthContext.Provider value={value}>{children}</BackendHealthContext.Provider>;
 }

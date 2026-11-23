@@ -189,7 +189,7 @@ export function isInvoicesResponse(value: unknown): value is InvoicesResponse {
   if (!isRecord(value)) return false;
   if (!Array.isArray(value.data)) return false;
   if (!isRecord(value.pagination)) return false;
-  return value.data.every((item) => {
+  return value.data.every((item: unknown) => {
     if (!isRecord(item)) return false;
     return (
       typeof item.id === 'string' &&
@@ -205,7 +205,7 @@ export function isInvoicesResponse(value: unknown): value is InvoicesResponse {
  */
 export function isPnlResponse(value: unknown): value is PnlResponse {
   if (!Array.isArray(value)) return false;
-  return value.every((item) => {
+  return value.every((item: unknown) => {
     if (!isRecord(item)) return false;
     return typeof item.date === 'string' && typeof item.value === 'number';
   });

@@ -85,9 +85,9 @@ function DashboardContent() {
         showSuccess('Wallet connected');
       }
     } catch (e: unknown) {
-      const error = e as Error;
-      console.error('Connection failed:', error.message);
-      showError(error.message || 'Failed to connect to wallet.');
+      const message = e instanceof Error ? e.message : 'Failed to connect to wallet.';
+      console.error('Connection failed:', message);
+      showError(message);
     }
   };
 
@@ -155,7 +155,7 @@ function DashboardContent() {
 
     riskSocketRef.current?.syncInvoices(invoices.map((i) => i.id));
   }, [walletAddress, invoices]);
-  const _toast = useTransactionToast();
+  useTransactionToast();
 
   const handleInvoiceMint = (txStatus: string) => {
     console.log('Invoice minted, tx status:', txStatus);

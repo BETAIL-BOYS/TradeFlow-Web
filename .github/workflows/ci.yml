@@ -1,6 +1,8 @@
 name: Web CI
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -37,5 +39,11 @@ jobs:
       - name: Verify Package Integrity
         run: ls src/app/page.tsx
 
+      - name: Run Lint
+        run: npm run lint
+
       - name: Run Test Coverage
         run: npm run test:coverage
+
+      - name: Build
+        run: npm run build

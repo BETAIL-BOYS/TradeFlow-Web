@@ -1,22 +1,24 @@
 import { create } from 'zustand';
 
+export interface TransactionDetails {
+  networkFee?: string;
+  contractAddress?: string;
+  amount?: string;
+  fromToken?: string;
+  toToken?: string;
+}
+
 export interface SignatureState {
   // State
   isSigning: boolean;
   signingMessage: string;
-  transactionDetails: {
-    networkFee?: string;
-    contractAddress?: string;
-    amount?: string;
-    fromToken?: string;
-    toToken?: string;
-  } | null;
+  transactionDetails: TransactionDetails | null;
 
   // Actions
-  startSigning: (message?: string, details?: SignatureState['transactionDetails']) => void;
+  startSigning: (message?: string, details?: TransactionDetails | null) => void;
   stopSigning: () => void;
   updateMessage: (message: string) => void;
-  setTransactionDetails: (details: SignatureState['transactionDetails']) => void;
+  setTransactionDetails: (details: TransactionDetails | null) => void;
 }
 
 export const useSignatureStore = create<SignatureState>((set) => ({
@@ -26,7 +28,10 @@ export const useSignatureStore = create<SignatureState>((set) => ({
   transactionDetails: null,
 
   // Actions
-  startSigning: (message = 'Please sign the transaction in your wallet.', details = null) => {
+  startSigning: (
+    message = 'Please sign the transaction in your wallet.',
+    details: TransactionDetails | null = null
+  ) => {
     set({
       isSigning: true,
       signingMessage: message,
@@ -46,16 +51,25 @@ export const useSignatureStore = create<SignatureState>((set) => ({
     set({ signingMessage: message });
   },
 
-  setTransactionDetails: (details) => {
+  setTransactionDetails: (details: TransactionDetails | null) => {
     set({ transactionDetails: details });
   },
 }));
 
 // Selector hooks for common use cases
-export const useIsSigning = () => useSignatureStore((state) => state.isSigning);
-export const useSigningMessage = () => useSignatureStore((state) => state.signingMessage);
-export const useTransactionDetails = () => useSignatureStore((state) => state.transactionDetails);
-export const useSigningActions = () => {
+export const useIsSigning = (): boolean => useSignatureStore((state) => state.isSigning);
+export const useSigningMessage = (): string => useSignatureStore((state) => state.signingMessage);
+export const useTransactionDetails = (): TransactionDetails | null =>
+  useSignatureStore((state) => state.transactionDetails);
+
+export interface SigningActions {
+  startSigning: SignatureState['startSigning'];
+  stopSigning: SignatureState['stopSigning'];
+  updateMessage: SignatureState['updateMessage'];
+  setTransactionDetails: SignatureState['setTransactionDetails'];
+}
+
+export const useSigningActions = (): SigningActions => {
   const startSigning = useSignatureStore((state) => state.startSigning);
   const stopSigning = useSignatureStore((state) => state.stopSigning);
   const updateMessage = useSignatureStore((state) => state.updateMessage);

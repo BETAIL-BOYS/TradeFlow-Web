@@ -1,6 +1,7 @@
 import js from '@eslint/js';
 import ts from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
+import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 
 export default [
@@ -21,14 +22,20 @@ export default [
         ecmaFeatures: { jsx: true },
         ecmaVersion: 2022,
         sourceType: 'module',
+        project: './tsconfig.json',
+        tsconfigRootDir: import.meta.dirname,
       },
     },
     plugins: {
       '@typescript-eslint': ts,
+      'react-hooks': reactHooks,
     },
     rules: {
       ...ts.configs.recommended.rules,
-      '@typescript-eslint/no-explicit-any': 'off',
+      ...ts.configs['strict-type-checked'].rules,
+      ...reactHooks.configs.recommended.rules,
+      'react-hooks/exhaustive-deps': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {
