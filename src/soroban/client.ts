@@ -8,11 +8,11 @@ export function getSorobanClient(): Server {
   const { rpcUrl } = getSorobanConfig();
 
   // Clear cache if RPC URL has changed (network switch)
-  if (_currentRpcUrl && _currentRpcUrl !== rpcUrl) {
+  if (_currentRpcUrl !== null && _currentRpcUrl !== rpcUrl) {
     _client = null;
   }
 
-  if (!_client) {
+  if (_client === null) {
     _client = new Server(rpcUrl, { allowHttp: rpcUrl.startsWith('http://') });
     _currentRpcUrl = rpcUrl;
   }

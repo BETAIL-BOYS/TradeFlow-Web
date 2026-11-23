@@ -13,7 +13,10 @@ export function useInvoice(invoiceId: string) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!invoiceId) return;
+    if (!invoiceId) {
+      setLoading(false);
+      return;
+    }
 
     let cancelled = false;
     setLoading(true);
@@ -23,8 +26,11 @@ export function useInvoice(invoiceId: string) {
       .then((data) => {
         if (!cancelled) setInvoice(data);
       })
-      .catch((err: Error) => {
-        if (!cancelled) setError(err.message);
+      .catch((err: unknown) => {
+        if (!cancelled) {
+          const message = err instanceof Error ? err.message : String(err);
+          setError(message);
+        }
       })
       .finally(() => {
         if (!cancelled) setLoading(false);

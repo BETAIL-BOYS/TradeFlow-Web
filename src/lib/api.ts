@@ -19,11 +19,11 @@ import { httpClient, normalizeHttpError } from './httpClient';
  * Converts Axios headers object to a plain Record<string, string>.
  * Handles arrays, numbers, and booleans by joining or stringifying.
  */
-function toHeadersRecord(headers: any): Record<string, string> {
+function toHeadersRecord(headers: unknown): Record<string, string> {
   const out: Record<string, string> = {};
-  if (!headers) return out;
-  for (const [key, value] of Object.entries(headers)) {
-    if (Array.isArray(value)) out[key] = value.join(', ');
+  if (!headers || typeof headers !== 'object') return out;
+  for (const [key, value] of Object.entries(headers as Record<string, unknown>)) {
+    if (Array.isArray(value)) out[key] = (value as unknown[]).map(String).join(', ');
     else if (typeof value === 'string') out[key] = value;
     else if (typeof value === 'number') out[key] = String(value);
     else if (typeof value === 'boolean') out[key] = value ? 'true' : 'false';
